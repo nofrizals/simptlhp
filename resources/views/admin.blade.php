@@ -19,7 +19,7 @@
                         </span>
                     </div>
                 </div>
-                <table id="userTable" class="display text-center">
+                <table id="userTable" class="min-w-full divide-y divide-gray-200 display nowrap">
                     <thead>
                         <tr>
                             <th>No</th>
