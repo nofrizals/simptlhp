@@ -145,7 +145,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="w-full px-2.5" style="display: none">
+                            <div class="w-full px-2.5 pick-tim hidden">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Tim
                                 </label>
@@ -172,7 +172,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="w-full px-2.5" style="display: none">
+                            <div class="w-full px-2.5 hidden" id="obrikRadio">
                                 <div class="flex flex-col gap-3" x-data="{ isChecked: '' }">
                                     <label class="text-sm font-medium text-gray-800 dark:text-white/90">
                                         Obrik Level Korwil/UPTD/Kelurahan/Kampung
@@ -183,7 +183,7 @@
                                                 :class="isChecked === 'Tidak' ? 'text-gray-700 dark:text-gray-400' :
                                                     'text-gray-500 dark:text-gray-400'"
                                                 class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only" type="radio" name="roleSelect" id="Tidak"
+                                                <input class="sr-only" type="radio" name="obrikRadio" id="Tidak"
                                                     @change="isChecked = 'Tidak'" />
                                                 <span
                                                     :class="isChecked === 'Tidak' ? 'border-brand-500 bg-brand-500' :
@@ -200,7 +200,7 @@
                                                 :class="isChecked === 'Ya' ? 'text-gray-700 dark:text-gray-400' :
                                                     'text-gray-500 dark:text-gray-400'"
                                                 class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only" type="radio" name="roleSelect" id="Ya"
+                                                <input class="sr-only" type="radio" name="obrikRadio" id="Ya"
                                                     @change="isChecked = 'Ya'" />
                                                 <span
                                                     :class="isChecked === 'Ya' ? 'border-brand-500 bg-brand-500' :
@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-full px-2.5" style="display: none">
+                            <div class="w-full px-2.5 hidden">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Nama Obrik
                                 </label>
@@ -348,10 +348,25 @@
                     }
                 });
 
+                $('#level').change(function() {
+                    let kode_unor = $('#opd').val();
+                    if ($(this).val() == 3 && ((parseInt(kode_unor.substring(3, 5)) >= 32 && parseInt(kode_unor
+                                .substring(3, 5)) <= 45) || parseInt(kode_unor.substring(3, 5)) == 13 ||
+                            parseInt(kode_unor.substring(3, 5)) == 23)) {
+                        $('#obrikRadio').css('display', 'block');
+                    } else {
+                        if ($(this).val() == 2) {
+                            $('.pick-tim').removeClass('hidden');
+                        } else {
+                            $('.pick-tim').addClass('hidden');
+                        }
+                        $('#obrikRadio').css('display', 'none');
+                    }
+                    $('input[name=obrikRadio][value="0"]').prop('checked', true);
+                })
+
                 $('#opd').on('change', function() {
                     let opd = $(this).val();
-                    console.log(opd);
-
                     $('#nama_obrik option').hide();
                     $('#nama_obrik option[data-opd="' + opd + '"]').show();
                     $('#nama_obrik').val('');
