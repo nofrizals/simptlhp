@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instansi;
+use App\Models\Unor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -10,7 +12,31 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin');
+        $instansis = Unor::whereRaw('CHAR_LENGTH(kode_unor) <= 5')
+            ->whereRaw('RIGHT(kode_unor, 2) < 32')
+            ->get()
+            ->map(fn($i) => [
+                'kode' => $i->kode_unor,
+                'nama' => $i->nama_unor,
+                'tipe' => 'instansi',
+            ]);
+
+        $kecamatans = Unor::whereRaw('CHAR_LENGTH(kode_unor) = ?', [5])
+            ->whereRaw('RIGHT(kode_unor, 2) BETWEEN ? AND ?', [32, 45])
+            ->get(['kode_unor', 'nama_unor'])
+            ->map(fn($i) => [
+                'kode' => $i->kode_unor,
+                'nama' => $i->nama_unor,
+                'tipe' => 'kecamatan',
+            ]);
+
+        $turunansmini = Instansi::where('kode_instansi', 'like', 'obrik%')->get(['kode_instansi', 'nama_instansi'])
+            ->map(fn($tm) => [
+                'kode' => $tm->kode_instansi,
+                'nama' => $tm->nama_instansi,
+                'tipe' => 'turunansmini',
+            ]);
+        return view('admin', compact('instansis', 'kecamatans', 'turunansmini'));
     }
 
     public function ajaxDataAdmin(Request $request)

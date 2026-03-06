@@ -77,12 +77,21 @@
                                         <option value="" disabled selected
                                             class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                             Pilih OPD</option>
-                                        <option value="a" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            A</option>
-                                        <option value="b" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            B</option>
-                                        <option value="c" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            C</option>
+                                        @foreach ($instansis as $instansi)
+                                            <option value="{{ $instansi['kode'] }}">
+                                                {{ ucwords(strtolower($instansi['nama'])) }}
+                                            </option>
+                                        @endforeach
+                                        @foreach ($kecamatans as $kecamatan)
+                                            <option value="{{ $kecamatan['kode'] }}">
+                                                {{ ucwords(strtolower($kecamatan['nama'])) }}
+                                            </option>
+                                        @endforeach
+                                        @foreach ($turunansmini as $turunanmini)
+                                            <option value="{{ $turunanmini['kode'] }}">
+                                                {{ ucwords(strtolower($turunanmini['nama'])) }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
