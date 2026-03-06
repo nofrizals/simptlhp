@@ -145,7 +145,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="w-full px-2.5">
+                            <div class="w-full px-2.5" style="display: none">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Tim
                                 </label>
@@ -172,7 +172,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="w-full px-2.5">
+                            <div class="w-full px-2.5" style="display: none">
                                 <div class="flex flex-col gap-3" x-data="{ isChecked: '' }">
                                     <label class="text-sm font-medium text-gray-800 dark:text-white/90">
                                         Obrik Level Korwil/UPTD/Kelurahan/Kampung
@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-full px-2.5">
+                            <div class="w-full px-2.5" style="display: none">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Nama Obrik
                                 </label>
