@@ -173,7 +173,7 @@
                                 </div>
                             </div>
                             <div class="w-full px-2.5">
-                                <div class="flex items-center gap-3" x-data="{ isChecked: '' }">
+                                <div class="flex flex-col gap-3" x-data="{ isChecked: '' }">
                                     <label class="text-sm font-medium text-gray-800 dark:text-white/90">
                                         Obrik Level Korwil/UPTD/Kelurahan/Kampung
                                     </label>
@@ -215,7 +215,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Nama Obrik
@@ -243,7 +242,6 @@
                                     </span>
                                 </div>
                             </div>
-
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Password
