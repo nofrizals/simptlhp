@@ -39,9 +39,18 @@ class AdminController extends Controller
                 'tipe' => 'turunansmini',
             ]);
 
+        $obriks = Instansi::whereRaw('CHAR_LENGTH(kode_instansi) = 8')->get(['id_instansi', 'kode_instansi', 'nama_instansi'])
+            ->map(fn($o) => [
+                'id' => $o->id_instansi,
+                'kode' => $o->kode_instansi,
+                'kode_opd' => substr($o->kode_instansi, 0, 5),
+                'nama' => $o->nama_instansi,
+                'tipe' => 'obrik',
+            ]);
+
         $levels = Level::select('tingkatan_level', 'nama_level')->where('id_app', 14)->orderBy('tingkatan_level', 'asc')->get();
         $tims = Tim::get();
-        return view('admin', compact('instansis', 'kecamatans', 'turunansmini', 'levels', 'tims'));
+        return view('admin', compact('instansis', 'kecamatans', 'turunansmini', 'levels', 'tims', 'obriks'));
     }
 
     public function ajaxDataAdmin(Request $request)
