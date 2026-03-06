@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instansi;
+use App\Models\Level;
 use App\Models\Unor;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -36,7 +37,9 @@ class AdminController extends Controller
                 'nama' => $tm->nama_instansi,
                 'tipe' => 'turunansmini',
             ]);
-        return view('admin', compact('instansis', 'kecamatans', 'turunansmini'));
+
+        $levels = Level::select('tingkatan_level', 'nama_level')->where('id_app', 14)->orderBy('tingkatan_level', 'asc')->get();
+        return view('admin', compact('instansis', 'kecamatans', 'turunansmini', 'levels'));
     }
 
     public function ajaxDataAdmin(Request $request)

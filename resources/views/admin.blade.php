@@ -94,6 +94,9 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                @error('opd')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -101,6 +104,9 @@
                                 </label>
                                 <input type="text" name="id_pegawai" id="id_pegawai" placeholder="Masukkan NIP/NIK"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                @error('id_pegawai')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -108,6 +114,9 @@
                                 </label>
                                 <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama Lengkap"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                @error('nama_lengkap')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -116,17 +125,15 @@
                                 <div class="relative z-20 bg-transparent">
                                     <select name="level" id="level"
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        <option value="" disabled selected
+                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                             Pilih Level</option>
-                                        <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Category 1
-                                        </option>
-                                        <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Category 2
-                                        </option>
-                                        <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Category 3
-                                        </option>
+                                        @foreach ($levels as $level)
+                                            <option value="{{ $level->tingkatan_level }}"
+                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                                {{ ucwords($level->nama_level) }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     <span
                                         class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
