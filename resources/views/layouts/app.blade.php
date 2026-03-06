@@ -13,7 +13,40 @@
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.tailwindcss.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
+        /* Select2 Tailwind Style */
+        .select2-container--default .select2-selection--single {
+            height: 44px;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 10px;
+        }
+
+        .select2-dropdown {
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .select2-search__field {
+            border-radius: 0.375rem;
+            padding: 6px;
+        }
+
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter {
             margin-bottom: 1rem;
@@ -117,6 +150,9 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/dataTables.tailwindcss.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @stack('scripts')
 </body>
 
