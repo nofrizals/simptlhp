@@ -45,7 +45,7 @@
     </div>
     <!-- Modal -->
     <div id="myModal"
-        class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999 hidden opacity-0 pointer-events-none transition-opacity duration-300">
+        class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
         <div id="modalContent" class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10">
             <button id="closeModalBtn"
@@ -173,7 +173,7 @@
                                 </div>
                             </div>
                             <div class="w-full px-2.5 hidden" id="obrikRadio">
-                                <div class="flex flex-col gap-3" x-data="{ isChecked: '' }">
+                                <div class="flex flex-col gap-3" x-data="{ isChecked: 'Tidak' }">
                                     <label class="text-sm font-medium text-gray-800 dark:text-white/90">
                                         Obrik Level Korwil/UPTD/Kelurahan/Kampung
                                     </label>
@@ -270,10 +270,10 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-                $('.opd').select2({
-                    dropdownParent: $('#myModal'),
-                    width: '100%'
-                });
+                // $('.opd').select2({
+                //     dropdownParent: $('#myModal'),
+                //     width: '100%'
+                // });
             });
         </script>
         <script>
@@ -283,13 +283,22 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
+
                 $('#tableLoading').removeClass('hidden');
+
                 $("#openModalBtn").click(function() {
-                    $("#myModal")
-                        .removeClass("hidden opacity-0 pointer-events-none")
-                        .addClass("opacity-100 pointer-events-auto");
+                    if (!$('.opd').hasClass("select2-hidden-accessible")) {
+                        $('.opd').select2({
+                            dropdownParent: $('#myModal'),
+                            width: '100%'
+                        });
+                    }
+                    $("#myModal").removeClass("hidden opacity-0 pointer-events-none").addClass(
+                        "opacity-100 pointer-events-auto");
                 });
-                $("#closeModalBtn, #modalCloseBtn").click(function() {
+
+                $("#closeModalBtn").click(function() {
+                    $('#formAdmin')[0].reset();
                     $("#myModal")
                         .addClass("opacity-0 pointer-events-none")
                         .removeClass("opacity-100 pointer-events-auto");
@@ -297,10 +306,11 @@
                         $("#myModal").addClass("hidden");
                     }, 300);
                 });
+
                 var table = $('#userTable').DataTable({
                     responsive: true,
                     serverSide: true,
-                    processing: true,
+                    processing: false,
                     ajax: {
                         type: 'POST',
                         url: "{{ url('ajax-data-admin') }}",
@@ -350,6 +360,7 @@
 
                 $('#level').change(function() {
                     let kode_unor = $('#opd').val();
+                    if (!kode_unor) return;
                     let level = $(this).val();
                     let kode = parseInt(kode_unor.substring(3, 5));
                     let isObrik = (level == 3 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
@@ -367,10 +378,11 @@
                         }
                     }
 
-                    $('input[name=obrikRadio][value="0"]').prop('checked', true);
+                    $('input[name=obrikRadio][value="0"]').prop('checked', true).trigger('change');
                 });
 
-                $('input[name=obrikRadio]').change(function() {
+                // $('input[name=obrikRadio]').change(function() {
+                $(document).on('change', 'input[name=obrikRadio]', function() {
                     const opd = $('#opd').val();
                     if ($(this).val() != 1) {
                         $("#form_nama_obrik").addClass('hidden');
@@ -394,7 +406,7 @@
                             let html = '<option disabled selected>--pilih</option>';
                             if (res.data?.length) {
                                 res.data.forEach(row => {
-                                    let selected = row.kode_turunan == res.data.kode_unor ?
+                                    let selected = row.kode_turunan == opd ?
                                         'selected' : '';
                                     html += `<option value="${row.kode_turunan}" ${selected}>
                                 ${row.nama_instansi}
@@ -404,7 +416,8 @@
                             $('#nama_obrik').html(html);
                         },
                         error() {
-                            $('#nama_obrik').html('<option disabled selected>--pilih</option>');
+                            $('#nama_obrik').html(
+                                '<option disabled selected>--pilih</option>');
                         }
                     });
                 });
@@ -414,12 +427,6 @@
                     $('#nama_obrik option').hide();
                     $('#nama_obrik option[data-opd="' + opd + '"]').show();
                     $('#nama_obrik').val('');
-                });
-
-                $('#btnAddAdmin').click(function(e) {
-                    $('#modalAdmin').modal('show');
-                    console.log('ss');
-                    reset();
                 });
 
                 function reset() {
