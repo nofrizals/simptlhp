@@ -183,7 +183,7 @@
                                                 :class="isChecked === 'Tidak' ? 'text-gray-700 dark:text-gray-400' :
                                                     'text-gray-500 dark:text-gray-400'"
                                                 class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only" type="radio" name="obrikRadio" id="Tidak"
+                                                <input class="sr-only" type="radio" name="obrikRadio" value="0"
                                                     @change="isChecked = 'Tidak'" />
                                                 <span
                                                     :class="isChecked === 'Tidak' ? 'border-brand-500 bg-brand-500' :
@@ -200,7 +200,7 @@
                                                 :class="isChecked === 'Ya' ? 'text-gray-700 dark:text-gray-400' :
                                                     'text-gray-500 dark:text-gray-400'"
                                                 class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only" type="radio" name="obrikRadio" id="Ya"
+                                                <input class="sr-only" type="radio" name="obrikRadio" value="1"
                                                     @change="isChecked = 'Ya'" />
                                                 <span
                                                     :class="isChecked === 'Ya' ? 'border-brand-500 bg-brand-500' :
@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-full px-2.5 hidden">
+                            <div class="w-full px-2.5 hidden" id="form_nama_obrik">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Nama Obrik
                                 </label>
@@ -350,20 +350,64 @@
 
                 $('#level').change(function() {
                     let kode_unor = $('#opd').val();
-                    if ($(this).val() == 3 && ((parseInt(kode_unor.substring(3, 5)) >= 32 && parseInt(kode_unor
-                                .substring(3, 5)) <= 45) || parseInt(kode_unor.substring(3, 5)) == 13 ||
-                            parseInt(kode_unor.substring(3, 5)) == 23)) {
-                        $('#obrikRadio').css('display', 'block');
+                    let level = $(this).val();
+                    let kode = parseInt(kode_unor.substring(3, 5));
+                    let isObrik = (level == 3 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
+
+                    if (isObrik) {
+                        $('#obrikRadio').removeClass('hidden');
+                        $('.pick-tim').addClass('hidden');
                     } else {
-                        if ($(this).val() == 2) {
+                        $('#obrikRadio').addClass('hidden');
+
+                        if (level == 2) {
                             $('.pick-tim').removeClass('hidden');
                         } else {
                             $('.pick-tim').addClass('hidden');
                         }
-                        $('#obrikRadio').css('display', 'none');
                     }
+
                     $('input[name=obrikRadio][value="0"]').prop('checked', true);
-                })
+                });
+
+                $('input[name=obrikRadio]').change(function() {
+                    const opd = $('#opd').val();
+                    if ($(this).val() != 1) {
+                        $("#form_nama_obrik").addClass('hidden');
+                        $('#nama_obrik').html('<option disabled selected>--pilih</option>');
+                        return;
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('instansi/getMyTurunan') }}",
+                        dataType: "json",
+                        data: {
+                            id: opd
+                        },
+
+                        beforeSend() {
+                            $("#form_nama_obrik").removeClass('hidden');
+                        },
+
+                        success(res) {
+                            let html = '<option disabled selected>--pilih</option>';
+                            if (res.data?.length) {
+                                res.data.forEach(row => {
+                                    let selected = row.kode_turunan == res.data.kode_unor ?
+                                        'selected' : '';
+                                    html += `<option value="${row.kode_turunan}" ${selected}>
+                                ${row.nama_instansi}
+                             </option>`;
+                                });
+                            }
+                            $('#nama_obrik').html(html);
+                        },
+                        error() {
+                            $('#nama_obrik').html('<option disabled selected>--pilih</option>');
+                        }
+                    });
+                });
 
                 $('#opd').on('change', function() {
                     let opd = $(this).val();
