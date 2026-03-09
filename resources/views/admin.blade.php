@@ -44,7 +44,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <div id="myModal"
+    <div id="modalAdmin"
         class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
         <div id="modalContent" class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10">
@@ -94,9 +94,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('opd')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
+                                <p class="text-theme-xs text-error-500" id="opd_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -104,9 +102,7 @@
                                 </label>
                                 <input type="text" name="id_pegawai" id="id_pegawai" placeholder="Masukkan NIP/NIK"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                @error('id_pegawai')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
+                                <p class="text-theme-xs text-error-500" id="id_pegawai_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -114,9 +110,7 @@
                                 </label>
                                 <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama Lengkap"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                @error('nama_lengkap')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
+                                <p class="text-theme-xs text-error-500" id="nama_lengkap_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -145,6 +139,7 @@
                                         </svg>
                                     </span>
                                 </div>
+                                <p class="text-theme-xs text-error-500" id="level_error"></p>
                             </div>
                             <div class="w-full px-2.5 pick-tim hidden">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -172,6 +167,7 @@
                                         </svg>
                                     </span>
                                 </div>
+                                <p class="text-theme-xs text-error-500" id="tim_error"></p>
                             </div>
                             <div class="w-full px-2.5 hidden" id="obrikRadio">
                                 <div class="flex flex-col gap-3" x-data="{ isChecked: 'Tidak' }">
@@ -215,6 +211,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <p class="text-theme-xs text-error-500" id="obrikRadio_error"></p>
                             </div>
                             <div class="w-full px-2.5 hidden" id="form_nama_obrik">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -242,6 +239,7 @@
                                         </svg>
                                     </span>
                                 </div>
+                                <p class="text-theme-xs text-error-500" id="nama_obrik_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -249,15 +247,16 @@
                                 </label>
                                 <input type="password" name="password" id="password" placeholder="Password"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <p class="text-theme-xs text-error-500" id="password_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
-                                    <button type="submit"
+                                    <button type="submit" id="btn-save"
                                         class="bg-brand-500 hover:bg-brand-600 flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white">
                                         Save Changes
                                     </button>
-                                    <button
-                                        class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+                                    <button type="button"
+                                        class="cancel flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
                                         Cancel
                                     </button>
                                 </div>
@@ -271,14 +270,6 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-                // $('.opd').select2({
-                //     dropdownParent: $('#myModal'),
-                //     width: '100%'
-                // });
-            });
-        </script>
-        <script>
-            $(document).ready(function() {
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -290,21 +281,20 @@
                 $("#openModalBtn").click(function() {
                     if (!$('.opd').hasClass("select2-hidden-accessible")) {
                         $('.opd').select2({
-                            dropdownParent: $('#myModal'),
+                            dropdownParent: $('#modalAdmin'),
                             width: '100%'
                         });
                     }
-                    $("#myModal").removeClass("hidden opacity-0 pointer-events-none").addClass(
+                    $("#modalAdmin").removeClass("hidden opacity-0 pointer-events-none").addClass(
                         "opacity-100 pointer-events-auto");
                 });
 
                 $("#closeModalBtn").click(function() {
                     $('#formAdmin')[0].reset();
-                    $("#myModal")
-                        .addClass("opacity-0 pointer-events-none")
-                        .removeClass("opacity-100 pointer-events-auto");
+                    $("#modalAdmin").addClass("opacity-0 pointer-events-none").removeClass(
+                        "opacity-100 pointer-events-auto");
                     setTimeout(() => {
-                        $("#myModal").addClass("hidden");
+                        $("#modalAdmin").addClass("hidden");
                     }, 300);
                 });
 
@@ -359,6 +349,84 @@
                     }
                 });
 
+                $('#formAdmin').submit(function(e) {
+                    e.preventDefault();
+                    formData = new FormData($('#formAdmin')[0]);
+                    // $.ajax({
+                    //     type: 'POST',
+                    //     url: "{{ url('admin') }}",
+                    //     data: formData,
+                    //     dataType: 'json',
+                    //     contentType: false,
+                    //     processData: false,
+                    //     beforeSend: function() {
+                    //         $('.err').empty();
+                    //         $('#btn-save').attr('disabled', true).html(
+                    //             '<i class="fas fa-spinner fa-spin"></i>');
+                    //     },
+                    //     success: function(response) {
+                    //         $('#btn-save').attr('disabled', false).html('Simpan');
+                    //         if (response.status == false) {
+                    //             $.each(response.error, function(i, val) {
+                    //                 $("#" + i + "_error").html(val[0])
+                    //             });
+                    //         } else {
+                    //             $('#modalAdmin').modal('hide');
+                    //             $('#userTable').DataTable().ajax.reload(null, false);
+                    //             reset()
+                    //             notif('success', 'Bank berhasil ditambahkan');
+                    //         }
+                    //     }
+                    // });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('admin') }}",
+                        data: formData,
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $('.err').html('');
+                            let loading = `<svg aria-hidden="true" class="w-5 h-5 text-neutral-tertiary animate-spin fill-brand" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                            </svg>
+                            <span>Loading...</span>`
+                            $('#btn-save').prop('disabled', true).html(loading);
+                        },
+
+                        success: function(response) {
+                            console.log(response);
+                            if (!response) {
+                                notif('error', 'Response server tidak valid');
+                                return;
+                            }
+                            if (response.status === false) {
+                                $.each(response.error, function(key, val) {
+                                    $('#' + key + '_error').html(val[0]);
+                                });
+                            } else {
+                                $('#modalAdmin').modal('hide');
+                                if ($.fn.DataTable.isDataTable('#userTable')) {
+                                    $('#userTable').DataTable().ajax.reload(null, false);
+                                }
+                                reset();
+                                notif('success', 'Bank berhasil ditambahkan');
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error(xhr);
+                            notif('error', 'Terjadi kesalahan server');
+                        },
+                        complete: function() {
+                            $('#btn-save')
+                                .prop('disabled', false)
+                                .html('Simpan');
+                        }
+                    });
+                });
+
                 $('#level').change(function() {
                     let kode_unor = $('#opd').val();
                     // jika opd belum dipilih
@@ -387,7 +455,6 @@
                     $('input[name=obrikRadio][value="0"]').prop('checked', true).trigger('change');
                 });
 
-                // $('input[name=obrikRadio]').change(function() {
                 $(document).on('change', 'input[name=obrikRadio]', function() {
                     const opd = $('#opd').val();
                     if ($(this).val() != 1) {
@@ -436,8 +503,14 @@
                     $('#nama_obrik').val('');
                 });
 
+                $('.cancel').click(function(e) {
+                    e.preventDefault();
+                    reset();
+                    $('#modalAdmin').addClass('hidden opacity-0 pointer-events-none');
+                });
+
                 function reset() {
-                    $('#formAdmin').trigger('reset');
+                    $('#userTable').trigger('reset');
                     $('.err').empty();
                 }
             });

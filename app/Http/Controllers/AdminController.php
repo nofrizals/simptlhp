@@ -8,6 +8,8 @@ use App\Models\Tim;
 use App\Models\Unor;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminController extends Controller
@@ -111,5 +113,59 @@ class AdminController extends Controller
             })
             ->rawColumns(['id_pegawai', 'nama_pegawai', 'nama_obrik', 'level', 'action'])
             ->make(true);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'opd'    => ['required'],
+            'id_pegawai'   => ['required', 'digits_between:16,18'],
+            'nama_pegawai' => ['required', 'string', 'max:100'],
+            'id_level'     => ['required'],
+            'id_tim'       => ['required_if:id_level,22'],
+
+            'obrikSelect'  => [
+                Rule::requiredIf(function () use ($request) {
+                    $allowedKodeUnor = [
+                        '01.32',
+                        '01.33',
+                        '01.34',
+                        '01.35',
+                        '01.36',
+                        '01.37',
+                        '01.38',
+                        '01.39',
+                        '01.40',
+                        '01.41',
+                        '01.42',
+                        '01.43',
+                        '01.44',
+                        '01.45',
+                        '01.13'
+                    ];
+
+                    return $request->id_level == 23
+                        && in_array($request->kode_unor, $allowedKodeUnor);
+                })
+            ],
+
+            'kode_turunan' => ['required_if:obrikSelect,ya'],
+            'password'     => ['required', 'min:6'],
+        ]);
+        dd('ada');
+        User::create([
+            'kode_unor'     => $validated['kode_unor'],
+            'id_app'        => '14',
+            'id_pegawai'    => $validated['id_pegawai'],
+            'nama_pegawai'  => $validated['nama_pegawai'],
+            'simak'         => 0,
+            'id_level'      => $validated['id_level'],
+            'id_tim'        => $validated['id_tim'] ?? null,
+            'obrikSelect'   => $validated['obrikSelect'] ?? null,
+            'kode_turunan'  => $validated['kode_turunan'] ?? null,
+            'password'      => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->back()->with('success', 'Pegawai berhasil ditambahkan');
     }
 }
