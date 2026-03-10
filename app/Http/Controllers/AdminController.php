@@ -9,6 +9,7 @@ use App\Models\Unor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -50,7 +51,7 @@ class AdminController extends Controller
                 'tipe' => 'obrik',
             ]);
 
-        $levels = Level::select('tingkatan_level', 'nama_level')->where('id_app', 14)->orderBy('tingkatan_level', 'asc')->get();
+        $levels = Level::select('id_level', 'nama_level')->where('id_app', 14)->orderBy('tingkatan_level', 'asc')->get();
         $tims = Tim::get();
         return view('admin', compact('instansis', 'kecamatans', 'turunansmini', 'levels', 'tims', 'obriks'));
     }
@@ -117,14 +118,14 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator  = Validator::make($request->all(), [
             'opd'    => ['required'],
             'id_pegawai'   => ['required', 'digits_between:16,18'],
-            'nama_pegawai' => ['required', 'string', 'max:100'],
-            'id_level'     => ['required'],
-            'id_tim'       => ['required_if:id_level,22'],
+            'nama_lengkap' => ['required', 'string', 'max:100'],
+            'level'     => ['required'],
+            'tim'       => ['required_if:level,22'],
 
-            'obrikSelect'  => [
+            'obrikRadio'  => [
                 Rule::requiredIf(function () use ($request) {
                     $allowedKodeUnor = [
                         '01.32',
@@ -149,10 +150,27 @@ class AdminController extends Controller
                 })
             ],
 
-            'kode_turunan' => ['required_if:obrikSelect,ya'],
+            'nama_obrik' => ['required_if:obrikRadio,1'],
             'password'     => ['required', 'min:6'],
+        ], [
+            'opd.required' => 'OPD wajib diisi',
+            'id_pegawai.required' => 'NIP/NIK wajib diisi',
+            'id_pegawai.digits_between' => 'NIP/NIK tidak valid',
+            'nama_lengkap.required' => 'Nama lengkap wajib diisi',
+            'level.required' => 'Level wajib dipilih',
+            'tim.required_if' => 'Tim wajib dipilih',
+            'nama_obrik.required_if' => 'Nama obrik wajib dipilih',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 6 karakter'
         ]);
-        dd('ada');
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors()
+            ]);
+        }
+
+        $validated = $validator->validated();
         User::create([
             'kode_unor'     => $validated['kode_unor'],
             'id_app'        => '14',
@@ -166,6 +184,9 @@ class AdminController extends Controller
             'password'      => Hash::make($validated['password']),
         ]);
 
-        return redirect()->back()->with('success', 'Pegawai berhasil ditambahkan');
+        return response()->json([
+            'status' => true,
+            'message' => 'Admin berhasil ditambahkan'
+        ]);
     }
 }

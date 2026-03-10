@@ -94,7 +94,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <p class="text-theme-xs text-error-500" id="opd_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="opd_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -102,7 +102,7 @@
                                 </label>
                                 <input type="text" name="id_pegawai" id="id_pegawai" placeholder="Masukkan NIP/NIK"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="text-theme-xs text-error-500" id="id_pegawai_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="id_pegawai_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -110,7 +110,7 @@
                                 </label>
                                 <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama Lengkap"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="text-theme-xs text-error-500" id="nama_lengkap_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="nama_lengkap_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -124,7 +124,7 @@
                                             class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                             Pilih Level</option>
                                         @foreach ($levels as $level)
-                                            <option value="{{ $level->tingkatan_level }}"
+                                            <option value="{{ $level->id_level }}"
                                                 class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                                 {{ ucwords($level->nama_level) }}
                                             </option>
@@ -139,7 +139,7 @@
                                         </svg>
                                     </span>
                                 </div>
-                                <p class="text-theme-xs text-error-500" id="level_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="level_error"></p>
                             </div>
                             <div class="w-full px-2.5 pick-tim hidden">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -167,7 +167,7 @@
                                         </svg>
                                     </span>
                                 </div>
-                                <p class="text-theme-xs text-error-500" id="tim_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="tim_error"></p>
                             </div>
                             <div class="w-full px-2.5 hidden" id="obrikRadio">
                                 <div class="flex flex-col gap-3" x-data="{ isChecked: 'Tidak' }">
@@ -211,7 +211,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="text-theme-xs text-error-500" id="obrikRadio_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="obrikRadio_error"></p>
                             </div>
                             <div class="w-full px-2.5 hidden" id="form_nama_obrik">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -239,7 +239,7 @@
                                         </svg>
                                     </span>
                                 </div>
-                                <p class="text-theme-xs text-error-500" id="nama_obrik_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="nama_obrik_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -247,7 +247,7 @@
                                 </label>
                                 <input type="password" name="password" id="password" placeholder="Password"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="text-theme-xs text-error-500" id="password_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="password_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
@@ -352,33 +352,6 @@
                 $('#formAdmin').submit(function(e) {
                     e.preventDefault();
                     formData = new FormData($('#formAdmin')[0]);
-                    // $.ajax({
-                    //     type: 'POST',
-                    //     url: "{{ url('admin') }}",
-                    //     data: formData,
-                    //     dataType: 'json',
-                    //     contentType: false,
-                    //     processData: false,
-                    //     beforeSend: function() {
-                    //         $('.err').empty();
-                    //         $('#btn-save').attr('disabled', true).html(
-                    //             '<i class="fas fa-spinner fa-spin"></i>');
-                    //     },
-                    //     success: function(response) {
-                    //         $('#btn-save').attr('disabled', false).html('Simpan');
-                    //         if (response.status == false) {
-                    //             $.each(response.error, function(i, val) {
-                    //                 $("#" + i + "_error").html(val[0])
-                    //             });
-                    //         } else {
-                    //             $('#modalAdmin').modal('hide');
-                    //             $('#userTable').DataTable().ajax.reload(null, false);
-                    //             reset()
-                    //             notif('success', 'Bank berhasil ditambahkan');
-                    //         }
-                    //     }
-                    // });
-
                     $.ajax({
                         type: 'POST',
                         url: "{{ url('admin') }}",
@@ -407,7 +380,7 @@
                                     $('#' + key + '_error').html(val[0]);
                                 });
                             } else {
-                                $('#modalAdmin').modal('hide');
+                                $('#modalAdmin').addClass('hidden opacity-0 pointer-events-none');
                                 if ($.fn.DataTable.isDataTable('#userTable')) {
                                     $('#userTable').DataTable().ajax.reload(null, false);
                                 }
@@ -436,8 +409,10 @@
                         return;
                     }
                     let level = $(this).val();
+                    console.log(level);
+
                     let kode = parseInt(kode_unor.substring(3, 5));
-                    let isObrik = (level == 3 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
+                    let isObrik = (level == 23 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
 
                     if (isObrik) {
                         $('#obrikRadio').removeClass('hidden');
@@ -445,7 +420,7 @@
                     } else {
                         $('#obrikRadio').addClass('hidden');
 
-                        if (level == 2) {
+                        if (level == 22) {
                             $('.pick-tim').removeClass('hidden');
                         } else {
                             $('.pick-tim').addClass('hidden');
@@ -510,7 +485,7 @@
                 });
 
                 function reset() {
-                    $('#userTable').trigger('reset');
+                    $('#formAdmin')[0].reset();
                     $('.err').empty();
                 }
             });
