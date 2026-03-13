@@ -120,11 +120,10 @@ class AdminController extends Controller
     {
         $validator  = Validator::make($request->all(), [
             'opd'    => ['required'],
-            'id_pegawai'   => ['required', 'digits_between:16,18'],
+            'id_pegawai'   => ['required', 'unique:mysql_root.kis_users,id_pegawai', 'digits_between:16,18'],
             'nama_lengkap' => ['required', 'string', 'max:100'],
             'level'     => ['required'],
             'tim'       => ['required_if:level,22'],
-
             'obrikRadio'  => [
                 Rule::requiredIf(function () use ($request) {
                     $allowedKodeUnor = [
@@ -149,12 +148,12 @@ class AdminController extends Controller
                         && in_array($request->kode_unor, $allowedKodeUnor);
                 })
             ],
-
             'nama_obrik' => ['required_if:obrikRadio,1'],
             'password'     => ['required', 'min:6'],
         ], [
             'opd.required' => 'OPD wajib diisi',
             'id_pegawai.required' => 'NIP/NIK wajib diisi',
+            'id_pegawai.unique' => 'NIP/NIK sudah terdaftar',
             'id_pegawai.digits_between' => 'NIP/NIK tidak valid',
             'nama_lengkap.required' => 'Nama lengkap wajib diisi',
             'level.required' => 'Level wajib dipilih',
@@ -172,21 +171,21 @@ class AdminController extends Controller
 
         $validated = $validator->validated();
         User::create([
-            'kode_unor'     => $validated['kode_unor'],
-            'id_app'        => '14',
-            'id_pegawai'    => $validated['id_pegawai'],
-            'nama_pegawai'  => $validated['nama_pegawai'],
-            'simak'         => 0,
-            'id_level'      => $validated['id_level'],
-            'id_tim'        => $validated['id_tim'] ?? null,
-            'obrikSelect'   => $validated['obrikSelect'] ?? null,
-            'kode_turunan'  => $validated['kode_turunan'] ?? null,
-            'password'      => Hash::make($validated['password']),
+            'kode_unor'         => $validated['opd'],
+            'id_app'            => '14',
+            'id_pegawai'        => $validated['id_pegawai'],
+            'nama_pegawai'      => $validated['nama_lengkap'],
+            'simak'             => 0,
+            'tingkatan_level'   => $validated['level'],
+            // 'id_tim'            => $validated['tim'] ?? null,
+            // 'obrikSelect'       => $validated['obrikRadio'] ?? null,
+            // 'kode_turunan'      => $validated['nama_obrik'] ?? null,
+            'password'          => Hash::make($validated['password']),
         ]);
 
         return response()->json([
-            'status' => true,
-            'message' => 'Admin berhasil ditambahkan'
+            'status'    => true,
+            'message'   => 'Admin berhasil ditambahkan'
         ]);
     }
 }

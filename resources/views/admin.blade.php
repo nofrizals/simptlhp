@@ -381,10 +381,11 @@
                             } else {
                                 $('#modalAdmin').addClass('hidden opacity-0 pointer-events-none');
                                 if ($.fn.DataTable.isDataTable('#userTable')) {
-                                    $('#userTable').DataTable().ajax.reload(null, false);
+                                    $('#userTable').DataTable().ajax.reload(null, true);
                                 }
+                                notif('success', response.message);
                                 reset();
-                                notif('success', 'Bank berhasil ditambahkan');
+                                $('.pick-tim').addClass('hidden');
                             }
                         },
                         error: function(xhr) {

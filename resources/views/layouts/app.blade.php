@@ -139,7 +139,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         <div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto">
             @include('partials.overlay')
             @include('partials.header')
-
+            <div id="alert-container" class="mb-4"></div>
             <main>
                 @yield('content')
             </main>
@@ -153,6 +153,50 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 
     <!-- Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        function notif(type, message) {
+
+            let alertHtml = '';
+
+            if (type === 'success') {
+                alertHtml = `
+        <div class="rounded-xl border border-success-500 bg-success-50 p-4 mb-4">
+            <div class="flex items-start gap-3">
+                <div class="-mt-0.5 text-success-500">✔</div>
+                <div>
+                    <h4 class="mb-1 text-sm font-semibold text-gray-800">
+                        Success
+                    </h4>
+                    <p class="text-sm text-gray-500">${message}</p>
+                </div>
+            </div>
+        </div>`;
+            }
+
+            if (type === 'error') {
+                alertHtml = `
+        <div class="rounded-xl border border-red-500 bg-red-50 p-4 mb-4">
+            <div class="flex items-start gap-3">
+                <div class="-mt-0.5 text-red-500">✖</div>
+                <div>
+                    <h4 class="mb-1 text-sm font-semibold text-gray-800">
+                        Error
+                    </h4>
+                    <p class="text-sm text-gray-500">${message}</p>
+                </div>
+            </div>
+        </div>`;
+            }
+
+            $('#alert-container').html(alertHtml);
+
+            // auto hide setelah 5 detik
+            setTimeout(function() {
+                $('#alert-container').fadeOut();
+            }, 5000);
+        }
+    </script>
     @stack('scripts')
 </body>
 
