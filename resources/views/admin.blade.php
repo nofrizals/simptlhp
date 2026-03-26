@@ -13,7 +13,7 @@
                 <div class="flex justify-start mb-5">
                     <button id="openModalBtn"
                         class="px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
-                        Open Modal
+                        Tambah
                     </button>
                 </div>
                 <div id="tableLoading"
@@ -124,7 +124,7 @@
                                             class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                             Pilih Level</option>
                                         @foreach ($levels as $level)
-                                            <option value="{{ $level->id_level }}"
+                                            <option value="{{ $level->tingkatan_level }}"
                                                 class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                                 {{ ucwords($level->nama_level) }}
                                             </option>
@@ -253,7 +253,7 @@
                                 <div class="mt-1 flex items-center gap-3">
                                     <button type="submit" id="btn-save"
                                         class="bg-brand-500 hover:bg-brand-600 flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white">
-                                        Save Changes
+                                        Simpan
                                     </button>
                                     <button type="button"
                                         class="cancel flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
@@ -412,7 +412,7 @@
                     console.log(level);
 
                     let kode = parseInt(kode_unor.substring(3, 5));
-                    let isObrik = (level == 23 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
+                    let isObrik = (level == 3 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
 
                     if (isObrik) {
                         $('#obrikRadio').removeClass('hidden');
@@ -420,7 +420,7 @@
                     } else {
                         $('#obrikRadio').addClass('hidden');
 
-                        if (level == 22) {
+                        if (level == 2) {
                             $('.pick-tim').removeClass('hidden');
                         } else {
                             $('.pick-tim').addClass('hidden');

@@ -8,6 +8,7 @@ use App\Models\Tim;
 use App\Models\Unor;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -51,7 +52,7 @@ class AdminController extends Controller
                 'tipe' => 'obrik',
             ]);
 
-        $levels = Level::select('id_level', 'nama_level')->where('id_app', 14)->orderBy('tingkatan_level', 'asc')->get();
+        $levels = Level::select('tingkatan_level', 'nama_level')->where('id_app', 14)->orderBy('tingkatan_level', 'asc')->get();
         $tims = Tim::get();
         return view('admin', compact('instansis', 'kecamatans', 'turunansmini', 'levels', 'tims', 'obriks'));
     }
@@ -123,7 +124,7 @@ class AdminController extends Controller
             'id_pegawai'   => ['required', 'unique:mysql_root.kis_users,id_pegawai', 'digits_between:16,18'],
             'nama_lengkap' => ['required', 'string', 'max:100'],
             'level'     => ['required'],
-            'tim'       => ['required_if:level,22'],
+            'tim'       => ['required_if:level,2'],
             'obrikRadio'  => [
                 Rule::requiredIf(function () use ($request) {
                     $allowedKodeUnor = [
@@ -144,7 +145,7 @@ class AdminController extends Controller
                         '01.13'
                     ];
 
-                    return $request->id_level == 23
+                    return $request->id_level == 3
                         && in_array($request->kode_unor, $allowedKodeUnor);
                 })
             ],
@@ -170,17 +171,40 @@ class AdminController extends Controller
         }
 
         $validated = $validator->validated();
+        // User::create([
+        //     'kode_unor'         => $validated['opd'],
+        //     'id_app'            => '14',
+        //     'id_pegawai'        => $validated['id_pegawai'],
+        //     'nama_pegawai'      => $validated['nama_lengkap'],
+        //     'simak'             => 0,
+        //     'tingkatan_level'   => $validated['level'],
+        //     // 'id_tim'            => $validated['tim'] ?? null,
+        //     // 'obrikSelect'       => $validated['obrikRadio'] ?? null,
+        //     // 'kode_turunan'      => $validated['nama_obrik'] ?? null,
+        //     'password'          => Hash::make($validated['password']),
+
+        //     if ($request->obrikRadio == 1) {
+        // 		'kode_unor' = $request->nama_obrik;
+        // 	} else {
+        // 		'kode_unor' = $$request->opd;
+        // 	}
+
+        // ]);
+
+        $kode_unor = ($request->obrikRadio == 1)
+            ? $request->nama_obrik
+            : $request->opd;
+
         User::create([
-            'kode_unor'         => $validated['opd'],
+            'kode_unor'         => $kode_unor,
             'id_app'            => '14',
             'id_pegawai'        => $validated['id_pegawai'],
             'nama_pegawai'      => $validated['nama_lengkap'],
             'simak'             => 0,
             'tingkatan_level'   => $validated['level'],
-            // 'id_tim'            => $validated['tim'] ?? null,
-            // 'obrikSelect'       => $validated['obrikRadio'] ?? null,
-            // 'kode_turunan'      => $validated['nama_obrik'] ?? null,
             'password'          => Hash::make($validated['password']),
+            'diinput_oleh'      => Auth::id(),
+            'diinput_waktu'     => now(),
         ]);
 
         return response()->json([
