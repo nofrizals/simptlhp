@@ -120,12 +120,12 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $validator  = Validator::make($request->all(), [
-            'opd'    => ['required'],
-            'id_pegawai'   => ['required', 'unique:mysql_root.kis_users,id_pegawai', 'digits_between:16,18'],
-            'nama_lengkap' => ['required', 'string', 'max:100'],
-            'level'     => ['required'],
-            'tim'       => ['required_if:level,2'],
-            'obrikRadio'  => [
+            'opd'           => ['required'],
+            'id_pegawai'    => ['required', 'unique:mysql_root.kis_users,id_pegawai', 'digits_between:16,18'],
+            'nama_lengkap'  => ['required', 'string', 'max:100'],
+            'level'         => ['required'],
+            'tim'           => ['required_if:level,2'],
+            'obrikRadio'    => [
                 Rule::requiredIf(function () use ($request) {
                     $allowedKodeUnor = [
                         '01.32',
