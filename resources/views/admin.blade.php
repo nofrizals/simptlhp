@@ -369,9 +369,12 @@
                         },
 
                         success: function(response) {
-                            console.log(response);
                             if (!response) {
-                                notif('error', 'Response server tidak valid');
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: "Response server tidak valid",
+                                    icon: "error"
+                                });
                                 return;
                             }
                             if (response.status === false) {
@@ -383,14 +386,21 @@
                                 if ($.fn.DataTable.isDataTable('#userTable')) {
                                     $('#userTable').DataTable().ajax.reload(null, true);
                                 }
-                                notif('success', response.message);
+                                Swal.fire({
+                                    title: "Sukses",
+                                    text: response.message,
+                                    icon: "success"
+                                });
                                 reset();
                                 $('.pick-tim').addClass('hidden');
                             }
                         },
                         error: function(xhr) {
-                            console.error(xhr);
-                            notif('error', 'Terjadi kesalahan server');
+                            Swal.fire({
+                                title: "Gagal",
+                                text: "Terjadi kesalahan server",
+                                icon: "error"
+                            });
                         },
                         complete: function() {
                             $('#btn-save')
@@ -477,6 +487,49 @@
                     $('#nama_obrik option[data-opd="' + opd + '"]').show();
                     $('#nama_obrik').val('');
                 });
+
+
+
+                $(document).on('click', '.btn-deleteAdmin', function() {
+                    Swal.fire({
+                        title: 'Apakah anda yakin?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonColor: '#DC3545',
+                        confirmButtonColor: '#28A745',
+                        cancelButtonText: 'Batal',
+                        confirmButtonText: 'Yakin',
+                        reverseButtons: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let id = $(this).data('id');
+                            $.ajax({
+                                type: "delete",
+                                url: "{{ url('admin') }}/" + id,
+                                dataType: "json",
+                                success: function(response) {
+                                    if (response.status) {
+                                        Swal.fire({
+                                            title: "Sukses",
+                                            text: response.message,
+                                            icon: "success"
+                                        });
+                                        $('#userTable').DataTable().ajax.reload(null,
+                                            false);
+                                    } else {
+                                        Swal.fire({
+                                            title: "Gagal",
+                                            text: "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
+                                            icon: "error"
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    })
+                });
+
+
 
                 $('.cancel').click(function(e) {
                     e.preventDefault();

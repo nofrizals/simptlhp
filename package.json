@@ -49,6 +49,7 @@
     "dropzone": "^6.0.0-beta.2",
     "flatpickr": "^4.6.13",
     "fullcalendar": "^6.1.15",
-    "jsvectormap": "^1.6.0"
+    "jsvectormap": "^1.6.0",
+    "sweetalert2": "^11.26.24"
   }
 }

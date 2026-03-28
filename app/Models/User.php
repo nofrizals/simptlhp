@@ -9,6 +9,7 @@ class User extends Model
 {
     use HasFactory;
     protected $table = 'kis_users';
+    protected $primaryKey = 'id_user';
     protected $guarded = [];
     public $timestamps = false;
     protected $connection = 'mysql_root';
