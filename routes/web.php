@@ -10,6 +10,7 @@ Route::get('/', function () {
 
 Route::get('admin', [AdminController::class, 'index']);
 Route::post('admin', [AdminController::class, 'store']);
+Route::get('admin/{admin}/edit', [AdminController::class, 'edit']);
 Route::delete('admin/{admin}', [AdminController::class, 'destroy']);
 Route::post('ajax-data-admin', [AdminController::class, 'ajaxDataAdmin']);
 Route::post('instansi/getMyTurunan', [InstansiController::class, 'getMyTurunan']);

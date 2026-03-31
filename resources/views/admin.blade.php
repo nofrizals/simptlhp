@@ -58,9 +58,7 @@
             </button>
             <div class="rounded-2xl bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="px-5 py-4 sm:px-6 sm:py-5">
-                    <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                        Form Tambah Admin
-                    </h3>
+                    <h3 class="modal-header text-base font-medium text-gray-800 dark:text-white/90"></h3>
                 </div>
                 <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
                     <form id="formAdmin">
@@ -279,6 +277,7 @@
                 $('#tableLoading').removeClass('hidden');
 
                 $("#openModalBtn").click(function() {
+                    $('.modal-header').html('Form Tambah Admin');
                     if (!$('.opd').hasClass("select2-hidden-accessible")) {
                         $('.opd').select2({
                             dropdownParent: $('#modalAdmin'),
@@ -412,15 +411,11 @@
 
                 $('#level').change(function() {
                     let kode_unor = $('#opd').val();
-                    // jika opd belum dipilih
                     if (!kode_unor) {
-                        // reset level
                         $(this).val('').trigger('change');
                         return;
                     }
                     let level = $(this).val();
-                    console.log(level);
-
                     let kode = parseInt(kode_unor.substring(3, 5));
                     let isObrik = (level == 3 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
 
@@ -488,8 +483,6 @@
                     $('#nama_obrik').val('');
                 });
 
-
-
                 $(document).on('click', '.btn-deleteAdmin', function() {
                     Swal.fire({
                         title: 'Apakah anda yakin?',
@@ -529,7 +522,32 @@
                     })
                 });
 
+                $(document).on('click', '.btn-editAdmin', function() {
+                    let data = $(this).data();
+                    // console.log('data.tim.test:', data.tim);
+                    // console.log('data.tim:', data.tim);
+                    // console.log('select options:', $('#tim option').map((i, opt) => opt.value).get());
 
+                    $("#modalAdmin").removeClass("hidden opacity-0 pointer-events-none")
+                        .addClass(
+                            "opacity-100 pointer-events-auto");
+                    $('.modal-header').html('Form Edit Admin');
+                    // $('#modal-size').removeClass('modal-lg').addClass('modal-sm');
+                    // $('#col-loadPegawai').hide();
+                    // $('.ubahAdmin').hide();
+                    $('#opd').val(data.opd);
+                    $('#id_pegawai').val(data.id_pegawai);
+                    $('#nama_lengkap').val(data.nama);
+                    $('#level').val(data.level).change().prop('disabled', false);
+                    if (data.level == 2) {
+                        // $('#tim').val(data.tim).change();
+                        $('#tim').val(data.tim).trigger('change');
+                    }
+                    // $('#tim').val(data.tim);
+                    $('#obrikRadio').val(data.obrikRadio);
+                    $('#nama_obrik').val(data.nama_obrik);
+                    // $('#level').val(data.role).trigger('change');
+                });
 
                 $('.cancel').click(function(e) {
                     e.preventDefault();
