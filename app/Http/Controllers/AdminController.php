@@ -209,6 +209,7 @@ class AdminController extends Controller
 
     public function destroy(User $admin)
     {
+        TimAnggota::where('id_user', $admin->id_user)->delete();
         $admin->delete();
         return response()->json([
             'status'  => true,

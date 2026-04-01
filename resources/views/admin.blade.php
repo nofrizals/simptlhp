@@ -502,13 +502,13 @@
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
-                                        Swal.fire({
-                                            title: "Sukses",
-                                            text: response.message,
-                                            icon: "success"
-                                        });
-                                        $('#userTable').DataTable().ajax.reload(null,
-                                            false);
+                                        $('#userTable').DataTable().ajax.reload(function() {
+                                            Swal.fire({
+                                                title: "Sukses",
+                                                text: response.message,
+                                                icon: "success"
+                                            });
+                                        }, false);
                                     } else {
                                         Swal.fire({
                                             title: "Gagal",
@@ -558,6 +558,23 @@
                 function reset() {
                     $('#formAdmin')[0].reset();
                     $('.err').empty();
+
+                    // Reset select ke default option pertama
+                    $('#opd, #level, #tim, #nama_obrik').prop('selectedIndex', 0);
+
+                    // Disable kembali level (karena awalnya disabled)
+                    $('#level').prop('disabled', true);
+
+                    // Sembunyikan field tambahan
+                    $('.pick-tim').addClass('hidden');
+                    $('#obrikRadio').addClass('hidden');
+                    $('#form_nama_obrik').addClass('hidden');
+
+                    // Reset radio (default ke "Tidak")
+                    $('input[name="obrikRadio"][value="0"]').prop('checked', true);
+
+                    // Optional: trigger change kalau ada event listener
+                    $('#opd').trigger('change');
                 }
             });
         </script>
