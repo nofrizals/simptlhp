@@ -63,8 +63,9 @@
                 <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
                     <form id="formAdmin">
                         <div class="-mx-2.5 flex flex-wrap gap-y-5">
-                            <div class="w-full px-2.5">
-                            </div>
+                            <input type="hidden"
+                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                id="id" name="id">
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Nama OPD
@@ -246,6 +247,9 @@
                                 <input type="password" name="password" id="password" placeholder="Password"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 <p class="err text-theme-xs text-error-500" id="password_error"></p>
+                                <small id="password-edit" class="hidden text-red-500"><i>Kosongkan password
+                                        bila tidak
+                                        merubah</i></small>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
@@ -524,7 +528,7 @@
 
                 $(document).on('click', '.btn-editAdmin', function() {
                     let data = $(this).data();
-                    // console.log('data.tim.test:', data.tim);
+                    // console.log('data.opd:', data);
                     // console.log('data.tim:', data.tim);
                     // console.log('select options:', $('#tim option').map((i, opt) => opt.value).get());
 
@@ -535,6 +539,7 @@
                     // $('#modal-size').removeClass('modal-lg').addClass('modal-sm');
                     // $('#col-loadPegawai').hide();
                     // $('.ubahAdmin').hide();
+                    $('#id').val(data.id);
                     $('#opd').val(data.opd);
                     $('#id_pegawai').val(data.id_pegawai);
                     $('#nama_lengkap').val(data.nama);
@@ -546,7 +551,8 @@
                     // $('#tim').val(data.tim);
                     $('#obrikRadio').val(data.obrikRadio);
                     $('#nama_obrik').val(data.nama_obrik);
-                    // $('#level').val(data.role).trigger('change');
+                    // $('#level').val(data.role).trigger('change');                    
+                    $('#password-edit').removeClass('hidden');
                 });
 
                 $('.cancel').click(function(e) {
@@ -575,6 +581,8 @@
 
                     // Optional: trigger change kalau ada event listener
                     $('#opd').trigger('change');
+
+                    $('#password-edit').addClass('hidden');
                 }
             });
         </script>

@@ -121,9 +121,15 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
+        $passwordRules = ['min:6'];
+        if (!$request->id) {
+            $passwordRules[] = 'required';
+        } else {
+            $passwordRules[] = 'nullable';
+        }
         $validator  = Validator::make($request->all(), [
             'opd'           => ['required'],
-            'id_pegawai'    => ['required', 'unique:mysql_root.kis_users,id_pegawai', 'digits_between:16,18'],
+            'id_pegawai'    => ['required', Rule::unique('mysql_root.kis_users', 'id_pegawai')->ignore($request->id, 'id_user'), 'digits_between:16,18'],
             'nama_lengkap'  => ['required', 'string', 'max:100'],
             'level'         => ['required'],
             'tim'           => ['required_if:level,2'],
@@ -151,7 +157,7 @@ class AdminController extends Controller
                 })
             ],
             'nama_obrik'                => ['required_if:obrikRadio,1'],
-            'password'                  => ['required', 'min:6'],
+            'password'                  => $passwordRules,
         ], [
             'opd.required'              => 'OPD wajib diisi',
             'id_pegawai.required'       => 'NIP/NIK wajib diisi',
@@ -179,22 +185,29 @@ class AdminController extends Controller
             'id_pegawai'        => $validated['id_pegawai'],
             'nama_pegawai'      => $validated['nama_lengkap'],
             'simak'             => 0,
-            'tingkatan_level'   => $validated['level'],
-            'password'          => Hash::make($validated['password']),
-            'diinput_oleh'      => Auth::id(),
-            'diinput_waktu'     => now(),
+            'tingkatan_level'   => $validated['level']
         ];
-        $user = User::create($data);
+        if (!empty($validated['password'])) {
+            $data['password'] = Hash::make($validated['password']);
+        }
+        if ($request->id) {
+            $user = User::find($request->id);
+            $data['diedit_oleh']  = Auth::id();
+            $data['diedit_waktu'] = now();
+            $user->update($data);
+        } else {
+            $data['diinput_oleh']  = Auth::id();
+            $data['diinput_waktu'] = now();
+            $user = User::create($data);
+        }
         if ($user) {
-            if ($data['tingkatan_level'] == 2) {
+            if ($data['tingkatan_level'] == 2 && !empty($request->tim)) {
                 TimAnggota::updateOrCreate(
                     ['id_user' => $user->id_user],
                     ['id_tim' => $request->tim]
                 );
-                return response()->json([
-                    'status'  => true,
-                    'message' => 'User berhasil disimpan'
-                ]);
+            } else {
+                TimAnggota::where('id_user', $user->id_user)->delete();
             }
             return response()->json([
                 'status'  => true,
