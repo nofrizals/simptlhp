@@ -169,42 +169,38 @@
                                 <p class="err text-theme-xs text-error-500" id="tim_error"></p>
                             </div>
                             <div class="w-full px-2.5 hidden" id="obrikRadio">
-                                <div class="flex flex-col gap-3" x-data="{ isChecked: 'Tidak' }">
+                                <div class="flex flex-col gap-3">
                                     <label class="text-sm font-medium text-gray-800 dark:text-white/90">
                                         Obrik Level Korwil/UPTD/Kelurahan/Kampung
                                     </label>
                                     <div class="flex flex-wrap items-center gap-4">
                                         <div>
                                             <label
-                                                :class="isChecked === 'Tidak' ? 'text-gray-700 dark:text-gray-400' :
-                                                    'text-gray-500 dark:text-gray-400'"
                                                 class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only" type="radio" name="obrikRadio" value="0"
-                                                    @change="isChecked = 'Tidak'" />
+                                                <input class="sr-only peer" type="radio" name="obrikRadio"
+                                                    value="0">
+
                                                 <span
-                                                    :class="isChecked === 'Tidak' ? 'border-brand-500 bg-brand-500' :
-                                                        'bg-transparent border-gray-300 dark:border-gray-700'"
-                                                    class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
-                                                    <span :class="isChecked === 'Tidak' ? 'block' : 'hidden'"
-                                                        class="h-2 w-2 rounded-full bg-white"></span>
+                                                    class="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 peer-checked:border-blue-500 peer-checked:bg-blue-500">
+                                                    <span
+                                                        class="h-2 w-2 rounded-full bg-white hidden peer-checked:block"></span>
                                                 </span>
+
                                                 Tidak
                                             </label>
                                         </div>
                                         <div>
                                             <label
-                                                :class="isChecked === 'Ya' ? 'text-gray-700 dark:text-gray-400' :
-                                                    'text-gray-500 dark:text-gray-400'"
                                                 class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only" type="radio" name="obrikRadio" value="1"
-                                                    @change="isChecked = 'Ya'" />
+                                                <input class="sr-only peer" type="radio" name="obrikRadio"
+                                                    value="1">
+
                                                 <span
-                                                    :class="isChecked === 'Ya' ? 'border-brand-500 bg-brand-500' :
-                                                        'bg-transparent border-gray-300 dark:border-gray-700'"
-                                                    class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
-                                                    <span :class="isChecked === 'Ya' ? 'block' : 'hidden'"
-                                                        class="h-2 w-2 rounded-full bg-white"></span>
+                                                    class="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 peer-checked:border-blue-500 peer-checked:bg-blue-500">
+                                                    <span
+                                                        class="h-2 w-2 rounded-full bg-white hidden peer-checked:block"></span>
                                                 </span>
+
                                                 Ya
                                             </label>
                                         </div>
@@ -247,8 +243,7 @@
                                 <input type="password" name="password" id="password" placeholder="Password"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 <p class="err text-theme-xs text-error-500" id="password_error"></p>
-                                <small id="password-edit" class="hidden text-red-500"><i>Kosongkan password
-                                        bila tidak
+                                <small id="password-edit" class="hidden text-red-500"><i>Kosongkan password bila tidak
                                         merubah</i></small>
                             </div>
                             <div class="w-full px-2.5">
@@ -528,30 +523,20 @@
 
                 $(document).on('click', '.btn-editAdmin', function() {
                     let data = $(this).data();
-                    // console.log('data.opd:', data);
-                    // console.log('data.tim:', data.tim);
-                    // console.log('select options:', $('#tim option').map((i, opt) => opt.value).get());
-
                     $("#modalAdmin").removeClass("hidden opacity-0 pointer-events-none")
                         .addClass(
                             "opacity-100 pointer-events-auto");
                     $('.modal-header').html('Form Edit Admin');
-                    // $('#modal-size').removeClass('modal-lg').addClass('modal-sm');
-                    // $('#col-loadPegawai').hide();
-                    // $('.ubahAdmin').hide();
                     $('#id').val(data.id);
                     $('#opd').val(data.opd);
                     $('#id_pegawai').val(data.id_pegawai);
                     $('#nama_lengkap').val(data.nama);
                     $('#level').val(data.level).change().prop('disabled', false);
                     if (data.level == 2) {
-                        // $('#tim').val(data.tim).change();
                         $('#tim').val(data.tim).trigger('change');
                     }
-                    // $('#tim').val(data.tim);
                     $('#obrikRadio').val(data.obrikRadio);
                     $('#nama_obrik').val(data.nama_obrik);
-                    // $('#level').val(data.role).trigger('change');                    
                     $('#password-edit').removeClass('hidden');
                 });
 
