@@ -18,7 +18,7 @@
     <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <!-- Sidebar Menu -->
         <nav x-data="{ selected: $persist('Dashboard') }">
-            <!-- Menu Group -->
+            <!-- Menu -->
             <div>
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
                     <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
@@ -34,8 +34,8 @@
                     </svg>
                 </h3>
 
-                <ul class="flex flex-col gap-4 mb-6">
-                    <!-- Menu Item Dashboard -->
+                <ul class="mb-6 flex flex-col gap-1">
+                    <!-- Dashboard -->
                     <li>
                         <a href="{{ url('/') }}"
                             class="menu-item group {{ request()->is('/') ? 'menu-item-active' : 'menu-item-inactive' }}">
@@ -51,9 +51,7 @@
                             </span>
                         </a>
                     </li>
-                    <!-- Menu Item Dashboard -->
-
-                    <!-- Menu Admin -->
+                    <!-- Admin -->
                     <li>
                         <a href="{{ url('admin') }}"
                             class="menu-item group {{ request()->is('admin') ? 'menu-item-active' : 'menu-item-inactive' }}">
@@ -70,20 +68,348 @@
                             </span>
                         </a>
                     </li>
-                    <!-- Menu Admin -->
+                    <!-- Master -->
+                    <li>
+                        <a href="#" @click.prevent="selected = (selected === 'Masters' ? '':'Masters')"
+                            class="menu-item group"
+                            :class="(selected === 'Masters') || (page === 'lineChart' || page === 'barChart' ||
+                                page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'">
+                            <svg :class="(selected === 'Masters') || (page === 'lineChart' || page === 'barChart' ||
+                                page === 'pieChart') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" />
+                            </svg>
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Data Master
+                            </span>
+                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                                :class="[(selected === 'Masters') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive',
+                                    sidebarToggle ? 'lg:hidden' : ''
+                                ]"
+                                width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <!-- Dropdown Menu Start -->
+                        <div class="overflow-hidden transform translate"
+                            :class="(selected === 'Masters') ? 'block' : 'hidden'">
+                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                <li>
+                                    <a href="{{ url('jenis-php') }}" class="menu-dropdown-item group"
+                                        :class="page === 'jenis-php' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Jenis PHP
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('nilai-kerugian') }}" class="menu-dropdown-item group"
+                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Nilai Kerugian
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('status-tl') }}" class="menu-dropdown-item group"
+                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Status Tindak Lanjut
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('obrik') }}" class="menu-dropdown-item group"
+                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Obrik
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('obrik-turunan') }}" class="menu-dropdown-item group"
+                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Obrik Turunan
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown Menu End -->
+                    </li>
+                    <!-- Manajemen Tim -->
+                    <li>
+                        <a href="#"
+                            @click.prevent="selected = (selected === 'Manajemen-tim' ? '':'Manajemen-tim')"
+                            class="menu-item group"
+                            :class="(selected === 'Manajemen-tim') || (page === 'lineChart' || page === 'barChart' ||
+                                page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'">
+                            <svg :class="(selected === 'Manajemen-tim') || (page === 'lineChart' || page === 'barChart' ||
+                                page === 'pieChart') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.5 11C16.8807 11 18 9.88071 18 8.5C18 7.11929 16.8807 6 15.5 6C14.1193 6 13 7.11929 13 8.5C13 9.88071 14.1193 11 15.5 11Z
+                                    M8.5 11C9.88071 11 11 9.88071 11 8.5C11 7.11929 9.88071 6 8.5 6C7.11929 6 6 7.11929 6 8.5C6 9.88071 7.11929 11 8.5 11Z
+                                    M3 18C3 15.7909 4.79086 14 7 14H10C12.2091 14 14 15.7909 14 18
+                                    M10 18C10 15.7909 11.7909 14 14 14H17C19.2091 14 21 15.7909 21 18"
+                                    stroke="#737070" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" fill="none" />
+                            </svg>
+
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Manajemen Tim
+                            </span>
+                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                                :class="[(selected === 'Manajemen-tim') ? 'menu-item-arrow-active' :
+                                    'menu-item-arrow-inactive',
+                                    sidebarToggle ? 'lg:hidden' : ''
+                                ]"
+                                width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <!-- Dropdown Menu Start -->
+                        <div class="overflow-hidden transform translate"
+                            :class="(selected === 'Manajemen-tim') ? 'block' : 'hidden'">
+                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                <li>
+                                    <a href="{{ url('daftar-tim') }}" class="menu-dropdown-item group"
+                                        :class="page === 'lineChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Daftar Tim
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('obrik-tim') }}" class="menu-dropdown-item group"
+                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Obrik Ditangani
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown Menu End -->
+                    </li>
+                    <!-- Manajemen Kasus -->
+                    <li>
+                        <a href="#"
+                            @click.prevent="selected = (selected === 'Manajemen-kasus' ? '':'Manajemen-kasus')"
+                            class="menu-item group"
+                            :class="(selected === 'Manajemen-kasus') || (page === 'lineChart' || page === 'barChart' ||
+                                page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'">
+                            <svg :class="(selected === 'Manajemen-kasus') || (page === 'lineChart' || page === 'barChart' ||
+                                page === 'pieChart') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
+                                    fill="none" stroke="#737070" stroke-width="1.5" stroke-linejoin="round" />
+
+                                <path d="M14 3V7H18" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linejoin="round" />
+
+                                <circle cx="10.5" cy="12.5" r="2.5" fill="none" stroke="#737070"
+                                    stroke-width="1.5" />
+
+                                <path d="M12.5 14.5L14.5 16.5" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Manajemen Kasus
+                            </span>
+
+                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                                :class="[(selected === 'Manajemen-kasus') ? 'menu-item-arrow-active' :
+                                    'menu-item-arrow-inactive',
+                                    sidebarToggle ? 'lg:hidden' : ''
+                                ]"
+                                width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <!-- Dropdown Menu Start -->
+                        <div class="overflow-hidden transform translate"
+                            :class="(selected === 'Manajemen-kasus') ? 'block' : 'hidden'">
+                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                <li>
+                                    <a href="{{ url('daftar-tim') }}" class="menu-dropdown-item group"
+                                        :class="page === 'lineChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Daftar Kasus
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('obrik-tim') }}" class="menu-dropdown-item group"
+                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Verifikasi SSR
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown Menu End -->
+                    </li>
+                    <!-- Kasus -->
+                    <li>
+                        <a href="{{ url('kasus') }}"
+                            class="menu-item group {{ request()->is('kasus') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('kasus') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
+                                    fill="none" stroke="#737070" stroke-width="1.5" stroke-linejoin="round" />
+                                <path d="M14 3V7H18" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linejoin="round" />
+                                <path d="M9 11H15" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <path d="M9 14H15" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <path d="M9 17H13" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Kasus
+                            </span>
+                        </a>
+                    </li>
+                    <!-- Verifikasi SSR -->
+                    <li>
+                        <a href="{{ url('verifikasi-ssr') }}"
+                            class="menu-item group {{ request()->is('verifikasi-ssr') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('verifikasi-ssr') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
+                                    stroke="#737070" fill="none" stroke-width="1.5" stroke-linejoin="round" />
+                                <path d="M14 3V7H18" stroke="#737070" fill="none" stroke-width="1.5"
+                                    stroke-linejoin="round" />
+                                <path d="M9 13.5L11 15.5L15 11.5" stroke="#737070" fill="none" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Verifikasi SSR
+                            </span>
+                        </a>
+                    </li>
+                    <!-- Rekap Laporan -->
+                    <li>
+                        <a href="{{ url('rekap-laporan') }}"
+                            class="menu-item group {{ request()->is('rekap-laporan') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('rekap-laporan') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
+                                    fill="none" stroke="#737070" />
+
+                                <!-- Lipatan -->
+                                <path d="M14 3V7H18" stroke="#737070" stroke-width="1.5" />
+
+                                <!-- Bar chart -->
+                                <path d="M9 17V14" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M12 17V12" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M15 17V10" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Rekap Laporan
+                            </span>
+                        </a>
+                    </li>
+                    <!-- Rekap Laporan -->
+                    <li>
+                        <a href="#"
+                            @click.prevent="selected = (selected === 'Rekap-laporan' ? '':'Rekap-laporan')"
+                            class="menu-item group"
+                            :class="(selected === 'Rekap-laporan') || (page === 'lineChart' || page === 'barChart' ||
+                                page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'">
+                            <svg :class="(selected === 'Rekap-laporan') || (page === 'lineChart' || page === 'barChart' ||
+                                page === 'pieChart') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
+                                    fill="none" stroke="#737070" />
+
+                                <!-- Lipatan -->
+                                <path d="M14 3V7H18" stroke="#737070" stroke-width="1.5" />
+
+                                <!-- Bar chart -->
+                                <path d="M9 17V14" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M12 17V12" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M15 17V10" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Rekap Laporan
+                            </span>
+
+                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                                :class="[(selected === 'Rekap-laporan') ? 'menu-item-arrow-active' :
+                                    'menu-item-arrow-inactive',
+                                    sidebarToggle ? 'lg:hidden' : ''
+                                ]"
+                                width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <!-- Dropdown Menu Start -->
+                        <div class="overflow-hidden transform translate"
+                            :class="(selected === 'Rekap-laporan') ? 'block' : 'hidden'">
+                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                <li>
+                                    <a href="{{ url('php-tnk') }}" class="menu-dropdown-item group"
+                                        :class="page === 'lineChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        PHP/TNK
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('apbkam') }}" class="menu-dropdown-item group"
+                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        APBKAM
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('pertahun') }}" class="menu-dropdown-item group"
+                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Pertahun
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown Menu End -->
+                    </li>
                 </ul>
             </div>
-
-            <!-- Others Group -->
+            <!-- Lainnya -->
             <div>
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
                     <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
-                        others
+                        Lainnya
                     </span>
-
                     <svg :class="sidebarToggle ? 'lg:block hidden' : 'hidden'"
-                        class="mx-auto fill-current menu-group-icon" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                        class="mx-auto fill-current menu-group-icon" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M5.99915 10.2451C6.96564 10.2451 7.74915 11.0286 7.74915 11.9951V12.0051C7.74915 12.9716 6.96564 13.7551 5.99915 13.7551C5.03265 13.7551 4.24915 12.9716 4.24915 12.0051V11.9951C4.24915 11.0286 5.03265 10.2451 5.99915 10.2451ZM17.9991 10.2451C18.9656 10.2451 19.7491 11.0286 19.7491 11.9951V12.0051C19.7491 12.9716 18.9656 13.7551 17.9991 13.7551C17.0326 13.7551 16.2491 12.9716 16.2491 12.0051V11.9951C16.2491 11.0286 17.0326 10.2451 17.9991 10.2451ZM13.7491 11.9951C13.7491 11.0286 12.9656 10.2451 11.9991 10.2451C11.0326 10.2451 10.2491 11.0286 10.2491 11.9951V12.0051C10.2491 12.9716 11.0326 13.7551 11.9991 13.7551C12.9656 13.7551 13.7491 12.9716 13.7491 12.0051V11.9951Z"
                             fill="" />
@@ -91,210 +417,117 @@
                 </h3>
 
                 <ul class="flex flex-col gap-4 mb-6">
-                    <!-- Menu Item Charts -->
+                    <!-- Peraturan -->
                     <li>
-                        <a href="#" @click.prevent="selected = (selected === 'Charts' ? '':'Charts')"
-                            class="menu-item group"
-                            :class="(selected === 'Charts') || (page === 'lineChart' || page === 'barChart' ||
-                                page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'">
-                            <svg :class="(selected === 'Charts') || (page === 'lineChart' || page === 'barChart' ||
-                                page === 'pieChart') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                        <a href="{{ url('peraturan') }}"
+                            class="menu-item group {{ request()->is('peraturan') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('peraturan') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12 2C11.5858 2 11.25 2.33579 11.25 2.75V12C11.25 12.4142 11.5858 12.75 12 12.75H21.25C21.6642 12.75 22 12.4142 22 12C22 6.47715 17.5228 2 12 2ZM12.75 11.25V3.53263C13.2645 3.57761 13.7659 3.66843 14.25 3.80098V3.80099C15.6929 4.19606 16.9827 4.96184 18.0104 5.98959C19.0382 7.01734 19.8039 8.30707 20.199 9.75C20.3316 10.2341 20.4224 10.7355 20.4674 11.25H12.75ZM2 12C2 7.25083 5.31065 3.27489 9.75 2.25415V3.80099C6.14748 4.78734 3.5 8.0845 3.5 12C3.5 16.6944 7.30558 20.5 12 20.5C15.9155 20.5 19.2127 17.8525 20.199 14.25H21.7459C20.7251 18.6894 16.7492 22 12 22C6.47715 22 2 17.5229 2 12Z"
-                                    fill="" />
+                                <path d="M12 4V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+
+                                <path d="M6 6H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+
+                                <!-- Left string -->
+                                <path d="M8 6V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+
+                                <!-- Right string -->
+                                <path d="M16 6V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+
+                                <!-- Left scale -->
+                                <path d="M6.5 10H9.5L8 13H6L6.5 10Z" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linejoin="round" />
+
+                                <!-- Right scale -->
+                                <path d="M14.5 10H17.5L18 13H16L14.5 10Z" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linejoin="round" />
+
+                                <!-- Base -->
+                                <path d="M10 18H14" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+
+                                <path d="M12 6V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
 
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Charts
+                                Peraturan
                             </span>
-
-                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                                :class="[(selected === 'Charts') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive',
-                                    sidebarToggle ? 'lg:hidden' : ''
-                                ]"
-                                width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
                         </a>
-
-                        <!-- Dropdown Menu Start -->
-                        <div class="overflow-hidden transform translate"
-                            :class="(selected === 'Charts') ? 'block' : 'hidden'">
-                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                <li>
-                                    <a href="line-chart.html" class="menu-dropdown-item group"
-                                        :class="page === 'lineChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Line Chart
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="bar-chart.html" class="menu-dropdown-item group"
-                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Bar Chart
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Dropdown Menu End -->
                     </li>
-                    <!-- Menu Item Charts -->
-
-                    <!-- Menu Item Ui Elements -->
+                    <!-- Kontak -->
                     <li>
-                        <a href="#" @click.prevent="selected = (selected === 'UIElements' ? '':'UIElements')"
-                            class="menu-item group"
-                            :class="(selected === 'UIElements') || (page === 'alerts' || page === 'avatars' ||
-                                page === 'badge' || page === 'buttons' || page === 'buttonsGroup' ||
-                                page === 'cards' || page === 'carousel' || page === 'dropdowns' ||
-                                page === 'images' || page === 'list' || page === 'modals' ||
-                                page === 'videos') ? 'menu-item-active' : 'menu-item-inactive'">
-                            <svg :class="(selected === 'UIElements') || (page === 'alerts' || page === 'avatars' ||
-                                page === 'badge' || page === 'breadcrumb' || page === 'buttons' ||
-                                page === 'buttonsGroup' || page === 'cards' || page === 'carousel' ||
-                                page === 'dropdowns' || page === 'images' || page === 'list' ||
-                                page === 'modals' || page === 'notifications' || page === 'popovers' ||
-                                page === 'progress' || page === 'spinners' || page === 'tooltips' ||
-                                page === 'videos') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M11.665 3.75618C11.8762 3.65061 12.1247 3.65061 12.3358 3.75618L18.7807 6.97853L12.3358 10.2009C12.1247 10.3064 11.8762 10.3064 11.665 10.2009L5.22014 6.97853L11.665 3.75618ZM4.29297 8.19199V16.0946C4.29297 16.3787 4.45347 16.6384 4.70757 16.7654L11.25 20.0365V11.6512C11.1631 11.6205 11.0777 11.5843 10.9942 11.5425L4.29297 8.19199ZM12.75 20.037L19.2933 16.7654C19.5474 16.6384 19.7079 16.3787 19.7079 16.0946V8.19199L13.0066 11.5425C12.9229 11.5844 12.8372 11.6207 12.75 11.6515V20.037ZM13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857L11.3296 20.9149L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z"
-                                    fill="" />
+                        <a href="{{ url('kontak') }}"
+                            class="menu-item group {{ request()->is('kontak') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+
+                                <!-- User kiri -->
+                                <circle cx="8" cy="9" r="2.5" stroke="currentColor"
+                                    stroke-width="1.5" />
+                                <path d="M4.5 18C4.5 15.5 6.2 14 8 14C9.8 14 11.5 15.5 11.5 18" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" />
+
+                                <!-- User kanan -->
+                                <circle cx="16" cy="9" r="2.5" stroke="currentColor"
+                                    stroke-width="1.5" />
+                                <path d="M12.5 18C12.5 15.5 14.2 14 16 14C17.8 14 19.5 15.5 19.5 18"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+
+                                <!-- koneksi (representasi kontak) -->
+                                <path d="M10.5 10.5L13.5 10.5" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
                             </svg>
 
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                UI Elements
+                                Kontak
                             </span>
-
-                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                                :class="[(selected === 'UIElements') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive',
-                                    sidebarToggle ? 'lg:hidden' : ''
-                                ]"
-                                width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
                         </a>
-
-                        <!-- Dropdown Menu Start -->
-                        <div class="overflow-hidden transform translate"
-                            :class="(selected === 'UIElements') ? 'block' : 'hidden'">
-                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                <li>
-                                    <a href="alerts.html" class="menu-dropdown-item group"
-                                        :class="page === 'alerts' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Alerts
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="avatars.html" class="menu-dropdown-item group"
-                                        :class="page === 'avatars' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Avatars
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="badge.html" class="menu-dropdown-item group"
-                                        :class="page === 'badge' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Badges
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="buttons.html" class="menu-dropdown-item group"
-                                        :class="page === 'buttons' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Buttons
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="images.html" class="menu-dropdown-item group"
-                                        :class="page === 'images' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Images
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="videos.html" class="menu-dropdown-item group"
-                                        :class="page === 'videos' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Videos
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Dropdown Menu End -->
                     </li>
-                    <!-- Menu Item Ui Elements -->
-
-                    <!-- Menu Item Authentication -->
+                </ul>
+            </div>
+            <!-- Data Log -->
+            <div>
+                <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
+                    <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
+                        Data Log
+                    </span>
+                    <svg :class="sidebarToggle ? 'lg:block hidden' : 'hidden'"
+                        class="mx-auto fill-current menu-group-icon" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M5.99915 10.2451C6.96564 10.2451 7.74915 11.0286 7.74915 11.9951V12.0051C7.74915 12.9716 6.96564 13.7551 5.99915 13.7551C5.03265 13.7551 4.24915 12.9716 4.24915 12.0051V11.9951C4.24915 11.0286 5.03265 10.2451 5.99915 10.2451ZM17.9991 10.2451C18.9656 10.2451 19.7491 11.0286 19.7491 11.9951V12.0051C19.7491 12.9716 18.9656 13.7551 17.9991 13.7551C17.0326 13.7551 16.2491 12.9716 16.2491 12.0051V11.9951C16.2491 11.0286 17.0326 10.2451 17.9991 10.2451ZM13.7491 11.9951C13.7491 11.0286 12.9656 10.2451 11.9991 10.2451C11.0326 10.2451 10.2491 11.0286 10.2491 11.9951V12.0051C10.2491 12.9716 11.0326 13.7551 11.9991 13.7551C12.9656 13.7551 13.7491 12.9716 13.7491 12.0051V11.9951Z"
+                            fill="" />
+                    </svg>
+                </h3>
+                <ul class="flex flex-col gap-4 mb-6">
+                    <!-- Riwayat Login -->
                     <li>
-                        <a href="#"
-                            @click.prevent="selected = (selected === 'Authentication' ? '':'Authentication')"
-                            class="menu-item group"
-                            :class="(selected === 'Authentication') || (page === 'basicChart' || page === 'advancedChart') ?
-                            'menu-item-active' : 'menu-item-inactive'">
-                            <svg :class="(selected === 'Authentication') || (page === 'basicChart' || page === 'advancedChart') ?
-                            'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M14 2.75C14 2.33579 14.3358 2 14.75 2C15.1642 2 15.5 2.33579 15.5 2.75V5.73291L17.75 5.73291H19C19.4142 5.73291 19.75 6.0687 19.75 6.48291C19.75 6.89712 19.4142 7.23291 19 7.23291H18.5L18.5 12.2329C18.5 15.5691 15.9866 18.3183 12.75 18.6901V21.25C12.75 21.6642 12.4142 22 12 22C11.5858 22 11.25 21.6642 11.25 21.25V18.6901C8.01342 18.3183 5.5 15.5691 5.5 12.2329L5.5 7.23291H5C4.58579 7.23291 4.25 6.89712 4.25 6.48291C4.25 6.0687 4.58579 5.73291 5 5.73291L6.25 5.73291L8.5 5.73291L8.5 2.75C8.5 2.33579 8.83579 2 9.25 2C9.66421 2 10 2.33579 10 2.75L10 5.73291L14 5.73291V2.75ZM7 7.23291L7 12.2329C7 14.9943 9.23858 17.2329 12 17.2329C14.7614 17.2329 17 14.9943 17 12.2329L17 7.23291L7 7.23291Z"
-                                    fill="" />
+                        <a href="{{ url('riwayat-login') }}"
+                            class="menu-item group {{ request()->is('riwayat-login') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+
+                                <!-- User -->
+                                <circle cx="12" cy="9" r="3" stroke="currentColor"
+                                    stroke-width="1.5" />
+
+                                <path d="M7 18C7 15.5 9.5 14 12 14C14.5 14 17 15.5 17 18" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" />
+
+                                <!-- Clock -->
+                                <circle cx="18" cy="18" r="3" stroke="currentColor"
+                                    stroke-width="1.5" />
+
+                                <path d="M18 17V18.5L19 19" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+
                             </svg>
 
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Authentication
+                                Riwayat Login
                             </span>
-
-                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                                :class="[(selected === 'Authentication') ? 'menu-item-arrow-active' :
-                                    'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : ''
-                                ]"
-                                width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
                         </a>
-
-                        <!-- Dropdown Menu Start -->
-                        <div class="overflow-hidden transform translate"
-                            :class="(selected === 'Authentication') ? 'block' : 'hidden'">
-                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                <li>
-                                    <a href="signin.html" class="menu-dropdown-item group"
-                                        :class="page === 'signin' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Sign In
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="signup.html" class="menu-dropdown-item group"
-                                        :class="page === 'signup' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Sign Up
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Dropdown Menu End -->
                     </li>
-                    <!-- Menu Item Authentication -->
                 </ul>
             </div>
         </nav>
-        <!-- Sidebar Menu -->
     </div>
 </aside>
