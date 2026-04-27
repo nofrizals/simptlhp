@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\JenisPhp;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class JenisController extends Controller
@@ -18,13 +21,9 @@ class JenisController extends Controller
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('jenis_php', function ($value) {
-                return $value->jenis_php ?? '-';
-            })
-            ->addColumn('status', function ($value) {
-                return $value->status ?? '-';
+                return ucwords($value->jenis_php ?? '-');
             })
             ->addColumn('action', function ($value) {
-                // $tims = TimAnggota::where('id_user', $value->id_user)->first();
                 return '
                     <div class="flex items-center justify-center gap-3 px-4 py-2">
                         <a href="javascript:void(0)" data-id="' . $value->id_jenis_php . '" title="Hapus" class="btn-deleteJenisPHP text-gray-500 hover:text-red-500 transition duration-200">
@@ -39,5 +38,47 @@ class JenisController extends Controller
             })
             ->rawColumns(['jenis_php', 'status', 'action'])
             ->make(true);
+    }
+
+    public function store(Request $request)
+    {
+        $validator  = Validator::make($request->all(), [
+            'jenis_php'  => ['required', 'string', 'max:100']
+        ], [
+            'jenis_php.required'     => 'Jenis PHP wajib diisi',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors()
+            ]);
+        }
+
+        $validated = $validator->validated();
+        $data = [
+            'jenis_php'      => $validated['jenis_php']
+        ];
+        if ($request->id) {
+            $jenisPhp = JenisPhp::find($request->id);
+            if (!$jenisPhp) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+            $data['edited_by']  = 1;
+            $data['edited_at'] = now();
+            $jenisPhp->update($data);
+            $message = 'Jenis PHP berhasil diupdate';
+        } else {
+            $data['created_by']  = 1;
+            $data['created_at'] = now();
+            $jenisPhp = JenisPhp::create($data);
+            $message = 'Jenis PHP berhasil ditambahkan';
+        }
+        return response()->json([
+            'status'  => (bool) $jenisPhp,
+            'message' => $jenisPhp ? $message : 'Gagal menyimpan data'
+        ]);
     }
 }

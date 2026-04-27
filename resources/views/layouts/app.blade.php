@@ -67,11 +67,14 @@
         }
 
         /* Table header */
-        table.dataTable thead th {
+        /* table.dataTable thead th {
             font-weight: 600;
             font-size: 14px;
             color: #374151;
-            /* text-gray-700 */
+        } */
+
+        #jenisPhpTable thead th {
+            text-align: center !important;
         }
 
         /* Table body */

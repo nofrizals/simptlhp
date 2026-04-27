@@ -26,12 +26,11 @@
                         </span>
                     </div>
                 </div>
-                <table id="userTable" class="min-w-full divide-y divide-gray-200 display nowrap">
+                <table id="jenisPhpTable" class="min-w-full divide-y divide-gray-200 display">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Jenis PHP</th>
-                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -42,10 +41,13 @@
         </div>
     </div>
     <!-- Modal -->
-    {{-- <div id="modalJenisPHP"
-        class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="modalJenisPHP"
+        class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
-        <div id="modalContent" class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10">
+        <div id="modalContent"
+            class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 
+            transform scale-95 transition-transform duration-300
+            dark:bg-gray-900 lg:p-10">
             <button id="closeModalBtn"
                 class="absolute right-3 top-3 z-50 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11">
                 <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24">
@@ -64,185 +66,13 @@
                             <input type="hidden"
                                 class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                 id="id" name="id">
-                            <div class="w-full px-2.5">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama OPD
-                                </label>
-                                <div class="relative z-20 bg-transparent">
-                                    <select name="opd" id="opd"
-                                        class="opd dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="" disabled selected
-                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Pilih OPD</option>
-                                        @foreach ($instansis as $instansi)
-                                            <option value="{{ $instansi['kode'] }}">
-                                                {{ ucwords(strtolower($instansi['nama'])) }}
-                                            </option>
-                                        @endforeach
-                                        @foreach ($kecamatans as $kecamatan)
-                                            <option value="{{ $kecamatan['kode'] }}">
-                                                {{ ucwords(strtolower($kecamatan['nama'])) }}
-                                            </option>
-                                        @endforeach
-                                        @foreach ($turunansmini as $turunanmini)
-                                            <option value="{{ $turunanmini['kode'] }}">
-                                                {{ ucwords(strtolower($turunanmini['nama'])) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="opd_error"></p>
-                            </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    ID Pegawai
+                                    Jenis PHP
                                 </label>
-                                <input type="text" name="id_pegawai" id="id_pegawai" placeholder="Masukkan NIP/NIK"
+                                <input type="text" name="jenis_php" id="jenis_php" placeholder="Jenis PHP"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="id_pegawai_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama Lengkap
-                                </label>
-                                <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama Lengkap"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="nama_lengkap_error"></p>
-                            </div>
-                            <div class="w-full px-2.5">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Level
-                                </label>
-                                <div class="relative z-20 bg-transparent">
-                                    <select name="level" id="level"
-                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                                        disabled>
-                                        <option value="" disabled selected
-                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Pilih Level</option>
-                                        @foreach ($levels as $level)
-                                            <option value="{{ $level->tingkatan_level }}"
-                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                {{ ucwords($level->nama_level) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <span
-                                        class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke=""
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="level_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 pick-tim hidden">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Tim
-                                </label>
-                                <div class="relative z-20 bg-transparent">
-                                    <select name="tim" id="tim"
-                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="" disabled selected
-                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Pilih Tim</option>
-                                        @foreach ($tims as $tim)
-                                            <option value="{{ $tim->id }}"
-                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                {{ $tim->name }} - {{ $tim->ketua->nama_pegawai ?? 'ADMIN INFOKOM' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <span
-                                        class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke=""
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="tim_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 hidden" id="obrikRadio">
-                                <div class="flex flex-col gap-3">
-                                    <label class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                        Obrik Level Korwil/UPTD/Kelurahan/Kampung
-                                    </label>
-                                    <div class="flex flex-wrap items-center gap-4">
-                                        <div>
-                                            <label
-                                                class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only peer" type="radio" name="obrikRadio"
-                                                    value="0">
-
-                                                <span
-                                                    class="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 peer-checked:border-blue-500 peer-checked:bg-blue-500">
-                                                    <span
-                                                        class="h-2 w-2 rounded-full bg-white hidden peer-checked:block"></span>
-                                                </span>
-
-                                                Tidak
-                                            </label>
-                                        </div>
-                                        <div>
-                                            <label
-                                                class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only peer" type="radio" name="obrikRadio"
-                                                    value="1">
-
-                                                <span
-                                                    class="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 peer-checked:border-blue-500 peer-checked:bg-blue-500">
-                                                    <span
-                                                        class="h-2 w-2 rounded-full bg-white hidden peer-checked:block"></span>
-                                                </span>
-
-                                                Ya
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="obrikRadio_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 hidden" id="form_nama_obrik">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama Obrik
-                                </label>
-                                <div class="relative z-20 bg-transparent">
-                                    <select name="nama_obrik" id="nama_obrik"
-                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="" disabled selected
-                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Nama obrik</option>
-                                        @foreach ($obriks as $obrik)
-                                            <option value="{{ $obrik['id'] }}" data-opd="{{ $obrik['kode_opd'] }}"
-                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                {{ $obrik['nama'] }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <span
-                                        class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke=""
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="nama_obrik_error"></p>
-                            </div>
-                            <div class="w-full px-2.5">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Password
-                                </label>
-                                <input type="password" name="password" id="password" placeholder="Password"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="password_error"></p>
-                                <small id="password-edit" class="hidden text-red-500"><i>Kosongkan password bila tidak
-                                        merubah</i></small>
+                                <p class="err text-theme-xs text-error-500" id="jenis_php_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
@@ -261,7 +91,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
     @push('scripts')
         <script>
             $(document).ready(function() {
@@ -273,6 +103,24 @@
 
                 $('#tableLoading').removeClass('hidden');
 
+                function openModal() {
+                    $('#modalJenisPHP')
+                        .removeClass('pointer-events-none opacity-0');
+
+                    $('#modalContent')
+                        .removeClass('scale-95')
+                        .addClass('scale-100');
+                }
+
+                function closeModal() {
+                    $('#modalJenisPHP')
+                        .addClass('opacity-0 pointer-events-none');
+
+                    $('#modalContent')
+                        .removeClass('scale-100')
+                        .addClass('scale-95');
+                }
+
                 $("#openModalBtn").click(function() {
                     $('.modal-header').html('Form Tambah Jenis PHP');
                     if (!$('.opd').hasClass("select2-hidden-accessible")) {
@@ -281,39 +129,41 @@
                             width: '100%'
                         });
                     }
-                    $("#modalJenisPHP").removeClass("hidden opacity-0 pointer-events-none").addClass(
-                        "opacity-100 pointer-events-auto");
+                    openModal().addClass("opacity-100 pointer-events-auto");
                 });
 
                 $("#closeModalBtn").click(function() {
                     reset();
-                    $("#modalJenisPHP").addClass("opacity-0 pointer-events-none").removeClass(
-                        "opacity-100 pointer-events-auto");
+                    closeModal().removeClass("opacity-100 pointer-events-auto");
                 });
 
-                var table = $('#userTable').DataTable({
+                var table = $('#jenisPhpTable').DataTable({
                     responsive: true,
                     serverSide: true,
-                    processing: false,
+                    processing: true,
                     ajax: {
                         type: 'POST',
                         url: "{{ url('ajax-data-jenis-php') }}",
+                        error: function() {
+                            $('#tableLoading').addClass('hidden');
+                            Swal.fire({
+                                title: "Gagal",
+                                text: "Gagal memuat data",
+                                icon: "error"
+                            });
+                        }
                     },
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex',
                             orderable: false,
-                            searchable: false
+                            searchable: false,
+                            className: 'text-center'
                         },
                         {
                             data: 'jenis_php',
                             name: 'jenis_php',
-                            className: 'text-left'
-                        },
-                        {
-                            data: 'status',
-                            name: 'status',
-                            className: 'text-left'
+                            className: 'text-center'
                         },
                         {
                             data: 'action',
@@ -334,7 +184,7 @@
 
                 $('#formJenisPHP').submit(function(e) {
                     e.preventDefault();
-                    formData = new FormData($('#formJenisPHP')[0]);
+                    let formData = new FormData($('#formJenisPHP')[0]);
                     $.ajax({
                         type: 'POST',
                         url: "{{ url('jenis-php') }}",
@@ -368,10 +218,10 @@
                                     $('#' + key + '_error').html(val[0]);
                                 });
                             } else {
-                                $('#modalJenisPHP').addClass(
-                                    'hidden opacity-0 pointer-events-none');
-                                if ($.fn.DataTable.isDataTable('#userTable')) {
-                                    $('#userTable').DataTable().ajax.reload(null, true);
+                                closeModal();
+                                if ($.fn.DataTable.isDataTable('#jenisPhpTable')) {
+                                    $('#jenisPhpTable').DataTable().ajax.reload(null,
+                                        false);
                                 }
                                 Swal.fire({
                                     title: "Sukses",
@@ -397,80 +247,6 @@
                     });
                 });
 
-                // $('#level').change(function() {
-                //     let kode_unor = $('#opd').val();
-                //     if (!kode_unor) {
-                //         $(this).val('').trigger('change');
-                //         return;
-                //     }
-                //     let level = $(this).val();
-                //     let kode = parseInt(kode_unor.substring(3, 5));
-                //     let isObrik = (level == 3 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
-
-                //     if (isObrik) {
-                //         $('#obrikRadio').removeClass('hidden');
-                //         $('.pick-tim').addClass('hidden');
-                //     } else {
-                //         $('#obrikRadio').addClass('hidden');
-
-                //         if (level == 2) {
-                //             $('.pick-tim').removeClass('hidden');
-                //         } else {
-                //             $('.pick-tim').addClass('hidden');
-                //         }
-                //     }
-
-                //     $('input[name=obrikRadio][value="0"]').prop('checked', true).trigger('change');
-                // });
-
-                // $(document).on('change', 'input[name=obrikRadio]', function() {
-                //     const opd = $('#opd').val();
-                //     if ($(this).val() != 1) {
-                //         $("#form_nama_obrik").addClass('hidden');
-                //         $('#nama_obrik').html('<option disabled selected>--pilih</option>');
-                //         return;
-                //     }
-
-                //     $.ajax({
-                //         type: "POST",
-                //         url: "{{ url('instansi/getMyTurunan') }}",
-                //         dataType: "json",
-                //         data: {
-                //             id: opd
-                //         },
-
-                //         beforeSend() {
-                //             $("#form_nama_obrik").removeClass('hidden');
-                //         },
-
-                //         success(res) {
-                //             let html = '<option disabled selected>--pilih</option>';
-                //             if (res.data?.length) {
-                //                 res.data.forEach(row => {
-                //                     let selected = row.kode_turunan == opd ?
-                //                         'selected' : '';
-                //                     html += `<option value="${row.kode_turunan}" ${selected}>
-        //                 ${row.nama_instansi}
-        //              </option>`;
-                //                 });
-                //             }
-                //             $('#nama_obrik').html(html);
-                //         },
-                //         error() {
-                //             $('#nama_obrik').html(
-                //                 '<option disabled selected>--pilih</option>');
-                //         }
-                //     });
-                // });
-
-                // $('#opd').on('change', function() {
-                //     $('#level').prop('disabled', false);
-                //     let opd = $(this).val();
-                //     $('#nama_obrik option').hide();
-                //     $('#nama_obrik option[data-opd="' + opd + '"]').show();
-                //     $('#nama_obrik').val('');
-                // });
-
                 $(document).on('click', '.btn-deleteJenisPHP', function() {
                     Swal.fire({
                         title: 'Apakah anda yakin?',
@@ -490,13 +266,14 @@
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
-                                        $('#userTable').DataTable().ajax.reload(function() {
-                                            Swal.fire({
-                                                title: "Sukses",
-                                                text: response.message,
-                                                icon: "success"
-                                            });
-                                        }, false);
+                                        $('#jenisPhpTable').DataTable().ajax.reload(
+                                            function() {
+                                                Swal.fire({
+                                                    title: "Sukses",
+                                                    text: response.message,
+                                                    icon: "success"
+                                                });
+                                            }, false);
                                     } else {
                                         Swal.fire({
                                             title: "Gagal",
@@ -512,19 +289,19 @@
 
                 $(document).on('click', '.btn-editJenisPHP', function() {
                     let data = $(this).data();
-                    $("#modalJenisPHP").removeClass("hidden opacity-0 pointer-events-none")
-                        .addClass(
-                            "opacity-100 pointer-events-auto");
-                    $('.modal-header').html('Form Edit Admin');
+                    openModal().addClass(
+                        "opacity-100 pointer-events-auto");
+                    $('.modal-header').html(
+                        'Form Edit Jenis PHP');
                     $('#id').val(data.id);
-                    $('#jenis_php').val(data.jenis_php);
-                    $('#status').val(data.status);
+                    $('#jenis_php').val(data
+                        .jenis_php);
                 });
 
                 $('.cancel').click(function(e) {
                     e.preventDefault();
                     reset();
-                    $('#modalJenisPHP').addClass('hidden opacity-0 pointer-events-none');
+                    closeModal();
                 });
 
                 function reset() {

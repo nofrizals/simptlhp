@@ -18,4 +18,5 @@ Route::post('instansi/getMyTurunan', [InstansiController::class, 'getMyTurunan']
 
 // Master -> Jenis-php
 Route::get('jenis-php', [JenisController::class, 'index']);
+Route::post('jenis-php', [JenisController::class, 'store']);
 Route::post('ajax-data-jenis-php', [JenisController::class, 'ajaxDataJenisPHP']);
