@@ -129,12 +129,12 @@
                             width: '100%'
                         });
                     }
-                    openModal().addClass("opacity-100 pointer-events-auto");
+                    openModal();
                 });
 
                 $("#closeModalBtn").click(function() {
                     reset();
-                    closeModal().removeClass("opacity-100 pointer-events-auto");
+                    closeModal();
                 });
 
                 var table = $('#jenisPhpTable').DataTable({
@@ -289,13 +289,11 @@
 
                 $(document).on('click', '.btn-editJenisPHP', function() {
                     let data = $(this).data();
-                    openModal().addClass(
-                        "opacity-100 pointer-events-auto");
+                    openModal();
                     $('.modal-header').html(
                         'Form Edit Jenis PHP');
                     $('#id').val(data.id);
-                    $('#jenis_php').val(data
-                        .jenis_php);
+                    $('#jenis_php').val(data.jenis_php);
                 });
 
                 $('.cancel').click(function(e) {
