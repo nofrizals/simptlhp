@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Jenis PHP | SIMPTLHP')
-@section('page-data', "'jenis-php'")
+@section('title', 'Nilai Kerugian | SIMPTLHP')
+@section('page-data', "'nilai-kerugian'")
 
 @section('content')
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-        <div x-data="{ pageName: `Jenis PHP` }">
+        <div x-data="{ pageName: `Nilai Kerugian` }">
             @include('partials.breadcrumb')
         </div>
         <div class="space-y-5 sm:space-y-6">
@@ -26,11 +26,11 @@
                         </span>
                     </div>
                 </div>
-                <table id="jenisPhpTable" class="min-w-full divide-y divide-gray-200 display">
+                <table id="nilaiKerugianTable" class="min-w-full divide-y divide-gray-200 display">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Jenis PHP</th>
+                            <th>Nilai Kerugian</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -41,7 +41,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <div id="modalJenisPHP"
+    <div id="modalNilaiKerugian"
         class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
         <div id="modalContent"
@@ -61,18 +61,18 @@
                     <h3 class="modal-header text-base font-medium text-gray-800 dark:text-white/90"></h3>
                 </div>
                 <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
-                    <form id="formJenisPHP">
+                    <form id="formNilaiKerugian">
                         <div class="-mx-2.5 flex flex-wrap gap-y-5">
                             <input type="hidden"
                                 class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                 id="id" name="id">
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Jenis PHP
+                                    Nilai Kerugian
                                 </label>
-                                <input type="text" name="jenis_php" id="jenis_php" placeholder="Jenis PHP"
+                                <input type="number" name="nilai_kerugian" id="nilai_kerugian" placeholder="Nilai Kerugian"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="jenis_php_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="nilai_kerugian_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
@@ -104,7 +104,8 @@
                 $('#tableLoading').removeClass('hidden');
 
                 function openModal() {
-                    $('#modalJenisPHP')
+                    reset();
+                    $('#modalNilaiKerugian')
                         .removeClass('pointer-events-none opacity-0');
 
                     $('#modalContent')
@@ -113,7 +114,7 @@
                 }
 
                 function closeModal() {
-                    $('#modalJenisPHP')
+                    $('#modalNilaiKerugian')
                         .addClass('opacity-0 pointer-events-none');
 
                     $('#modalContent')
@@ -122,11 +123,10 @@
                 }
 
                 $("#openModalBtn").click(function() {
-                    reset();
-                    $('.modal-header').html('Form Tambah Jenis PHP');
+                    $('.modal-header').html('Form Tambah Nilai Kerugian');
                     if (!$('.opd').hasClass("select2-hidden-accessible")) {
                         $('.opd').select2({
-                            dropdownParent: $('#modalJenisPHP'),
+                            dropdownParent: $('#modalNilaiKerugian'),
                             width: '100%'
                         });
                     }
@@ -138,13 +138,13 @@
                     closeModal();
                 });
 
-                var table = $('#jenisPhpTable').DataTable({
+                var table = $('#nilaiKerugianTable').DataTable({
                     responsive: true,
                     serverSide: true,
                     processing: true,
                     ajax: {
                         type: 'POST',
-                        url: "{{ url('ajax-data-jenis-php') }}",
+                        url: "{{ url('ajax-data-nilai-kerugian') }}",
                         error: function() {
                             $('#tableLoading').addClass('hidden');
                             Swal.fire({
@@ -162,8 +162,8 @@
                             className: 'text-center'
                         },
                         {
-                            data: 'jenis_php',
-                            name: 'jenis_php',
+                            data: 'nilai_kerugian',
+                            name: 'nilai_kerugian',
                             className: 'text-center'
                         },
                         {
@@ -183,12 +183,12 @@
                     }
                 });
 
-                $('#formJenisPHP').submit(function(e) {
+                $('#formNilaiKerugian').submit(function(e) {
                     e.preventDefault();
-                    let formData = new FormData($('#formJenisPHP')[0]);
+                    let formData = new FormData($('#formNilaiKerugian')[0]);
                     $.ajax({
                         type: 'POST',
-                        url: "{{ url('jenis-php') }}",
+                        url: "{{ url('nilai-kerugian') }}",
                         data: formData,
                         dataType: 'json',
                         contentType: false,
@@ -220,8 +220,8 @@
                                 });
                             } else {
                                 closeModal();
-                                if ($.fn.DataTable.isDataTable('#jenisPhpTable')) {
-                                    $('#jenisPhpTable').DataTable().ajax.reload(null,
+                                if ($.fn.DataTable.isDataTable('#nilaiKerugianTable')) {
+                                    $('#nilaiKerugianTable').DataTable().ajax.reload(null,
                                         false);
                                 }
                                 Swal.fire({
@@ -248,7 +248,7 @@
                     });
                 });
 
-                $(document).on('click', '.btn-deleteJenisPHP', function() {
+                $(document).on('click', '.btn-deleteNilaiKerugian', function() {
                     Swal.fire({
                         title: 'Apakah anda yakin?',
                         icon: 'warning',
@@ -263,11 +263,11 @@
                             let id = $(this).data('id');
                             $.ajax({
                                 type: "delete",
-                                url: "{{ url('jenis-php') }}/" + id,
+                                url: "{{ url('nilai-kerugian') }}/" + id,
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
-                                        $('#jenisPhpTable').DataTable().ajax.reload(
+                                        $('#nilaiKerugianTable').DataTable().ajax.reload(
                                             function() {
                                                 Swal.fire({
                                                     title: "Sukses",
@@ -288,13 +288,13 @@
                     })
                 });
 
-                $(document).on('click', '.btn-editJenisPHP', function() {
+                $(document).on('click', '.btn-editNilaiKerugian', function() {
                     let data = $(this).data();
                     openModal();
                     $('.modal-header').html(
-                        'Form Edit Jenis PHP');
+                        'Form Edit Nilai Kerugian');
                     $('#id').val(data.id);
-                    $('#jenis_php').val(data.jenis_php);
+                    $('#nilai_kerugian').val(data.nilai_kerugian);
                 });
 
                 $('.cancel').click(function(e) {
@@ -305,7 +305,7 @@
 
                 function reset() {
                     $('#id').val('');
-                    $('#formJenisPHP')[0].reset();
+                    $('#formNilaiKerugian')[0].reset();
                     $('.err').empty();
                 }
             });
