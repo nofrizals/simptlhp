@@ -42,3 +42,9 @@ Route::get('obrik', [ObrikController::class, 'index']);
 Route::post('obrik', [ObrikController::class, 'store']);
 Route::delete('obrik/{obrik}', [ObrikController::class, 'destroy']);
 Route::post('ajax-data-obrik', [ObrikController::class, 'ajaxDataObrik']);
+
+// Master -> obrik-turunan
+Route::get('obrik-turunan', [ObrikTurunanController::class, 'index']);
+Route::post('obrik-turunan', [ObrikTurunanController::class, 'store']);
+Route::delete('obrik-turunan/{obrik_turunan}', [ObrikTurunanController::class, 'destroy']);
+Route::post('ajax-data-obrik-turunan', [ObrikTurunanController::class, 'ajaxDataObrikTurunan']);
