@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\NilaiKerugianController;
+use App\Http\Controllers\ObrikController;
 use App\Http\Controllers\StatusTlController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,3 +36,9 @@ Route::get('status-tl', [StatusTlController::class, 'index']);
 Route::post('status-tl', [StatusTlController::class, 'store']);
 Route::delete('status-tl/{status_tl}', [StatusTlController::class, 'destroy']);
 Route::post('ajax-data-status-tl', [StatusTlController::class, 'ajaxDataStatusTl']);
+
+// Master -> obrik
+Route::get('obrik', [ObrikController::class, 'index']);
+Route::post('obrik', [ObrikController::class, 'store']);
+Route::delete('obrik/{obrik}', [ObrikController::class, 'destroy']);
+Route::post('ajax-data-obrik', [ObrikController::class, 'ajaxDataObrik']);
