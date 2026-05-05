@@ -142,6 +142,24 @@
                     responsive: true,
                     serverSide: true,
                     processing: true,
+                    language: {
+                        emptyTable: `
+                            <div class="flex flex-col items-center justify-center py-5">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    Belum ada data
+                                </p>
+                            </div>
+                        `,
+                        zeroRecords: `
+                            <div class="flex flex-col items-center justify-center py-5">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    Data tidak ditemukan
+                                </p>
+                            </div>
+                        `,
+                        search: "",
+                        searchPlaceholder: "Cari data..."
+                    },
                     ajax: {
                         type: 'POST',
                         url: "{{ url('ajax-data-nilai-kerugian') }}",

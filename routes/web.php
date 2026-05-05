@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\NilaiKerugianController;
+use App\Http\Controllers\StatusTlController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,3 +29,9 @@ Route::get('nilai-kerugian', [NilaiKerugianController::class, 'index']);
 Route::post('nilai-kerugian', [NilaiKerugianController::class, 'store']);
 Route::delete('nilai-kerugian/{nilai_kerugian}', [NilaiKerugianController::class, 'destroy']);
 Route::post('ajax-data-nilai-kerugian', [NilaiKerugianController::class, 'ajaxDataNilaiKerugian']);
+
+// Master -> status-tl
+Route::get('status-tl', [StatusTlController::class, 'index']);
+Route::post('status-tl', [StatusTlController::class, 'store']);
+Route::delete('status-tl/{status_tl}', [StatusTlController::class, 'destroy']);
+Route::post('ajax-data-status-tl', [StatusTlController::class, 'ajaxDataStatusTl']);
