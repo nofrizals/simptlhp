@@ -11,7 +11,7 @@ class NilaiKerugianController extends Controller
 {
     public function index()
     {
-        return view('master.nilai-kerugian');
+        return view('pages.master.nilai-kerugian');
     }
 
     public function ajaxDataNilaiKerugian()

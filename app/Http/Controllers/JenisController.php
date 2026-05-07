@@ -11,7 +11,7 @@ class JenisController extends Controller
 {
     public function index()
     {
-        return view('master.jenis-php');
+        return view('pages.master.jenis-php');
     }
 
     public function ajaxDataJenisPHP()

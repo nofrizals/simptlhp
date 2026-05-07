@@ -8,6 +8,6 @@ class ObrikTurunanController extends Controller
 {
     public function index()
     {
-        return view('master.obrik_turunan');
+        return view('pages.master.obrik_turunan');
     }
 }

@@ -11,7 +11,7 @@ class StatusTlController extends Controller
 {
     public function index()
     {
-        return view('master.status-tl');
+        return view('pages.master.status-tl');
     }
 
     public function ajaxDataStatusTl()

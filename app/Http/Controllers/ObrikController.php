@@ -15,7 +15,7 @@ class ObrikController extends Controller
 {
     public function index()
     {
-        return view('master.obrik');
+        return view('pages.master.obrik');
     }
 
     public function ajaxDataObrik(Request $request)
