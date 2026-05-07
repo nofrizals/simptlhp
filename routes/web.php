@@ -5,7 +5,9 @@ use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\NilaiKerugianController;
 use App\Http\Controllers\ObrikController;
+use App\Http\Controllers\ObrikTurunanController;
 use App\Http\Controllers\StatusTlController;
+use App\Http\Controllers\TimController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,3 +50,9 @@ Route::get('obrik-turunan', [ObrikTurunanController::class, 'index']);
 Route::post('obrik-turunan', [ObrikTurunanController::class, 'store']);
 Route::delete('obrik-turunan/{obrik_turunan}', [ObrikTurunanController::class, 'destroy']);
 Route::post('ajax-data-obrik-turunan', [ObrikTurunanController::class, 'ajaxDataObrikTurunan']);
+
+// Manajemen Tim -> Tim
+Route::get('daftar-tim', [TimController::class, 'index']);
+Route::post('daftar-tim', [TimController::class, 'store']);
+Route::delete('daftar-tim/{status_tl}', [TimController::class, 'destroy']);
+Route::post('ajax-data-daftar-tim', [TimController::class, 'ajaxDataDaftarTim']);

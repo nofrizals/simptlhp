@@ -138,19 +138,15 @@
                     <li>
                         <a href="#"
                             @click.prevent="selected = (selected === 'Manajemen-tim' ? '':'Manajemen-tim')"
-                            class="menu-item group"
-                            :class="(selected === 'Manajemen-tim') || (page === 'lineChart' || page === 'barChart' ||
-                                page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'">
-                            <svg :class="(selected === 'Manajemen-tim') || (page === 'lineChart' || page === 'barChart' ||
-                                page === 'pieChart') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                            class="menu-item group {{ request()->is('daftar-tim', 'obrik-tim') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('daftar-tim', 'obrik-tim') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15.5 11C16.8807 11 18 9.88071 18 8.5C18 7.11929 16.8807 6 15.5 6C14.1193 6 13 7.11929 13 8.5C13 9.88071 14.1193 11 15.5 11Z
                                     M8.5 11C9.88071 11 11 9.88071 11 8.5C11 7.11929 9.88071 6 8.5 6C7.11929 6 6 7.11929 6 8.5C6 9.88071 7.11929 11 8.5 11Z
                                     M3 18C3 15.7909 4.79086 14 7 14H10C12.2091 14 14 15.7909 14 18
-                                    M10 18C10 15.7909 11.7909 14 14 14H17C19.2091 14 21 15.7909 21 18"
-                                    stroke="#737070" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" fill="none" />
+                                    M10 18C10 15.7909 11.7909 14 14 14H17C19.2091 14 21 15.7909 21 18" stroke="#737070"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
                             </svg>
 
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
@@ -174,16 +170,14 @@
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                 class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                 <li>
-                                    <a href="{{ url('daftar-tim') }}" class="menu-dropdown-item group"
-                                        :class="page === 'lineChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
+                                    <a href="{{ url('daftar-tim') }}"
+                                        class="menu-dropdown-item group {{ request()->is('daftar-tim') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                                         Daftar Tim
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('obrik-tim') }}" class="menu-dropdown-item group"
-                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
+                                    <a href="{{ url('obrik-tim') }}"
+                                        class="menu-dropdown-item group {{ request()->is('obrik-tim') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                                         Obrik Ditangani
                                     </a>
                                 </li>
