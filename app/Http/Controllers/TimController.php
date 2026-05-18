@@ -42,9 +42,9 @@ class TimController extends Controller
     public function store(Request $request)
     {
         $validator  = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:100']
+            'tim' => ['required', 'string', 'max:100']
         ], [
-            'name.required'     => 'Nama tim wajib diisi',
+            'tim.required'     => 'Nama tim wajib diisi',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -55,7 +55,7 @@ class TimController extends Controller
 
         $validated = $validator->validated();
         $data = [
-            'name'      => $validated['name']
+            'name'      => $validated['tim']
         ];
 
         if ($request->id) {

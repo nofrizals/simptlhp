@@ -10,6 +10,7 @@ class Tim extends Model
 {
     use HasFactory;
     protected $table = 'kis_tims';
+    public $timestamps = false;
     protected $guarded = [];
 
     public function ketua()

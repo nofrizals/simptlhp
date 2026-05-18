@@ -54,5 +54,5 @@ Route::post('ajax-data-obrik-turunan', [ObrikTurunanController::class, 'ajaxData
 // Manajemen Tim -> Tim
 Route::get('daftar-tim', [TimController::class, 'index']);
 Route::post('daftar-tim', [TimController::class, 'store']);
-Route::delete('daftar-tim/{status_tl}', [TimController::class, 'destroy']);
+Route::delete('daftar-tim/{tim}', [TimController::class, 'destroy']);
 Route::post('ajax-data-daftar-tim', [TimController::class, 'ajaxDataDaftarTim']);

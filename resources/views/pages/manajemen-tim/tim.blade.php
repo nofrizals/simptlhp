@@ -312,7 +312,7 @@
                     $('.modal-header').html(
                         'Form Edit Tim');
                     $('#id').val(data.id);
-                    $('#tim').val(data.tim);
+                    $('#tim').val(data.name);
                 });
 
                 $('.cancel').click(function(e) {
