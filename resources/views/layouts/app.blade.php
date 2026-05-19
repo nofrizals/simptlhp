@@ -89,6 +89,10 @@
             text-align: center !important;
         }
 
+        #kasusTable thead th {
+            text-align: center !important;
+        }
+
         /* Table body */
         table.dataTable tbody td {
             font-size: 14px;

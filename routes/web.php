@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
+use App\Http\Controllers\KasusController;
 use App\Http\Controllers\NilaiKerugianController;
 use App\Http\Controllers\ObrikController;
 use App\Http\Controllers\ObrikTurunanController;
@@ -56,3 +57,9 @@ Route::get('daftar-tim', [TimController::class, 'index']);
 Route::post('daftar-tim', [TimController::class, 'store']);
 Route::delete('daftar-tim/{tim}', [TimController::class, 'destroy']);
 Route::post('ajax-data-daftar-tim', [TimController::class, 'ajaxDataDaftarTim']);
+
+// Manajemen Kasus -> Kasus
+Route::get('daftar-kasus', [KasusController::class, 'index']);
+Route::post('daftar-kasus', [KasusController::class, 'store']);
+Route::delete('daftar-kasus/{kasus}', [KasusController::class, 'destroy']);
+Route::post('ajax-data-daftar-kasus', [KasusController::class, 'ajaxDataDaftarKasus']);

@@ -187,7 +187,7 @@
                     </li>
                     <!-- Manajemen Kasus -->
                     <li>
-                        <a href="#"
+                        {{-- <a href="#"
                             @click.prevent="selected = (selected === 'Manajemen-kasus' ? '':'Manajemen-kasus')"
                             class="menu-item group"
                             :class="(selected === 'Manajemen-kasus') || (page === 'lineChart' || page === 'barChart' ||
@@ -223,6 +223,41 @@
                                 <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
                                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
+                        </a> --}}
+
+                        <a href="#"
+                            @click.prevent="selected = (selected === 'Manajemen-kasus' ? '':'Manajemen-kasus')"
+                            class="menu-item group {{ request()->is('daftar-kasus', 'verifikasi-ssr') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('daftar-kasus', 'verifikasi-ssr') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
+                                    fill="none" stroke="#737070" stroke-width="1.5" stroke-linejoin="round" />
+
+                                <path d="M14 3V7H18" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linejoin="round" />
+
+                                <circle cx="10.5" cy="12.5" r="2.5" fill="none" stroke="#737070"
+                                    stroke-width="1.5" />
+
+                                <path d="M12.5 14.5L14.5 16.5" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Manajemen Kasus
+                            </span>
+                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                                :class="[(selected === 'Manajemen-kasus') ? 'menu-item-arrow-active' :
+                                    'menu-item-arrow-inactive',
+                                    sidebarToggle ? 'lg:hidden' : ''
+                                ]"
+                                width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
                         </a>
 
                         <!-- Dropdown Menu Start -->
@@ -231,14 +266,14 @@
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                 class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                 <li>
-                                    <a href="{{ url('daftar-tim') }}" class="menu-dropdown-item group"
+                                    <a href="{{ url('daftar-kasus') }}" class="menu-dropdown-item group"
                                         :class="page === 'lineChart' ? 'menu-dropdown-item-active' :
                                             'menu-dropdown-item-inactive'">
                                         Daftar Kasus
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('obrik-tim') }}" class="menu-dropdown-item group"
+                                    <a href="{{ url('verifikasi-ssr') }}" class="menu-dropdown-item group"
                                         :class="page === 'barChart' ? 'menu-dropdown-item-active' :
                                             'menu-dropdown-item-inactive'">
                                         Verifikasi SSR
