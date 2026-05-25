@@ -12,4 +12,9 @@ class Kasus extends Model
     protected $primaryKey = 'id_kasus';
     public $timestamps = false;
     protected $guarded = [];
+
+    public function jenis_php()
+    {
+        return $this->hasOne(JenisPhp::class, 'id_jenis_php', 'id_jenis_php');
+    }
 }

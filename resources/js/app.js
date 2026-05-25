@@ -15,6 +15,7 @@ import chart03 from "./components/charts/chart-03";
 import map01 from "./components/map-01";
 import "./components/calendar-init.js";
 import "./components/image-resize";
+import { Indonesian } from "flatpickr/dist/l10n/id.js";
 
 window.Swal = Swal;
 Alpine.plugin(persist);
@@ -90,31 +91,38 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const searchInput = document.getElementById("search-input");
-  const searchButton = document.getElementById("search-button");
+// document.addEventListener("DOMContentLoaded", function () {
+//   const searchInput = document.getElementById("search-input");
+//   const searchButton = document.getElementById("search-button");
 
-  // Function to focus the search input
-  function focusSearchInput() {
-    searchInput.focus();
-  }
+//   // Function to focus the search input
+//   function focusSearchInput() {
+//     searchInput.focus();
+//   }
 
-  // Add click event listener to the search button
-  searchButton.addEventListener("click", focusSearchInput);
+//   // Add click event listener to the search button
+//   searchButton.addEventListener("click", focusSearchInput);
 
-  // Add keyboard event listener for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
-  document.addEventListener("keydown", function (event) {
-    if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-      event.preventDefault(); // Prevent the default browser behavior
-      focusSearchInput();
-    }
-  });
+//   // Add keyboard event listener for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+//   document.addEventListener("keydown", function (event) {
+//     if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+//       event.preventDefault(); // Prevent the default browser behavior
+//       focusSearchInput();
+//     }
+//   });
 
-  // Add keyboard event listener for "/" key
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "/" && document.activeElement !== searchInput) {
-      event.preventDefault(); // Prevent the "/" character from being typed
-      focusSearchInput();
-    }
+//   // Add keyboard event listener for "/" key
+//   document.addEventListener("keydown", function (event) {
+//     if (event.key === "/" && document.activeElement !== searchInput) {
+//       event.preventDefault(); // Prevent the "/" character from being typed
+//       focusSearchInput();
+//     }
+//   });
+// });
+
+document.addEventListener('DOMContentLoaded', () => {
+  flatpickr(".datepickerKasus", {
+    locale: Indonesian,
+    dateFormat: "Y-m-d",
   });
 });

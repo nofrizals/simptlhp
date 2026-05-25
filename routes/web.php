@@ -60,6 +60,7 @@ Route::post('ajax-data-daftar-tim', [TimController::class, 'ajaxDataDaftarTim'])
 
 // Manajemen Kasus -> Kasus
 Route::get('daftar-kasus', [KasusController::class, 'index']);
+Route::get('daftar-kasus/{id}/edit', [KasusController::class, 'edit']);
 Route::post('daftar-kasus', [KasusController::class, 'store']);
 Route::delete('daftar-kasus/{kasus}', [KasusController::class, 'destroy']);
 Route::post('ajax-data-daftar-kasus', [KasusController::class, 'ajaxDataDaftarKasus']);

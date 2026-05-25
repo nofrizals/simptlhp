@@ -266,9 +266,8 @@
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                 class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                 <li>
-                                    <a href="{{ url('daftar-kasus') }}" class="menu-dropdown-item group"
-                                        :class="page === 'lineChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
+                                    <a href="{{ url('daftar-kasus') }}"
+                                        class="menu-dropdown-item group {{ request()->is('daftar-kasus') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                                         Daftar Kasus
                                     </a>
                                 </li>

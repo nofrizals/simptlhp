@@ -32,13 +32,10 @@
                             <th>No</th>
                             <th>Jenis PHP</th>
                             <th>Tahun Pemeriksaan</th>
-                            <th>SPT</th>
-                            <th>SPT Mulai</th>
-                            <th>SPT Selesai</th>
+                            <th>NO. & TGL SURAT TUGAS</th>
                             <th>Nomor LHP</th>
                             <th>Tanggal LHP</th>
-                            <th>Kode Unor</th>
-                            <th>Ketua Tim</th>
+                            <th>Nama Obrik</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -53,7 +50,7 @@
         class="fixed inset-0 flex items-start justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
         <div id="modalContent"
-            class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 
+            class="relative w-full max-w-[800px] rounded-3xl bg-white p-6 
             transform scale-95 transition-transform duration-300
             dark:bg-gray-900 lg:p-10">
             <button id="closeModalBtn"
@@ -65,39 +62,40 @@
                 </svg>
             </button>
             <div class="rounded-2xl bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <div class="px-5 py-4 sm:px-6 sm:py-5">
+                <div class="px-6 pt-3 pb-3 border-b border-gray-200">
                     <h3 class="modal-header text-base font-medium text-gray-800 dark:text-white/90"></h3>
                 </div>
                 <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
                     <form id="formKasus">
                         <div class="-mx-2.5 flex flex-wrap gap-y-5">
-                            <input type="hidden"
-                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                                id="id" name="id">
+                            <input type="hidden" id="id" name="id">
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Jenis PHP
+                                    Jenis PHP <span class="text-red-400">*</span>
                                 </label>
-                                <select
+                                <select name="id_jenis_php" id="id_jenis_php"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option selected class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                    <option value="" selected disabled
+                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                         Jenis PHP
                                     </option>
                                     @foreach ($jenisPhp as $item)
-                                        <option class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                        <option value="{{ $item->id_jenis_php }}"
+                                            class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             {{ $item->jenis_php }}
                                         </option>
                                     @endforeach
                                 </select>
-                                <p class="err text-theme-xs text-error-500" id="jenis_php_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="id_jenis_php_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Tahun Pemeriksaan
+                                    Tahun Pemeriksaan <span class="text-red-400">*</span>
                                 </label>
-                                <select
+                                <select name="tahun_pemeriksaan" id="tahun_pemeriksaan"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option selected class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                    <option selected disabled value=""
+                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                         Pilih tahun
                                     </option>
                                     @for ($i = 2005; $i <= date('Y'); $i++)
@@ -107,71 +105,85 @@
                                         </option>
                                     @endfor
                                 </select>
-                                <p class="err text-theme-xs text-error-500" id="jenis_php_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="tahun_pemeriksaan_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    SPT
+                                    SPT <span class="text-red-400">*</span>
                                 </label>
-                                <input type="text" name="spt" id="spt" placeholder="No. & Tanggal Surat Tugas"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="spt_error"></p>
+                                <div class="flex gap-3">
+                                    <!-- Nomor SPT -->
+                                    <div class="w-1/2">
+                                        <input type="text" name="nomor_spt" id="nomor_spt" placeholder="No. Surat Tugas"
+                                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                        <p class="err text-theme-xs text-error-500" id="nomor_spt_error"></p>
+                                    </div>
+                                    <!-- Tanggal SPT -->
+                                    <div class="w-1/2">
+                                        <input type="text" name="tanggal_spt" id="tanggal_spt"
+                                            placeholder="Pilih tanggal SPT"
+                                            class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                        <p class="err text-theme-xs text-error-500" id="tanggal_spt_error"></p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    SPT Mulai
+                                    SPT Mulai <span class="text-red-400">*</span>
                                 </label>
                                 <input type="text" name="spt_mulai" id="spt_mulai" placeholder="Mulai Pemeriksaan"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 <p class="err text-theme-xs text-error-500" id="spt_mulai_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    SPT Selesai
+                                    SPT Selesai <span class="text-red-400">*</span>
                                 </label>
                                 <input type="text" name="spt_selesai" id="spt_selesai" placeholder="Selesai Pemeriksaan"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 <p class="err text-theme-xs text-error-500" id="spt_selesai_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nomor LHP
+                                    Nomor LHP <span class="text-red-400">*</span>
                                 </label>
-                                <input type="text" name="no_lhp" id="no_lhp" placeholder="No. LHP"
+                                <input type="text" name="nomor_lhp" id="nomor_lhp" placeholder="No. LHP"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="no_lhp_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="nomor_lhp_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Tanggal LHP
+                                    Tanggal LHP <span class="text-red-400">*</span>
                                 </label>
-                                <input type="text" name="tgl_lhp" id="tgl_lhp" placeholder="Tgl LHP"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="tgl_lhp_error"></p>
+                                <input type="text" name="tanggal_lhp" id="tanggal_lhp" placeholder="Tanggal LHP"
+                                    class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <p class="err text-theme-xs text-error-500" id="tanggal_lhp_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama Obrik
+                                    Nama Obrik <span class="text-red-400">*</span>
                                 </label>
-                                <select
+                                <select name="kode_unor"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option selected class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                    <option value="" selected disabled
+                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                         Pilih Obrik
                                     </option>
                                 </select>
-                                <p class="err text-theme-xs text-error-500" id="jenis_php_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="kode_unor_error"></p>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Ketua Tim
+                                    Ketua Tim <span class="text-red-400">*</span>
                                 </label>
-                                <select
+                                <select name="nip_ketua"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option selected class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                    <option value="" selected disabled
+                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                         Pilih ketua tim
                                     </option>
                                 </select>
-                                <p class="err text-theme-xs text-error-500" id="jenis_php_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="nip_ketua_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
@@ -294,16 +306,6 @@
                             className: 'text-center'
                         },
                         {
-                            data: 'spt_mulai',
-                            name: 'spt_mulai',
-                            className: 'text-center'
-                        },
-                        {
-                            data: 'spt_selesai',
-                            name: 'spt_selesai',
-                            className: 'text-center'
-                        },
-                        {
                             data: 'nomor_lhp',
                             name: 'nomor_lhp',
                             className: 'text-center'
@@ -316,11 +318,6 @@
                         {
                             data: 'kode_unor',
                             name: 'kode_unor',
-                            className: 'text-center'
-                        },
-                        {
-                            data: 'nip_ketua',
-                            name: 'nip_ketua',
                             className: 'text-center'
                         },
                         {
@@ -420,7 +417,7 @@
                             let id = $(this).data('id');
                             $.ajax({
                                 type: "delete",
-                                url: "{{ url('daftar-tim') }}/" + id,
+                                url: "{{ url('daftar-kasus') }}/" + id,
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
@@ -446,12 +443,33 @@
                 });
 
                 $(document).on('click', '.btn-editKasus', function() {
-                    let data = $(this).data();
-                    openModal();
-                    $('.modal-header').html(
-                        'Kasus');
-                    $('#id').val(data.id);
-                    $('#kasus').val(data.kasus);
+                    let id = $(this).data('id');
+                    $('.modal-header').html('Form Edit Kasus');
+                    openModal()
+                    $.ajax({
+                        url: 'daftar-kasus/' + id + '/edit',
+                        type: 'GET',
+                        success: function(response) {
+                            $('#id').val(response.id);
+                            $('#id_jenis_php').val(response.id_jenis_php);
+                            $('#tahun_pemeriksaan').val(response.tahun_pemeriksaan).change();
+                            $('#nomor_spt').val(response.nomor_spt);
+                            $('#tanggal_spt').val(response.tanggal_spt);
+                            $('#spt_mulai').val(response.spt_mulai);
+                            $('#spt_selesai').val(response.spt_selesai);
+                            $('#nomor_lhp').val(response.nomor_lhp);
+                            $('#tanggal_lhp').val(response.tanggal_lhp);
+                            $('#kode_unor').val(response.kode_unor);
+                            $('#nip_ketua').val(response.nip_ketua);
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: "Gagal",
+                                text: "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
+                                icon: "error"
+                            });
+                        }
+                    });
                 });
 
                 $('.cancel').click(function(e) {
