@@ -3,7 +3,7 @@
     <!-- SIDEBAR HEADER -->
     <div :class="sidebarToggle ? 'justify-center' : 'justify-between'"
         class="flex items-center gap-2 pt-8 sidebar-header pb-7">
-        <a href="index.html">
+        <a href="{{ url('/') }}">
             <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
                 <img class="dark:hidden" src="./images/logo/logo.svg" alt="Logo" />
                 <img class="hidden dark:block" src="./images/logo/logo-dark.svg" alt="Logo" />
@@ -272,9 +272,8 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('verifikasi-ssr') }}" class="menu-dropdown-item group"
-                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
+                                    <a href="{{ url('verifikasi-ssr') }}"
+                                        class="menu-dropdown-item group {{ request()->is('verifikasi-ssr') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                                         Verifikasi SSR
                                     </a>
                                 </li>
@@ -308,7 +307,7 @@
                         </a>
                     </li>
                     <!-- Verifikasi SSR -->
-                    <li>
+                    {{-- <li>
                         <a href="{{ url('verifikasi-ssr') }}"
                             class="menu-item group {{ request()->is('verifikasi-ssr') ? 'menu-item-active' : 'menu-item-inactive' }}">
                             <svg class="{{ request()->is('verifikasi-ssr') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
@@ -326,7 +325,7 @@
                                 Verifikasi SSR
                             </span>
                         </a>
-                    </li>
+                    </li> --}}
                     <!-- Rekap Laporan -->
                     <li>
                         <a href="{{ url('rekap-laporan') }}"

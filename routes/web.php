@@ -9,6 +9,7 @@ use App\Http\Controllers\ObrikController;
 use App\Http\Controllers\ObrikTurunanController;
 use App\Http\Controllers\StatusTlController;
 use App\Http\Controllers\TimController;
+use App\Http\Controllers\VerifikasiSsrController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -64,3 +65,10 @@ Route::get('daftar-kasus/{id}/edit', [KasusController::class, 'edit']);
 Route::post('daftar-kasus', [KasusController::class, 'store']);
 Route::delete('daftar-kasus/{kasus}', [KasusController::class, 'destroy']);
 Route::post('ajax-data-daftar-kasus', [KasusController::class, 'ajaxDataDaftarKasus']);
+
+// Manajemen Kasus -> Verifikasi SSR
+Route::get('verifikasi-ssr', [VerifikasiSsrController::class, 'index']);
+Route::get('verifikasi-ssr/{id}/edit', [VerifikasiSsrController::class, 'edit']);
+Route::post('verifikasi-ssr', [VerifikasiSsrController::class, 'store']);
+Route::delete('verifikasi-ssr/{kasus}', [VerifikasiSsrController::class, 'destroy']);
+Route::post('ajax-data-verifikasi-ssr', [VerifikasiSsrController::class, 'ajaxDataVerifikasiSsr']);
