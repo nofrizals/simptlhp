@@ -45,7 +45,7 @@
     </div>
     <!-- Modal -->
     <div id="modalAdmin"
-        class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300">
+        class="fixed inset-0 flex items-start justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
         <div id="modalContent" class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10">
             <button id="closeModalBtn"
