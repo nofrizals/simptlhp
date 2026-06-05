@@ -275,6 +275,25 @@
 
                 $('#tableLoading').removeClass('hidden');
 
+                function openModal() {
+                    reset();
+                    $('#modalAdmin')
+                        .removeClass('pointer-events-none opacity-0');
+
+                    $('#modalContent')
+                        .removeClass('scale-95')
+                        .addClass('scale-100');
+                }
+
+                function closeModal() {
+                    $('#modalAdmin')
+                        .addClass('opacity-0 pointer-events-none');
+
+                    $('#modalContent')
+                        .removeClass('scale-100')
+                        .addClass('scale-95');
+                }
+
                 $("#openModalBtn").click(function() {
                     $('.modal-header').html('Form Tambah Admin');
                     if (!$('.opd').hasClass("select2-hidden-accessible")) {
@@ -283,14 +302,12 @@
                             width: '100%'
                         });
                     }
-                    $("#modalAdmin").removeClass("hidden opacity-0 pointer-events-none").addClass(
-                        "opacity-100 pointer-events-auto");
+                    openModal();
                 });
 
                 $("#closeModalBtn").click(function() {
                     reset();
-                    $("#modalAdmin").addClass("opacity-0 pointer-events-none").removeClass(
-                        "opacity-100 pointer-events-auto");
+                    closeModal();
                 });
 
                 var table = $('#userTable').DataTable({
@@ -523,9 +540,7 @@
 
                 $(document).on('click', '.btn-editAdmin', function() {
                     let data = $(this).data();
-                    $("#modalAdmin").removeClass("hidden opacity-0 pointer-events-none")
-                        .addClass(
-                            "opacity-100 pointer-events-auto");
+                    openModal()
                     $('.modal-header').html('Form Edit Admin');
                     $('#id').val(data.id);
                     $('#opd').val(data.opd);
@@ -543,10 +558,11 @@
                 $('.cancel').click(function(e) {
                     e.preventDefault();
                     reset();
-                    $('#modalAdmin').addClass('hidden opacity-0 pointer-events-none');
+                    closeModal();
                 });
 
                 function reset() {
+                    $('#id').val('');
                     $('#formAdmin')[0].reset();
                     $('.err').empty();
 
