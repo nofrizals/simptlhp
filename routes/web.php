@@ -12,8 +12,14 @@ use App\Http\Controllers\TimController;
 use App\Http\Controllers\VerifikasiSsrController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('dashboard');
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('dashboard');
+    });
 });
 
 Route::get('admin', [AdminController::class, 'index']);
