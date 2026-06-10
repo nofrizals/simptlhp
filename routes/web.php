@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KasusController;
@@ -12,22 +13,29 @@ use App\Http\Controllers\TimController;
 use App\Http\Controllers\VerifikasiSsrController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
+
+// Route::post('/login', function () {
+Route::post('login', [AuthController::class, 'login']);
+// });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     });
+
+    // --> Menu Admin
+    Route::get('admin', [AdminController::class, 'index']);
+    Route::post('admin', [AdminController::class, 'store']);
+    // Route::get('admin/{admin}/edit', [AdminController::class, 'edit']);
+    Route::delete('admin/{admin}', [AdminController::class, 'destroy']);
+    Route::post('ajax-data-admin', [AdminController::class, 'ajaxDataAdmin']);
+    Route::post('instansi/getMyTurunan', [InstansiController::class, 'getMyTurunan']);
+
+    //Logout
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::get('admin', [AdminController::class, 'index']);
-Route::post('admin', [AdminController::class, 'store']);
-// Route::get('admin/{admin}/edit', [AdminController::class, 'edit']);
-Route::delete('admin/{admin}', [AdminController::class, 'destroy']);
-Route::post('ajax-data-admin', [AdminController::class, 'ajaxDataAdmin']);
-Route::post('instansi/getMyTurunan', [InstansiController::class, 'getMyTurunan']);
 
 // Master -> Jenis-php
 Route::get('jenis-php', [JenisController::class, 'index']);

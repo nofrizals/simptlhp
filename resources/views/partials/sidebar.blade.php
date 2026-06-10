@@ -3,7 +3,7 @@
     <!-- SIDEBAR HEADER -->
     <div :class="sidebarToggle ? 'justify-center' : 'justify-between'"
         class="flex items-center gap-2 pt-8 sidebar-header pb-7">
-        <a href="{{ url('/') }}">
+        <a href="{{ url('dashboard') }}">
             <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
                 <img class="dark:hidden" src="./images/logo/logo.svg" alt="Logo" />
                 <img class="hidden dark:block" src="./images/logo/logo-dark.svg" alt="Logo" />
@@ -37,9 +37,9 @@
                 <ul class="mb-6 flex flex-col gap-1">
                     <!-- Dashboard -->
                     <li>
-                        <a href="{{ url('/') }}"
-                            class="menu-item group {{ request()->is('/') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg class="{{ request()->is('/') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                        <a href="{{ url('dashboard') }}"
+                            class="menu-item group {{ request()->is('dashboard') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('dashboard') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
