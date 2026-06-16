@@ -15,6 +15,12 @@ class User extends Authenticatable
     protected $guarded = [];
     public $timestamps = false;
     protected $connection = 'mysql_root';
+    protected $hidden     = ['password'];
+
+    protected $casts = [
+        'simak'           => 'boolean',
+        'tingkatan_level' => 'integer',
+    ];
 
     public function instansi()
     {

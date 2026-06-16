@@ -5,18 +5,18 @@ namespace App\Clients;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
-class EgovAuthClient
+class RootAuthClient
 {
     public function login(string $nip, string $password): array
     {
         try {
             $response = Http::withBasicAuth(
-                config('services.egov.username'),
-                config('services.egov.password')
+                config('services.root.username'),
+                config('services.root.password')
             )->withHeaders([
-                'SIAK-KEY' => config('services.egov.key'),
+                'SIAK-KEY' => config('services.root.key'),
             ])->asForm()->timeout(10)
-                ->post(config('services.egov.url'), [
+                ->post(config('services.root.url'), [
                     'username' => $nip,
                     'password' => $password,
                     'host' => 'simptlhp.siakkab.go.id',

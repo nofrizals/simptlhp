@@ -167,23 +167,17 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                             });
                             return;
                         }
-                        if (response.status === false) {
-                            $.each(response.error, function(key, val) {
-                                $('#' + key + '_error').html(val[0]);
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Login berhasil',
-                                text: 'Mengalihkan ke dashboard...',
-                                icon: 'success',
-                                timer: 2000,
-                                showConfirmButton: false,
-                                allowOutsideClick: false
-                            });
-                            setTimeout(() => {
-                                window.location.href = response.redirect;
-                            }, 1200);
-                        }
+                        Swal.fire({
+                            title: 'Login berhasil',
+                            text: 'Mengalihkan ke dashboard...',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false,
+                            allowOutsideClick: false
+                        });
+                        setTimeout(() => {
+                            window.location.href = response.redirect;
+                        }, 1200);
                     },
                     error: function(xhr) {
                         $('.err').html('');
@@ -194,6 +188,16 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                             });
                             return;
                         }
+                        // Handle 503 (SSO down)
+                        if (xhr.status === 503) {
+                            Swal.fire({
+                                title: "Gagal",
+                                text: xhr.responseJSON.message,
+                                icon: "warning"
+                            });
+                            return;
+                        }
+
                         Swal.fire({
                             title: "Gagal",
                             text: "Terjadi kesalahan server",

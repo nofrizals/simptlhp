@@ -13,11 +13,9 @@ use App\Http\Controllers\TimController;
 use App\Http\Controllers\VerifikasiSsrController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
-
-// Route::post('/login', function () {
+Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('login', [AuthController::class, 'login']);
-// });
+Route::post('egov-checking', [AuthController::class, 'egovChecking']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {

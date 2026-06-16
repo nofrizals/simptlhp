@@ -13,11 +13,11 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
-    'egov' => [
-        'username' => env('EGOV_USER'),
-        'password' => env('EGOV_PASS'),
-        'key' => env('EGOV_KEY'),
-        'url' => env('EGOV_URL'),
+    'root' => [
+        'username' => env('ROOT_USER'),
+        'password' => env('ROOT_PASS'),
+        'key' => env('ROOT_KEY'),
+        'url' => env('ROOT_URL'),
     ],
 
     'postmark' => [
