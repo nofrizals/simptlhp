@@ -44,14 +44,22 @@ class AuthService
         }
 
         // 3. Cari user di DB lokal berdasarkan nip_baru dari SSO
-        $user = $this->userRepo->findByIdPegawai($data['nip_baru']);
+        // $user = $this->userRepo->findByIdPegawai($data['id_pegawai']);
+
+        $user = null;
+        if (($data['simak'] ?? 0) == 0) {
+            // User biasa
+            $user = $this->userRepo->findByIdPegawai($data['id_pegawai']);
+        } else {
+            $user = $this->userRepo->findByNipBaru($data['nip_baru']);
+        }
+
         if (!$user) {
             throw ValidationException::withMessages([
-                'nip' => 'User tidak terdaftar di sistem lokal',
+                'nip' => 'User tidak terdaftar',
             ]);
         }
 
-        // 4. Set Laravel Auth session
         Auth::login($user);
         request()->session()->regenerate();
 
@@ -59,9 +67,10 @@ class AuthService
         $namaOpd   = $this->namaOpdService->resolveByKodeUnor($data['unor_root'] ?? '');
         $sessionId = (string) Str::uuid();
 
-        // 6. Set semua session data (sesuai CI lama)
+        // 6. Set semua session data
+        $nip = ((int) $data['simak'] === 1) ? ($data['nip_baru'] ?? $data['id_pegawai']) : $data['id_pegawai'];
         session([
-            'nip'        => $data['nip_baru'],
+            'nip'        => $nip,
             'nama'       => $data['nama_pegawai'] ?? null,
             'id_pegawai' => $data['id_pegawai'],
             'level'      => $data['tingkatan_level'],
@@ -77,7 +86,7 @@ class AuthService
         // 8. Catat access log (audit trail)
         $this->recordAccessLog(
             sessionId: $sessionId,
-            idPegawai: $data['nip_baru'],
+            idPegawai: $data['id_pegawai'],
             kodeUnor: $data['unor_root'] ?? '',
             level: (int) ($data['tingkatan_level'] ?? 0),
         );

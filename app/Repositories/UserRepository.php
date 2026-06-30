@@ -12,4 +12,8 @@ class UserRepository
     {
         return User::where('id_pegawai', $idPegawai)->first();
     }
+    public function findByNipBaru(string $nipBaru): ?User
+    {
+        return User::where('id_pegawai', $nipBaru)->first();
+    }
 }
