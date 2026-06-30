@@ -10,13 +10,108 @@
     <title>
         @yield('title', 'SIMPTLHP')
     </title>
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.tailwindcss.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
-
     <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
+        /* === TailAdmin Pill Pagination === */
+        .dataTables_paginate {
+            display: flex !important;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* semua tombol */
+        .dataTables_paginate .paginate_button {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+
+            min-width: 38px;
+            height: 38px;
+
+            padding: 0 12px !important;
+
+            border-radius: 9999px !important;
+            /* pill shape */
+            border: 1px solid #E5E7EB !important;
+
+            background: #fff !important;
+            color: #374151 !important;
+
+            font-size: 14px;
+            font-weight: 500;
+
+            transition: all .2s ease;
+            cursor: pointer;
+        }
+
+        /* hover */
+        .dataTables_paginate .paginate_button:hover {
+            background: #F3F4F6 !important;
+            border-color: #D1D5DB !important;
+        }
+
+        /* active page (PILL BLUE) */
+        .dataTables_paginate .paginate_button.current {
+            background: #465FFF !important;
+            border-color: #465FFF !important;
+            color: #fff !important;
+        }
+
+        /* disabled */
+        .dataTables_paginate .paginate_button.disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        /* prev & next lebih clean */
+        .dataTables_paginate .paginate_button.previous,
+        .dataTables_paginate .paginate_button.next {
+            font-weight: 600;
+        }
+
+        #userTable {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        #userTable thead th {
+            background: #F9FAFB;
+            color: #6B7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 18px 24px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .dark #userTable thead th {
+            background: #111827;
+            color: #9CA3AF;
+        }
+
+        #userTable tbody td {
+            padding: 16px 24px;
+            color: #374151;
+        }
+
+        #userTable tbody tr {
+            transition: all .15s ease;
+        }
+
+        .dark #userTable tbody td {
+            border-color: #1F2937;
+        }
+
+        #userTable tbody tr:hover {
+            background: #F9FAFB;
+        }
+
+        .dark #userTable tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
         /* Select2 Tailwind Style */
         .select2-container--default .select2-selection--single {
             height: 44px;
@@ -47,32 +142,6 @@
             padding: 6px;
         }
 
-        .dataTables_wrapper .dataTables_length,
-        .dataTables_wrapper .dataTables_filter {
-            margin-bottom: 1rem;
-        }
-
-        .dataTables_wrapper .dataTables_info {
-            margin-top: 1rem;
-        }
-
-        .dataTables_wrapper .dataTables_paginate {
-            margin-top: 1rem;
-        }
-
-        /* Samakan font dengan TailAdmin */
-        .dataTables_wrapper {
-            font-family: inherit;
-            color: inherit;
-        }
-
-        /* Table header */
-        /* table.dataTable thead th {
-            font-weight: 600;
-            font-size: 14px;
-            color: #374151;
-        } */
-
         #jenisPhpTable thead th {
             text-align: center !important;
         }
@@ -92,57 +161,6 @@
         #kasusTable thead th {
             text-align: center !important;
         }
-
-        /* Table body */
-        table.dataTable tbody td {
-            font-size: 14px;
-            color: #1f2937;
-            /* text-gray-800 */
-        }
-
-        /* Search input */
-        .dataTables_wrapper .dataTables_filter input {
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            font-size: 14px;
-        }
-
-        /* Select show entries */
-        .dataTables_wrapper .dataTables_length select {
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            padding: 0.25rem 0.5rem;
-            font-size: 14px;
-        }
-
-        /* Pagination button */
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            border-radius: 0.375rem;
-            padding: 0.4rem 0.75rem;
-            margin: 0 2px;
-        }
-
-        /* Active page */
-        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background-color: #3b82f6 !important;
-            color: white !important;
-            border: none;
-        }
-
-        .dataTables_wrapper .dataTables_length,
-        .dataTables_wrapper .dataTables_filter {
-            display: flex;
-            align-items: center;
-        }
-
-        .dataTables_wrapper .dataTables_filter {
-            justify-content: flex-end;
-        }
-
-        .dataTables_wrapper .dataTables_length {
-            justify-content: flex-start;
-        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -159,7 +177,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             @include('partials.overlay')
             @include('partials.header')
             <div id="alert-container" class="mb-4"></div>
-            <main>
+            <main class="flex-1 p-6 lg:p-8">
                 @yield('content')
             </main>
         </div>
@@ -167,8 +185,6 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.tailwindcss.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
     <!-- Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
