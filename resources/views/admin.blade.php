@@ -29,7 +29,7 @@
             <div class="flex items-center gap-3">
                 <span class="text-sm text-gray-500">Tampilkan</span>
                 <select id="pageLength"
-                    class="h-10 rounded-lg border border-gray-300 px-3 text-sm dark:border-gray-700 dark:bg-gray-900">
+                    class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
@@ -40,7 +40,7 @@
             {{-- SEARCH --}}
             <div class="relative">
                 <input id="customSearch" type="text" placeholder="Cari admin..."
-                    class="h-10 w-72 rounded-xl border border-gray-300 px-4 text-sm focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900">
+                    class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
             </div>
         </div>
 
