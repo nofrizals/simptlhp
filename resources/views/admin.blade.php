@@ -12,7 +12,7 @@
                     Data Admin
                 </h3>
                 <p class="text-sm text-gray-500">
-                    Kelola seluruh pengguna administrator
+                    Kelola seluruh pengguna
                 </p>
             </div>
 
@@ -363,6 +363,13 @@
                 // ════════════════════════════════════════════════════════════════
                 // DATATABLE UTAMA
                 // ════════════════════════════════════════════════════════════════
+
+                // LOADING
+                $('#userTable')
+                    .on('processing.dt', function(e, settings, processing) {
+                        $('#tableLoading').toggleClass('hidden', !processing);
+                    });
+
                 const userTable = $('#userTable').DataTable({
                     processing: true,
                     serverSide: true,
@@ -436,11 +443,6 @@
 
                 userTable.on('init.dt', moveDataTableFooter);
                 userTable.on('draw.dt', moveDataTableFooter);
-
-                // LOADING
-                userTable.on('processing.dt', function(e, settings, processing) {
-                    $('#tableLoading').toggleClass('hidden', !processing);
-                });
 
                 // ════════════════════════════════════════════════════════════════
                 // MODAL ADMIN — Helper

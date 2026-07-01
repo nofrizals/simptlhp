@@ -113,7 +113,8 @@ class AdminController extends Controller
                 return '<div class="flex items-center gap-2"><span>'
                     . e($nama_pegawai) . '</span>' . $simakIcon . '</div>';
             })
-            ->addColumn('nama_obrik', fn(User $user) => e($user->instansi?->nama_instansi ?? '-'))
+            ->addColumn('nama_obrik', fn(User $user) => e($user->instansi?->nama_instansi ? ucwords(strtolower($user->instansi->nama_instansi)) : '-'))
+
             ->addColumn('level', fn(User $user) => e($user->nama_level ?? '-'))
             ->addColumn('action', function (User $user) {
                 $timId   = TimAnggota::where('id_user', $user->id_user)->value('id_tim') ?? '';
