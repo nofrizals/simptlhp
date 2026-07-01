@@ -104,9 +104,14 @@ class AdminController extends Controller
                 $simakIcon = $user->simak
                     ? '<img src="' . asset('images/icons/SIMAK72r.png') . '" class="h-4 w-auto opacity-80 hover:opacity-100" title="Terdaftar di SIMAK"/>'
                     : '';
-
+                $parts = explode(',', $user->nama_pegawai);
+                $nama_pegawai = ucwords(strtolower(trim($parts[0])));
+                if (count($parts) > 1) {
+                    $gelar = implode(',', array_slice($parts, 1));
+                    return e($nama_pegawai . ',' . $gelar);
+                }
                 return '<div class="flex items-center gap-2"><span>'
-                    . e($user->nama_pegawai) . '</span>' . $simakIcon . '</div>';
+                    . e($nama_pegawai) . '</span>' . $simakIcon . '</div>';
             })
             ->addColumn('nama_obrik', fn(User $user) => e($user->instansi?->nama_instansi ?? '-'))
             ->addColumn('level', fn(User $user) => e($user->nama_level ?? '-'))
