@@ -12,4 +12,7 @@ class JenisPhp extends Model
     protected $primaryKey = 'id_jenis_php';
     public $timestamps = false;
     protected $guarded = [];
+    public const SEARCHABLE_COLUMNS = [
+        'jenis_php'
+    ];
 }

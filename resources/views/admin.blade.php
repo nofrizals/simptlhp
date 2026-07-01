@@ -46,6 +46,7 @@
                     </div>
                 </div>
 
+                {{-- Loading --}}
                 <div id="tableLoading"
                     class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
                     <div class="flex flex-col items-center gap-2">
@@ -57,7 +58,7 @@
 
                 {{-- TABLE --}}
                 <div class="overflow-x-auto">
-                    <table id="userTable" class="min-w-full text-sm">
+                    <table id="dataTable" class="min-w-full text-sm">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
@@ -373,12 +374,12 @@
                 // ════════════════════════════════════════════════════════════════
 
                 // LOADING
-                $('#userTable')
+                $('#dataTable')
                     .on('processing.dt', function(e, settings, processing) {
                         $('#tableLoading').toggleClass('hidden', !processing);
                     });
 
-                const userTable = $('#userTable').DataTable({
+                const dataTable = $('#dataTable').DataTable({
                     processing: true,
                     serverSide: true,
                     responsive: false,
@@ -437,20 +438,20 @@
                 });
 
                 $('#customSearch').on('input', function() {
-                    userTable.search(this.value).draw();
+                    dataTable.search(this.value).draw();
                 });
 
                 $('#pageLength').on('change', function() {
-                    userTable.page.len(this.value).draw();
+                    dataTable.page.len(this.value).draw();
                 });
 
                 function moveDataTableFooter() {
-                    $('#userTable_info').appendTo('#tableInfo');
-                    $('#userTable_paginate').appendTo('#tablePagination');
+                    $('#dataTable_info').appendTo('#tableInfo');
+                    $('#dataTable_paginate').appendTo('#tablePagination');
                 }
 
-                userTable.on('init.dt', moveDataTableFooter);
-                userTable.on('draw.dt', moveDataTableFooter);
+                dataTable.on('init.dt', moveDataTableFooter);
+                dataTable.on('draw.dt', moveDataTableFooter);
 
                 // ════════════════════════════════════════════════════════════════
                 // MODAL ADMIN — Helper
@@ -760,7 +761,7 @@
                             }
 
                             closeModalAdmin();
-                            userTable.ajax.reload(null, false);
+                            dataTable.ajax.reload(null, false);
                             Swal.fire({
                                 title: 'Sukses',
                                 text: response.message,
@@ -844,7 +845,7 @@
                                         icon: 'error'
                                     });
                                 }
-                                userTable.ajax.reload(function() {
+                                dataTable.ajax.reload(function() {
                                     Swal.fire({
                                         title: 'Sukses',
                                         text: response.message,

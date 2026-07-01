@@ -71,12 +71,12 @@
             font-weight: 600;
         }
 
-        #userTable {
+        #dataTable {
             border-collapse: separate;
             border-spacing: 0;
         }
 
-        #userTable thead th {
+        #dataTable thead th {
             background: #F9FAFB;
             color: #6B7280;
             font-size: 12px;
@@ -86,29 +86,29 @@
             border-bottom: 1px solid #E5E7EB;
         }
 
-        .dark #userTable thead th {
+        .dark #dataTable thead th {
             background: #111827;
             color: #9CA3AF;
         }
 
-        #userTable tbody td {
+        #dataTable tbody td {
             padding: 16px 24px;
             color: #374151;
         }
 
-        #userTable tbody tr {
+        #dataTable tbody tr {
             transition: all .15s ease;
         }
 
-        .dark #userTable tbody td {
+        .dark #dataTable tbody td {
             border-color: #1F2937;
         }
 
-        #userTable tbody tr:hover {
+        #dataTable tbody tr:hover {
             background: #F9FAFB;
         }
 
-        .dark #userTable tbody tr:hover {
+        .dark #dataTable tbody tr:hover {
             background: rgba(255, 255, 255, 0.03);
         }
 
@@ -142,7 +142,7 @@
             padding: 6px;
         }
 
-        #jenisPhpTable thead th {
+        /* #jenisPhpTable thead th {
             text-align: center !important;
         }
 
@@ -160,7 +160,7 @@
 
         #kasusTable thead th {
             text-align: center !important;
-        }
+        } */
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
