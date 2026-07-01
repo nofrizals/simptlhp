@@ -4,76 +4,84 @@
 @section('page-data', "'basicTables'")
 
 @section('content')
-    <div
-        class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
-            <div>
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                    Data Admin
-                </h3>
-                <p class="text-sm text-gray-500">
-                    Kelola seluruh pengguna
-                </p>
+    <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+        <div class="space-y-6">
+            <div
+                class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                            Data Admin
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            Kelola seluruh pengguna
+                        </p>
+                    </div>
+
+                    <button id="openModalBtn"
+                        class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        + Tambah Admin
+                    </button>
+                </div>
+
+                {{-- TOOLBAR --}}
+                <div
+                    class="flex flex-col gap-4 border-b border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
+                    {{-- SHOW --}}
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-gray-500">Tampilkan</span>
+                        <select id="pageLength"
+                            class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+
+                    {{-- SEARCH --}}
+                    <div class="relative">
+                        <input id="customSearch" type="text" placeholder="Cari admin..."
+                            class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                    </div>
+                </div>
+
+                <div id="tableLoading"
+                    class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                        </div>
+                        <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
+                    </div>
+                </div>
+
+                {{-- TABLE --}}
+                <div class="overflow-x-auto">
+                    <table id="userTable" class="min-w-full text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">ID Pegawai
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Lengkap
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Obrik
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Level</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+                    </table>
+                </div>
+
+                {{-- FOOTER --}}
+                <div
+                    class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
+                    <div id="tableInfo" class="text-sm text-gray-500"></div>
+                    <div id="tablePagination"></div>
+                </div>
             </div>
-
-            <button id="openModalBtn"
-                class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
-                + Tambah Admin
-            </button>
-        </div>
-
-        {{-- TOOLBAR --}}
-        <div
-            class="flex flex-col gap-4 border-b border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-            {{-- SHOW --}}
-            <div class="flex items-center gap-3">
-                <span class="text-sm text-gray-500">Tampilkan</span>
-                <select id="pageLength"
-                    class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-            </div>
-
-            {{-- SEARCH --}}
-            <div class="relative">
-                <input id="customSearch" type="text" placeholder="Cari admin..."
-                    class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
-            </div>
-        </div>
-
-        <div id="tableLoading"
-            class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
-            <div class="flex flex-col items-center gap-2">
-                <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
-            </div>
-        </div>
-
-        {{-- TABLE --}}
-        <div class="overflow-x-auto">
-            <table id="userTable" class="min-w-full text-sm">
-                <thead class="bg-gray-50 dark:bg-gray-800">
-                    <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">ID Pegawai</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Lengkap</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Obrik</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Level</th>
-                        <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
-            </table>
-        </div>
-
-        {{-- FOOTER --}}
-        <div
-            class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-            <div id="tableInfo" class="text-sm text-gray-500"></div>
-            <div id="tablePagination"></div>
         </div>
     </div>
 
@@ -250,7 +258,7 @@
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 <p class="err text-theme-xs text-error-500" id="password_error"></p>
                                 <small id="password-edit" class="hidden text-red-500">
-                                    <i>Kosongkan password bila tidak merubah</i>
+                                    <i>Kosongkan jika tidak diubah</i>
                                 </small>
                             </div>
 
