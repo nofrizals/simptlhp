@@ -12,4 +12,7 @@ class NilaiKerugian extends Model
     protected $primaryKey = 'id_nilai_kerugian';
     public $timestamps = false;
     protected $guarded = [];
+    public const SEARCHABLE_COLUMNS = [
+        'nilai_kerugian'
+    ];
 }
