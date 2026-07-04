@@ -5,47 +5,84 @@
 
 @section('content')
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-        <div x-data="{ pageName: `Obrik` }">
-            @include('partials.breadcrumb')
-        </div>
-        <div class="space-y-5 sm:space-y-6">
-            <div class="relative border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
-                <div class="flex justify-start mb-5">
+        <div class="space-y-6">
+            <div
+                class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                            Data Obrik
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            Kelola seluruh obrik
+                        </p>
+                    </div>
                     <button id="openModalBtn"
-                        class="px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
-                        Tambah
+                        class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        + Tambah Data
                     </button>
                 </div>
-                <div id="tableLoading"
-                    class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50 rounded-lg">
-                    <div class="flex flex-col items-center gap-2">
-                        <div class="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent">
-                        </div>
-                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">
-                            Memuat data...
-                        </span>
+
+                {{-- TOOLBAR --}}
+                <div
+                    class="flex flex-col gap-4 border-b border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
+                    {{-- SHOW --}}
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-gray-500">Tampilkan</span>
+                        <select id="pageLength"
+                            class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+
+                    {{-- SEARCH --}}
+                    <div class="relative">
+                        <input id="customSearch" type="text" placeholder="Cari admin..."
+                            class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
-                <table id="obrikTable" class="min-w-full divide-y divide-gray-200 display nowrap">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Id Pegawai</th>
-                            <th>Nama Lengkap</th>
-                            <th>Nama Obrik</th>
-                            <th>Level</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+
+                {{-- Loading --}}
+                <div id="tableLoading"
+                    class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                        </div>
+                        <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table id="dataTable" class="min-w-full text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Kode Obrik
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Obrik
+                                </th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+                    </table>
+                </div>
+
+                {{-- FOOTER --}}
+                <div
+                    class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
+                    <div id="tableInfo" class="text-sm text-gray-500"></div>
+                    <div id="tablePagination"></div>
+                </div>
             </div>
         </div>
     </div>
     <!-- Modal -->
     <div id="modalObrik"
-        class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300">
+        class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
         <div id="modalContent" class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10">
             <button id="closeModalBtn"
@@ -66,185 +103,13 @@
                             <input type="hidden"
                                 class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                 id="id" name="id">
-                            <div class="w-full px-2.5">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama OPD
-                                </label>
-                                <div class="relative z-20 bg-transparent">
-                                    <select name="opd" id="opd"
-                                        class="opd dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="" disabled selected
-                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Pilih OPD</option>
-                                        @foreach ($instansis as $instansi)
-                                            <option value="{{ $instansi['kode'] }}">
-                                                {{ ucwords(strtolower($instansi['nama'])) }}
-                                            </option>
-                                        @endforeach
-                                        @foreach ($kecamatans as $kecamatan)
-                                            <option value="{{ $kecamatan['kode'] }}">
-                                                {{ ucwords(strtolower($kecamatan['nama'])) }}
-                                            </option>
-                                        @endforeach
-                                        @foreach ($turunansmini as $turunanmini)
-                                            <option value="{{ $turunanmini['kode'] }}">
-                                                {{ ucwords(strtolower($turunanmini['nama'])) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="opd_error"></p>
-                            </div>
                             <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    ID Pegawai
-                                </label>
-                                <input type="text" name="id_pegawai" id="id_pegawai" placeholder="Masukkan NIP/NIK"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="id_pegawai_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama Lengkap
-                                </label>
-                                <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama Lengkap"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="nama_lengkap_error"></p>
-                            </div>
-                            <div class="w-full px-2.5">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Level
-                                </label>
-                                <div class="relative z-20 bg-transparent">
-                                    <select name="level" id="level"
-                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                                        disabled>
-                                        <option value="" disabled selected
-                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Pilih Level</option>
-                                        @foreach ($levels as $level)
-                                            <option value="{{ $level->tingkatan_level }}"
-                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                {{ ucwords($level->nama_level) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <span
-                                        class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke=""
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="level_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 pick-tim hidden">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Tim
-                                </label>
-                                <div class="relative z-20 bg-transparent">
-                                    <select name="tim" id="tim"
-                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="" disabled selected
-                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Pilih Tim</option>
-                                        @foreach ($tims as $tim)
-                                            <option value="{{ $tim->id }}"
-                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                {{ $tim->name }} - {{ $tim->ketua->nama_pegawai ?? 'ADMIN INFOKOM' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <span
-                                        class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke=""
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="tim_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 hidden" id="obrikRadio">
-                                <div class="flex flex-col gap-3">
-                                    <label class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                        Obrik Level Korwil/UPTD/Kelurahan/Kampung
-                                    </label>
-                                    <div class="flex flex-wrap items-center gap-4">
-                                        <div>
-                                            <label
-                                                class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only peer" type="radio" name="obrikRadio"
-                                                    value="0">
-
-                                                <span
-                                                    class="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 peer-checked:border-blue-500 peer-checked:bg-blue-500">
-                                                    <span
-                                                        class="h-2 w-2 rounded-full bg-white hidden peer-checked:block"></span>
-                                                </span>
-
-                                                Tidak
-                                            </label>
-                                        </div>
-                                        <div>
-                                            <label
-                                                class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                                <input class="sr-only peer" type="radio" name="obrikRadio"
-                                                    value="1">
-
-                                                <span
-                                                    class="flex h-5 w-5 items-center justify-center rounded-full border border-gray-300 peer-checked:border-blue-500 peer-checked:bg-blue-500">
-                                                    <span
-                                                        class="h-2 w-2 rounded-full bg-white hidden peer-checked:block"></span>
-                                                </span>
-
-                                                Ya
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="obrikRadio_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 hidden" id="form_nama_obrik">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Nama Obrik
                                 </label>
-                                <div class="relative z-20 bg-transparent">
-                                    <select name="nama_obrik" id="nama_obrik"
-                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="" disabled selected
-                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                            Nama obrik</option>
-                                        @foreach ($obriks as $obrik)
-                                            <option value="{{ $obrik['id'] }}" data-opd="{{ $obrik['kode_opd'] }}"
-                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                {{ $obrik['nama'] }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <span
-                                        class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                                        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke=""
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <p class="err text-theme-xs text-error-500" id="nama_obrik_error"></p>
-                            </div>
-                            <div class="w-full px-2.5">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Password
-                                </label>
-                                <input type="password" name="password" id="password" placeholder="Password"
+                                <input type="text" name="nama_turunan" id="nama_turunan" placeholder="Nama Obrik"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="password_error"></p>
-                                <small id="password-edit" class="hidden text-red-500"><i>Kosongkan password bila tidak
-                                        merubah</i></small>
+                                <p class="err text-theme-xs text-error-500" id="nama_turunan_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
@@ -273,52 +138,38 @@
                     }
                 });
 
-                $('#tableLoading').removeClass('hidden');
+                // ─── URL ───────────────────────────────────────────────
+                const URL = {
+                    ajaxObrik: "{{ url('ajax-data-obrik') }}",
+                    storeObrik: "{{ url('obrik') }}",
+                };
 
-                $("#openModalBtn").click(function() {
-                    reset();
-                    $('.modal-header').html('Form Tambah Obrik');
-                    if (!$('.opd').hasClass("select2-hidden-accessible")) {
-                        $('.opd').select2({
-                            dropdownParent: $('#modalObrik'),
-                            width: '100%'
-                        });
-                    }
-                    $("#modalObrik").removeClass("hidden opacity-0 pointer-events-none").addClass(
-                        "opacity-100 pointer-events-auto");
-                });
+                // ─── Spinner HTML ────────────────────────────────────────────────
+                const SPINNER_HTML = `
+                        <svg aria-hidden="true" class="w-5 h-5 animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                        </svg>
+                        <span>Loading...</span>`;
 
-                $("#closeModalBtn").click(function() {
-                    reset();
-                    $("#modalObrik").addClass("opacity-0 pointer-events-none").removeClass(
-                        "opacity-100 pointer-events-auto");
-                });
+                // LOADING
+                $('#dataTable')
+                    .on('processing.dt', function(e, settings, processing) {
+                        $('#tableLoading').toggleClass('hidden', !processing);
+                    });
 
-                var table = $('#obrikTable').DataTable({
-                    responsive: true,
+                const dataTable = $('#dataTable').DataTable({
+                    processing: true,
                     serverSide: true,
-                    processing: false,
-                    language: {
-                        emptyTable: `
-                            <div class="flex flex-col items-center justify-center py-5">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    Belum ada data
-                                </p>
-                            </div>
-                        `,
-                        zeroRecords: `
-                            <div class="flex flex-col items-center justify-center py-5">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    Data tidak ditemukan
-                                </p>
-                            </div>
-                        `,
-                        search: "",
-                        searchPlaceholder: "Cari data..."
-                    },
+                    responsive: false,
+                    scrollX: true,
+                    dom: 'rtip',
+                    searching: true,
+                    ordering: true,
+                    lengthChange: false,
                     ajax: {
                         type: 'POST',
-                        url: "{{ url('ajax-data-obrik') }}",
+                        url: URL.ajaxObrik,
                     },
                     columns: [{
                             data: 'DT_RowIndex',
@@ -327,23 +178,13 @@
                             searchable: false
                         },
                         {
-                            data: 'id_pegawai',
-                            name: 'id_pegawai',
+                            data: 'kode_instansi',
+                            name: 'kode_instansi',
                             className: 'text-left'
                         },
                         {
-                            data: 'nama_pegawai',
-                            name: 'nama_pegawai',
-                            className: 'text-left'
-                        },
-                        {
-                            data: 'nama_obrik',
-                            name: 'nama_obrik',
-                            className: 'text-left'
-                        },
-                        {
-                            data: 'level',
-                            name: 'level',
+                            data: 'nama_instansi',
+                            name: 'nama_instansi',
                             className: 'text-left'
                         },
                         {
@@ -352,15 +193,68 @@
                             orderable: false,
                             searchable: false
                         }
-                    ]
+                    ],
+                    language: {
+                        processing: "",
+                        zeroRecords: "Data tidak ditemukan",
+                        info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                        infoEmpty: "Tidak ada data",
+                        paginate: {
+                            previous: "←",
+                            next: "→"
+                        }
+                    },
                 });
 
-                table.on('processing.dt', function(e, settings, processing) {
-                    if (processing) {
-                        $('#tableLoading').removeClass('hidden');
-                    } else {
-                        $('#tableLoading').addClass('hidden');
+                $('#customSearch').on('input', function() {
+                    dataTable.search(this.value).draw();
+                });
+
+                $('#pageLength').on('change', function() {
+                    dataTable.page.len(this.value).draw();
+                });
+
+                function moveDataTableFooter() {
+                    $('#dataTable_info').appendTo('#tableInfo');
+                    $('#dataTable_paginate').appendTo('#tablePagination');
+                }
+
+                dataTable.on('init.dt', moveDataTableFooter);
+                dataTable.on('draw.dt', moveDataTableFooter);
+
+                function openModal() {
+                    reset();
+                    $('#modalObrik')
+                        .removeClass('pointer-events-none opacity-0');
+
+                    $('#modalContent')
+                        .removeClass('scale-95')
+                        .addClass('scale-100');
+                }
+
+                function closeModal() {
+                    $('#modalObrik')
+                        .addClass('opacity-0 pointer-events-none');
+
+                    $('#modalContent')
+                        .removeClass('scale-100')
+                        .addClass('scale-95');
+                }
+
+                $("#openModalBtn").click(function() {
+                    $('.modal-header').html('Form Tambah Obrik');
+                    if (!$('.opd').hasClass("select2-hidden-accessible")) {
+                        $('.opd').select2({
+                            dropdownParent: $('#modalObrik'),
+                            width: '100%'
+                        });
                     }
+                    openModal();
+                });
+
+                $("#closeModalBtn").click(function() {
+                    reset();
+                    closeModal();
                 });
 
                 $('#formObrik').submit(function(e) {
@@ -368,7 +262,7 @@
                     formData = new FormData($('#formObrik')[0]);
                     $.ajax({
                         type: 'POST',
-                        url: "{{ url('obrik') }}",
+                        url: URL.storeObrik,
                         data: formData,
                         dataType: 'json',
                         contentType: false,
@@ -399,9 +293,9 @@
                                     $('#' + key + '_error').html(val[0]);
                                 });
                             } else {
-                                $('#modalObrik').addClass('hidden opacity-0 pointer-events-none');
-                                if ($.fn.DataTable.isDataTable('#obrikTable')) {
-                                    $('#obrikTable').DataTable().ajax.reload(null, true);
+                                closeModal();
+                                if ($.fn.DataTable.isDataTable('#dataTable')) {
+                                    $('#dataTable').DataTable().ajax.reload(null, true);
                                 }
                                 Swal.fire({
                                     title: "Sukses",
@@ -427,80 +321,6 @@
                     });
                 });
 
-                $('#level').change(function() {
-                    let kode_unor = $('#opd').val();
-                    if (!kode_unor) {
-                        $(this).val('').trigger('change');
-                        return;
-                    }
-                    let level = $(this).val();
-                    let kode = parseInt(kode_unor.substring(3, 5));
-                    let isObrik = (level == 3 && ((kode >= 32 && kode <= 45) || kode == 13 || kode == 23));
-
-                    if (isObrik) {
-                        $('#obrikRadio').removeClass('hidden');
-                        $('.pick-tim').addClass('hidden');
-                    } else {
-                        $('#obrikRadio').addClass('hidden');
-
-                        if (level == 2) {
-                            $('.pick-tim').removeClass('hidden');
-                        } else {
-                            $('.pick-tim').addClass('hidden');
-                        }
-                    }
-
-                    $('input[name=obrikRadio][value="0"]').prop('checked', true).trigger('change');
-                });
-
-                $(document).on('change', 'input[name=obrikRadio]', function() {
-                    const opd = $('#opd').val();
-                    if ($(this).val() != 1) {
-                        $("#form_nama_obrik").addClass('hidden');
-                        $('#nama_obrik').html('<option disabled selected>--pilih</option>');
-                        return;
-                    }
-
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ url('instansi/getMyTurunan') }}",
-                        dataType: "json",
-                        data: {
-                            id: opd
-                        },
-
-                        beforeSend() {
-                            $("#form_nama_obrik").removeClass('hidden');
-                        },
-
-                        success(res) {
-                            let html = '<option disabled selected>--pilih</option>';
-                            if (res.data?.length) {
-                                res.data.forEach(row => {
-                                    let selected = row.kode_turunan == opd ?
-                                        'selected' : '';
-                                    html += `<option value="${row.kode_turunan}" ${selected}>
-                                ${row.nama_instansi}
-                             </option>`;
-                                });
-                            }
-                            $('#nama_obrik').html(html);
-                        },
-                        error() {
-                            $('#nama_obrik').html(
-                                '<option disabled selected>--pilih</option>');
-                        }
-                    });
-                });
-
-                $('#opd').on('change', function() {
-                    $('#level').prop('disabled', false);
-                    let opd = $(this).val();
-                    $('#nama_obrik option').hide();
-                    $('#nama_obrik option[data-opd="' + opd + '"]').show();
-                    $('#nama_obrik').val('');
-                });
-
                 $(document).on('click', '.btn-deleteObrik', function() {
                     Swal.fire({
                         title: 'Apakah anda yakin?',
@@ -516,11 +336,11 @@
                             let id = $(this).data('id');
                             $.ajax({
                                 type: "delete",
-                                url: "{{ url('obrik') }}/" + id,
+                                url: `${URL.storeObrik}/${id}`,
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
-                                        $('#obrikTable').DataTable().ajax.reload(
+                                        $('#dataTable').DataTable().ajax.reload(
                                             function() {
                                                 Swal.fire({
                                                     title: "Sukses",
@@ -543,52 +363,23 @@
 
                 $(document).on('click', '.btn-editObrik', function() {
                     let data = $(this).data();
-                    $("#modalObrik").removeClass("hidden opacity-0 pointer-events-none")
-                        .addClass(
-                            "opacity-100 pointer-events-auto");
-                    $('.modal-header').html('Form Edit Obrik');
+                    openModal();
+                    $('.modal-header').html(
+                        'Form Edit Obrik');
                     $('#id').val(data.id);
-                    $('#opd').val(data.opd);
-                    $('#id_pegawai').val(data.id_pegawai);
-                    $('#nama_lengkap').val(data.nama);
-                    $('#level').val(data.level).change().prop('disabled', false);
-                    if (data.level == 2) {
-                        $('#tim').val(data.tim).trigger('change');
-                    }
-                    $('#obrikRadio').val(data.obrikRadio);
-                    $('#nama_obrik').val(data.nama_obrik);
-                    $('#password-edit').removeClass('hidden');
+                    $('#nama_turunan').val(data.obrik);
                 });
 
                 $('.cancel').click(function(e) {
                     e.preventDefault();
                     reset();
-                    $('#modalObrik').addClass('hidden opacity-0 pointer-events-none');
+                    closeModal();
                 });
 
                 function reset() {
                     $('#id').val('');
                     $('#formObrik')[0].reset();
                     $('.err').empty();
-
-                    // Reset select ke default option pertama
-                    $('#opd, #level, #tim, #nama_obrik').prop('selectedIndex', 0);
-
-                    // Disable kembali level (karena awalnya disabled)
-                    $('#level').prop('disabled', true);
-
-                    // Sembunyikan field tambahan
-                    $('.pick-tim').addClass('hidden');
-                    $('#obrikRadio').addClass('hidden');
-                    $('#form_nama_obrik').addClass('hidden');
-
-                    // Reset radio (default ke "Tidak")
-                    $('input[name="obrikRadio"][value="0"]').prop('checked', true);
-
-                    // Optional: trigger change kalau ada event listener
-                    $('#opd').trigger('change');
-
-                    $('#password-edit').addClass('hidden');
                 }
             });
         </script>
