@@ -11,10 +11,10 @@
                 <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                            Data Nilai Kerugian
+                            Data Status Tindak Lanjut
                         </h3>
                         <p class="text-sm text-gray-500">
-                            Kelola seluruh nilai kerugian
+                            Kelola seluruh status tindak lanjut
                         </p>
                     </div>
                     <button id="openModalBtn"
@@ -40,7 +40,7 @@
 
                     {{-- SEARCH --}}
                     <div class="relative">
-                        <input id="customSearch" type="text" placeholder="Cari admin..."
+                        <input id="customSearch" type="text" placeholder="Cari status tindak lanjut..."
                             class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
