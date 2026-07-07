@@ -18,7 +18,7 @@ class ObrikController extends Controller
 
     public function ajaxDataObrik(Request $request)
     {
-        $data = Obrik::orderBy('id_instansi', 'desc');
+        $data = Obrik::where('kode_instansi', 'like', 'obrik%')->orderBy('id_instansi', 'desc');
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->editColumn('kode_instansi', function ($value) {

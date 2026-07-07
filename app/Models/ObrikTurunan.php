@@ -2,6 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ObrikTurunan extends Model {}
+class ObrikTurunan extends Model
+{
+    use HasFactory;
+    protected $table = 'kis_instansis';
+    protected $primaryKey = 'id_instansi';
+    protected $guarded = [];
+    public $timestamps = false;
+
+    public static function getLastKode($key)
+    {
+        $max = self::where('kode_instansi', 'like', $key . '%')
+            ->whereRaw('CHAR_LENGTH(TRIM(kode_instansi)) = 8')
+            ->selectRaw('MAX(CAST(RIGHT(kode_instansi,2) AS UNSIGNED)) as max')
+            ->value('max');
+
+        return ($max ?? 0) + 1;
+    }
+}

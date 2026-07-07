@@ -12,4 +12,11 @@ class Unor extends Model
     protected $table = 'm_unor';
     protected $guarded = [];
     public $timestamps = false;
+
+    public function getByKodeUnor($kode_unor)
+    {
+        return self::select('nama_unor')
+            ->where('kode_unor', $kode_unor)
+            ->first();
+    }
 }
