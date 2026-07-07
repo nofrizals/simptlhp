@@ -6,6 +6,7 @@ use App\Models\JenisPhp;
 use App\Models\Kasus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -125,7 +126,7 @@ class KasusController extends Controller
                 ]);
             }
             $data['spt']        = $request->nomor_spt . "\n" . $request->tanggal_spt;
-            $data['edited_by']  = 1;
+            $data['edited_by']  = Auth::id();
             $data['edited_at'] = now();
             $kasus->update($data);
             $message = 'Data berhasil diupdate';
@@ -133,7 +134,7 @@ class KasusController extends Controller
             $data['spt']        = $validated['nomor_spt'] . "\n" . Carbon::parse($validated['tanggal_spt'])->translatedFormat('d F Y');
             $data['kode_unor']  = '01.32.07';
             $data['nip_ketua']  = '199711222025211002';
-            $data['created_by'] = 1;
+            $data['created_by'] = Auth::id();
             $data['created_at'] = now();
             $kasus = Kasus::create($data);
             $message = 'Data berhasil ditambahkan';

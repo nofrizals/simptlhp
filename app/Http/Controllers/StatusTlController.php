@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\StatusTl;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -75,12 +76,12 @@ class StatusTlController extends Controller
                     'message' => 'Data tidak ditemukan'
                 ]);
             }
-            $data['edited_by']  = 1;
+            $data['edited_by']  = Auth::id();
             $data['edited_at'] = now();
             $statusTl->update($data);
             $message = 'Data berhasil diupdate';
         } else {
-            $data['created_by']  = 1;
+            $data['created_by']  = Auth::id();
             $data['created_at'] = now();
             $statusTl = StatusTl::create($data);
             $message = 'Data berhasil ditambahkan';

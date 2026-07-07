@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\NilaiKerugian;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -77,12 +78,12 @@ class NilaiKerugianController extends Controller
                     'message' => 'Data tidak ditemukan'
                 ]);
             }
-            $data['edited_by']  = 1;
+            $data['edited_by']  = Auth::id();
             $data['edited_at'] = now();
             $nilaiKerugian->update($data);
             $message = 'Data berhasil diupdate';
         } else {
-            $data['created_by']  = 1;
+            $data['created_by']  = Auth::id();
             $data['created_at'] = now();
             $nilaiKerugian = NilaiKerugian::create($data);
             $message = 'Data berhasil ditambahkan';
