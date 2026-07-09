@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -44,5 +43,10 @@ class User extends Authenticatable
         }
 
         return $nama;
+    }
+
+    public function instansi_root()
+    {
+        return $this->belongsTo(Instansi_root::class, 'kode_unor', 'kode_instansi');
     }
 }
