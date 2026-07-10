@@ -9,7 +9,12 @@ class Instansi extends Model
 {
     use HasFactory;
     protected $table = 'kis_instansis';
+    protected $primaryKey = 'id_instansi';
     protected $guarded = [];
+    public $timestamps = false;
+    public const SEARCHABLE_COLUMNS = [
+        'nama_instansi'
+    ];
 
     public function users()
     {
@@ -40,5 +45,10 @@ class Instansi extends Model
         }, $words);
 
         return implode(' ', $words);
+    }
+
+    public function tim()
+    {
+        return $this->belongsTo(Tim::class, 'id_tim', 'id');
     }
 }

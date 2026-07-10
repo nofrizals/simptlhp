@@ -7,6 +7,7 @@ use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KasusController;
 use App\Http\Controllers\NilaiKerugianController;
 use App\Http\Controllers\ObrikController;
+use App\Http\Controllers\ObrikDitanganiController;
 use App\Http\Controllers\ObrikTurunanController;
 use App\Http\Controllers\StatusTlController;
 use App\Http\Controllers\TimController;
@@ -71,6 +72,15 @@ Route::get('daftar-tim', [TimController::class, 'index']);
 Route::post('daftar-tim', [TimController::class, 'store']);
 Route::delete('daftar-tim/{tim}', [TimController::class, 'destroy']);
 Route::post('ajax-data-daftar-tim', [TimController::class, 'ajaxDataDaftarTim']);
+
+// Manajemen Tim -> Obrik Ditangani
+Route::get('obrik-tim', [ObrikDitanganiController::class, 'index']);
+Route::post('obrik-tim', [ObrikDitanganiController::class, 'store']);
+Route::delete('obrik-tim/{obrik_tim}', [ObrikDitanganiController::class, 'destroy']);
+Route::post('ajax-obrik-tim', [ObrikDitanganiController::class, 'ajaxObrikTim']);
+
+
+
 
 // Manajemen Kasus -> Kasus
 Route::get('daftar-kasus', [KasusController::class, 'index']);
