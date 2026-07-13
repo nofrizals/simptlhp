@@ -5,43 +5,83 @@
 
 @section('content')
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-        <div x-data="{ pageName: `Manajemen Daftar Kasus` }">
-            @include('partials.breadcrumb')
-        </div>
-        <div class="space-y-5 sm:space-y-6">
-            <div class="relative border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
-                <div class="flex justify-start mb-5">
+        <div class="space-y-6">
+            <div
+                class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                            Data Daftar Kasus
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            Kelola seluruh daftar kasus
+                        </p>
+                    </div>
                     <button id="openModalBtn"
-                        class="px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
-                        Tambah
+                        class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        + Tambah Data
                     </button>
                 </div>
-                <div id="tableLoading"
-                    class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50 rounded-lg">
-                    <div class="flex flex-col items-center gap-2">
-                        <div class="animate-spin rounded-full h-10 w-10 border-4 border-blue-500 border-t-transparent">
-                        </div>
-                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">
-                            Memuat data...
-                        </span>
+
+                {{-- TOOLBAR --}}
+                <div
+                    class="flex flex-col gap-4 border-b border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
+                    {{-- SHOW --}}
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-gray-500">Tampilkan</span>
+                        <select id="pageLength"
+                            class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+
+                    {{-- SEARCH --}}
+                    <div class="relative">
+                        <input id="customSearch" type="text" placeholder="Cari tahun pemeriksaan..."
+                            class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
-                <table id="kasusTable" class="min-w-full divide-y divide-gray-200 display">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Jenis PHP</th>
-                            <th>Tahun Pemeriksaan</th>
-                            <th>NO. & TGL SURAT TUGAS</th>
-                            <th>Nomor LHP</th>
-                            <th>Tanggal LHP</th>
-                            <th>Nama Obrik</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+
+                {{-- Loading --}}
+                <div id="tableLoading"
+                    class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                        </div>
+                        <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table id="dataTable" class="min-w-full text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Jenis PHP</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Tahun
+                                    Pemeriksaan</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">NO. & TGL
+                                    SURAT TUGAS</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nomor LHP</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Tanggal LHP
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Obrik
+                                </th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+                    </table>
+                </div>
+
+                {{-- FOOTER --}}
+                <div
+                    class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
+                    <div id="tableInfo" class="text-sm text-gray-500"></div>
+                    <div id="tablePagination"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -70,56 +110,105 @@
                         <div class="-mx-2.5 flex flex-wrap gap-y-5">
                             <input type="hidden" id="id" name="id">
                             <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Jenis PHP <span class="text-red-400">*</span>
-                                </label>
-                                <select name="id_jenis_php" id="id_jenis_php"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option value="" selected disabled
-                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                                        Jenis PHP
-                                    </option>
-                                    @foreach ($jenisPhp as $item)
-                                        <option value="{{ $item->id_jenis_php }}"
-                                            class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                                            {{ $item->jenis_php }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <p class="err text-theme-xs text-error-500" id="id_jenis_php_error"></p>
+                                <div class="flex gap-3">
+                                    <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Nama Obrik <span class="text-red-400">*</span>
+                                        </label>
+                                        <select name="kode_unor" id="kode_unor"
+                                            class="opd dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                            <option value="" disabled selected
+                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">Pilih OPD
+                                            </option>
+                                            @foreach ($obriks as $obrik)
+                                                <option value="{{ $obrik->kode_instansi }}"
+                                                    class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                                    {{ ucwords(strtolower($obrik->nama_instansi)) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <p class="err text-theme-xs text-error-500" id="kode_unor_error"></p>
+                                    </div>
+                                    <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Ketua Tim <span class="text-red-400">*</span>
+                                        </label>
+                                        <select name="nip_ketua" id="nip_ketua"
+                                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                            <option value="" selected disabled
+                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                                Pilih ketua tim
+                                            </option>
+                                            @foreach ($ketua_tims as $ketua_tim)
+                                                <option value="{{ $ketua_tim->id }}"
+                                                    class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                                    {{ $ketua_tim->name }} - {{ $ketua_tim->ketua->nama_pegawai }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <p class="err text-theme-xs text-error-500" id="nip_ketua_error"></p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Tahun Pemeriksaan <span class="text-red-400">*</span>
-                                </label>
-                                <select name="tahun_pemeriksaan" id="tahun_pemeriksaan"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option selected disabled value=""
-                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                                        Pilih tahun
-                                    </option>
-                                    @for ($i = 2005; $i <= date('Y'); $i++)
-                                        <option value="{{ $i }}"
-                                            class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                                            {{ $i }}
-                                        </option>
-                                    @endfor
-                                </select>
-                                <p class="err text-theme-xs text-error-500" id="tahun_pemeriksaan_error"></p>
+                                <div class="flex gap-3">
+                                    <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Jenis PHP <span class="text-red-400">*</span>
+                                        </label>
+                                        <select name="id_jenis_php" id="id_jenis_php"
+                                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                            <option value="" selected disabled
+                                                class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                                Jenis PHP
+                                            </option>
+                                            @foreach ($jenisPhp as $item)
+                                                <option value="{{ $item->id_jenis_php }}"
+                                                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                                    {{ $item->jenis_php }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <p class="err text-theme-xs text-error-500" id="id_jenis_php_error"></p>
+                                    </div>
+                                    <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Tahun Pemeriksaan <span class="text-red-400">*</span>
+                                        </label>
+                                        <select name="tahun_pemeriksaan" id="tahun_pemeriksaan"
+                                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                            <option selected disabled value=""
+                                                class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                                Pilih tahun
+                                            </option>
+                                            @for ($i = 2005; $i <= date('Y'); $i++)
+                                                <option value="{{ $i }}"
+                                                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                                    {{ $i }}
+                                                </option>
+                                            @endfor
+                                        </select>
+                                        <p class="err text-theme-xs text-error-500" id="tahun_pemeriksaan_error"></p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    SPT <span class="text-red-400">*</span>
-                                </label>
                                 <div class="flex gap-3">
                                     <!-- Nomor SPT -->
                                     <div class="w-1/2">
-                                        <input type="text" name="nomor_spt" id="nomor_spt" placeholder="No. Surat Tugas"
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            No. SPT <span class="text-red-400">*</span>
+                                        </label>
+                                        <input type="text" name="nomor_spt" id="nomor_spt"
+                                            placeholder="No. Surat Tugas"
                                             class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                         <p class="err text-theme-xs text-error-500" id="nomor_spt_error"></p>
                                     </div>
                                     <!-- Tanggal SPT -->
                                     <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Tgl. SPT <span class="text-red-400">*</span>
+                                        </label>
                                         <input type="text" name="tanggal_spt" id="tanggal_spt"
                                             placeholder="Pilih tanggal SPT"
                                             class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
@@ -128,63 +217,52 @@
                                 </div>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    SPT Mulai <span class="text-red-400">*</span>
-                                </label>
-                                <input type="text" name="spt_mulai" id="spt_mulai" placeholder="Mulai Pemeriksaan"
-                                    class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="spt_mulai_error"></p>
+                                <div class="flex gap-3">
+                                    <!-- Nomor SPT -->
+                                    <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            SPT Mulai <span class="text-red-400">*</span>
+                                        </label>
+                                        <input type="text" name="spt_mulai" id="spt_mulai"
+                                            placeholder="Mulai Pemeriksaan"
+                                            class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                        <p class="err text-theme-xs text-error-500" id="spt_mulai_error"></p>
+                                    </div>
+
+                                    <!-- Nomor SPT -->
+                                    <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            SPT Selesai <span class="text-red-400">*</span>
+                                        </label>
+                                        <input type="text" name="spt_selesai" id="spt_selesai"
+                                            placeholder="Selesai Pemeriksaan"
+                                            class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                        <p class="err text-theme-xs text-error-500" id="spt_selesai_error"></p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    SPT Selesai <span class="text-red-400">*</span>
-                                </label>
-                                <input type="text" name="spt_selesai" id="spt_selesai" placeholder="Selesai Pemeriksaan"
-                                    class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="spt_selesai_error"></p>
+                                <div class="flex gap-3">
+                                    <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Nomor LHP <span class="text-red-400">*</span>
+                                        </label>
+                                        <input type="text" name="nomor_lhp" id="nomor_lhp" placeholder="No. LHP"
+                                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                        <p class="err text-theme-xs text-error-500" id="nomor_lhp_error"></p>
+                                    </div>
+                                    <div class="w-1/2">
+                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Tanggal LHP <span class="text-red-400">*</span>
+                                        </label>
+                                        <input type="text" name="tanggal_lhp" id="tanggal_lhp"
+                                            placeholder="Tanggal LHP"
+                                            class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                        <p class="err text-theme-xs text-error-500" id="tanggal_lhp_error"></p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nomor LHP <span class="text-red-400">*</span>
-                                </label>
-                                <input type="text" name="nomor_lhp" id="nomor_lhp" placeholder="No. LHP"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="nomor_lhp_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Tanggal LHP <span class="text-red-400">*</span>
-                                </label>
-                                <input type="text" name="tanggal_lhp" id="tanggal_lhp" placeholder="Tanggal LHP"
-                                    class="datepickerKasus dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="tanggal_lhp_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama Obrik <span class="text-red-400">*</span>
-                                </label>
-                                <select name="kode_unor"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option value="" selected disabled
-                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                                        Pilih Obrik
-                                    </option>
-                                </select>
-                                <p class="err text-theme-xs text-error-500" id="kode_unor_error"></p>
-                            </div>
-                            <div class="w-full px-2.5 xl:w-1/2">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Ketua Tim <span class="text-red-400">*</span>
-                                </label>
-                                <select name="nip_ketua"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option value="" selected disabled
-                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                                        Pilih ketua tim
-                                    </option>
-                                </select>
-                                <p class="err text-theme-xs text-error-500" id="nip_ketua_error"></p>
-                            </div>
+
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
                                     <button type="submit" id="btn-save"
@@ -212,76 +290,38 @@
                     }
                 });
 
-                $('#tableLoading').removeClass('hidden');
+                // ─── URL ───────────────────────────────────────────────
+                const URL = {
+                    ajaxKasus: "{{ url('ajax-data-daftar-kasus') }}",
+                    storeKasus: "{{ url('daftar-kasus') }}",
+                };
 
-                function openModal() {
-                    reset();
-                    $('#modalKasus')
-                        .removeClass('pointer-events-none opacity-0');
+                // ─── Spinner HTML ────────────────────────────────────────────────
+                const SPINNER_HTML = `
+                        <svg aria-hidden="true" class="w-5 h-5 animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                        </svg>
+                        <span>Loading...</span>`;
 
-                    $('#modalContent')
-                        .removeClass('scale-95')
-                        .addClass('scale-100');
-                }
+                // LOADING
+                $('#dataTable')
+                    .on('processing.dt', function(e, settings, processing) {
+                        $('#tableLoading').toggleClass('hidden', !processing);
+                    });
 
-                function closeModal() {
-                    $('#modalKasus')
-                        .addClass('opacity-0 pointer-events-none');
-
-                    $('#modalContent')
-                        .removeClass('scale-100')
-                        .addClass('scale-95');
-                }
-
-                $("#openModalBtn").click(function() {
-                    $('.modal-header').html('Form Tambah Kasus');
-                    if (!$('.opd').hasClass("select2-hidden-accessible")) {
-                        $('.opd').select2({
-                            dropdownParent: $('#modalKasus'),
-                            width: '100%'
-                        });
-                    }
-                    openModal();
-                });
-
-                $("#closeModalBtn").click(function() {
-                    reset();
-                    closeModal();
-                });
-
-                var table = $('#kasusTable').DataTable({
-                    responsive: true,
-                    serverSide: true,
+                const dataTable = $('#dataTable').DataTable({
                     processing: true,
-                    language: {
-                        emptyTable: `
-                            <div class="flex flex-col items-center justify-center py-5">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    Belum ada data
-                                </p>
-                            </div>
-                        `,
-                        zeroRecords: `
-                            <div class="flex flex-col items-center justify-center py-5">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">
-                                    Data tidak ditemukan
-                                </p>
-                            </div>
-                        `,
-                        search: "",
-                        searchPlaceholder: "Cari data..."
-                    },
+                    serverSide: true,
+                    responsive: false,
+                    scrollX: true,
+                    dom: 'rtip',
+                    searching: true,
+                    ordering: true,
+                    lengthChange: false,
                     ajax: {
                         type: 'POST',
-                        url: "{{ url('ajax-data-daftar-kasus') }}",
-                        error: function() {
-                            $('#tableLoading').addClass('hidden');
-                            Swal.fire({
-                                title: "Gagal",
-                                text: "Gagal memuat data",
-                                icon: "error"
-                            });
-                        }
+                        url: URL.ajaxKasus
                     },
                     columns: [{
                             data: 'DT_RowIndex',
@@ -326,15 +366,79 @@
                             orderable: false,
                             searchable: false
                         }
-                    ]
+                    ],
+                    language: {
+                        processing: "",
+                        zeroRecords: "Data tidak ditemukan",
+                        info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                        infoEmpty: "Tidak ada data",
+                        paginate: {
+                            previous: "←",
+                            next: "→"
+                        }
+                    }
                 });
 
-                table.on('processing.dt', function(e, settings, processing) {
-                    if (processing) {
-                        $('#tableLoading').removeClass('hidden');
-                    } else {
-                        $('#tableLoading').addClass('hidden');
+                $('#customSearch').on('input', function() {
+                    dataTable.search(this.value).draw();
+                });
+
+                $('#pageLength').on('change', function() {
+                    dataTable.page.len(this.value).draw();
+                });
+
+                function moveDataTableFooter() {
+                    $('#dataTable_info').appendTo('#tableInfo');
+                    $('#dataTable_paginate').appendTo('#tablePagination');
+                }
+
+                dataTable.on('init.dt', moveDataTableFooter);
+                dataTable.on('draw.dt', moveDataTableFooter);
+
+                function openModal() {
+                    reset();
+                    $('#modalKasus')
+                        .removeClass('pointer-events-none opacity-0');
+
+                    $('#modalContent')
+                        .removeClass('scale-95')
+                        .addClass('scale-100');
+                }
+
+                function closeModal() {
+                    $('#modalKasus')
+                        .addClass('opacity-0 pointer-events-none');
+
+                    $('#modalContent')
+                        .removeClass('scale-100')
+                        .addClass('scale-95');
+                }
+
+                function initSelect2() {
+                    if (!$('.opd').hasClass("select2-hidden-accessible")) {
+                        $('.opd').select2({
+                            dropdownParent: $('#modalKasus'),
+                            width: '100%'
+                        }).on('select2:open', function() {
+                            $('.select2-search__field').css({
+                                'border': '1px solid #d1d5db',
+                                'border-radius': '0.5rem',
+                                'outline': 'none',
+                                'box-shadow': '0 0 0 3px rgba(70,95,255,.1)'
+                            });
+                        });
                     }
+                }
+
+                $("#openModalBtn").click(function() {
+                    $('.modal-header').html('Form Tambah Kasus');
+                    initSelect2();
+                    openModal();
+                });
+
+                $("#closeModalBtn").click(function() {
+                    reset();
+                    closeModal();
                 });
 
                 $('#formKasus').submit(function(e) {
@@ -342,7 +446,7 @@
                     let formData = new FormData($('#formKasus')[0]);
                     $.ajax({
                         type: 'POST',
-                        url: "{{ url('daftar-kasus') }}",
+                        url: URL.storeKasus,
                         data: formData,
                         dataType: 'json',
                         contentType: false,
@@ -374,8 +478,8 @@
                                 });
                             } else {
                                 closeModal();
-                                if ($.fn.DataTable.isDataTable('#kasusTable')) {
-                                    $('#kasusTable').DataTable().ajax.reload(null,
+                                if ($.fn.DataTable.isDataTable('#dataTable')) {
+                                    $('#dataTable').DataTable().ajax.reload(null,
                                         false);
                                 }
                                 Swal.fire({
@@ -417,11 +521,11 @@
                             let id = $(this).data('id');
                             $.ajax({
                                 type: "delete",
-                                url: "{{ url('daftar-kasus') }}/" + id,
+                                url: `${URL.storeKasus}/${id}`,
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
-                                        $('#kasusTable').DataTable().ajax.reload(
+                                        $('#dataTable').DataTable().ajax.reload(
                                             function() {
                                                 Swal.fire({
                                                     title: "Sukses",
@@ -447,7 +551,7 @@
                     $('.modal-header').html('Form Edit Kasus');
                     openModal()
                     $.ajax({
-                        url: 'daftar-kasus/' + id + '/edit',
+                        url: `${URL.storeKasus}/${id}/edit`,
                         type: 'GET',
                         success: function(response) {
                             $('#id').val(response.id);
@@ -459,7 +563,8 @@
                             $('#spt_selesai').val(response.spt_selesai);
                             $('#nomor_lhp').val(response.nomor_lhp);
                             $('#tanggal_lhp').val(response.tanggal_lhp);
-                            $('#kode_unor').val(response.kode_unor);
+                            initSelect2();
+                            $('#kode_unor').val(response.kode_unor).trigger('change');
                             $('#nip_ketua').val(response.nip_ketua);
                         },
                         error: function(xhr) {
@@ -482,6 +587,9 @@
                     $('#id').val('');
                     $('#formKasus')[0].reset();
                     $('.err').empty();
+                    if ($('#kode_unor').hasClass('select2-hidden-accessible')) {
+                        $('#kode_unor').val(null).trigger('change');
+                    }
                 }
             });
         </script>

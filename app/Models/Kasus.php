@@ -12,9 +12,17 @@ class Kasus extends Model
     protected $primaryKey = 'id_kasus';
     public $timestamps = false;
     protected $guarded = [];
+    public const SEARCHABLE_COLUMNS = [
+        'tahun_pemeriksaan'
+    ];
 
     public function jenis_php()
     {
         return $this->hasOne(JenisPhp::class, 'id_jenis_php', 'id_jenis_php');
+    }
+
+    public function instansi()
+    {
+        return $this->belongsTo(Instansi::class, 'kode_unor', 'kode_instansi');
     }
 }

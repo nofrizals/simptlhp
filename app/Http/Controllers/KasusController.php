@@ -2,29 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JenisPhp;
-use App\Models\Kasus;
 use Carbon\Carbon;
+use App\Models\Tim;
+use App\Models\Kasus;
+use App\Models\Instansi;
+use App\Models\JenisPhp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 
 class KasusController extends Controller
 {
     public function index()
     {
+        $ketua_tims = Tim::with('ketua')->get();
+        $obriks = Instansi::where('kode_instansi', 'not like', 'obrik%')->get();
         $jenisPhp = JenisPhp::get();
-        return view('pages.manajemen-kasus.kasus', compact('jenisPhp'));
+        return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'obriks', 'ketua_tims'));
     }
 
     public function ajaxDataDaftarKasus()
     {
-        $data = Kasus::with('jenis_php')->orderBy('id_kasus', 'desc');
+        $data = Kasus::with(['jenis_php', 'instansi'])->orderBy('id_kasus', 'desc');
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('id_jenis_php', function ($value) {
-                return $value->jenis_php->jenis_php ?? '-';
+                return ucwords($value->jenis_php->jenis_php) ?? '-';
             })
             ->addColumn('tahun_pemeriksaan', function ($value) {
                 return $value->tahun_pemeriksaan ?? '-';
@@ -41,7 +46,7 @@ class KasusController extends Controller
                 return Carbon::parse($value->tanggal_lhp ?? '-')->translatedFormat('d F Y');
             })
             ->addColumn('kode_unor', function ($value) {
-                return $value->kode_unor ?? '-';
+                return ucwords(strtolower($value->instansi->nama_instansi)) ?? '-';
             })
             ->addColumn('action', function ($value) {
                 return '
@@ -55,6 +60,14 @@ class KasusController extends Controller
                             <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.0911 3.53206C16.2124 2.65338 14.7878 2.65338 13.9091 3.53206L5.6074 11.8337C5.29899 12.1421 5.08687 12.5335 4.99684 12.9603L4.26177 16.445C4.20943 16.6931 4.286 16.9508 4.46529 17.1301C4.64458 17.3094 4.90232 17.3859 5.15042 17.3336L8.63507 16.5985C9.06184 16.5085 9.45324 16.2964 9.76165 15.988L18.0633 7.68631C18.942 6.80763 18.942 5.38301 18.0633 4.50433L17.0911 3.53206ZM14.9697 4.59272C15.2626 4.29982 15.7375 4.29982 16.0304 4.59272L17.0027 5.56499C17.2956 5.85788 17.2956 6.33276 17.0027 6.62565L16.1043 7.52402L14.0714 5.49109L14.9697 4.59272ZM13.0107 6.55175L6.66806 12.8944C6.56526 12.9972 6.49455 13.1277 6.46454 13.2699L5.96704 15.6283L8.32547 15.1308C8.46772 15.1008 8.59819 15.0301 8.70099 14.9273L15.0436 8.58468L13.0107 6.55175Z" fill=""/></svg>
                         </a>
                     </div>';
+            })
+            ->filterColumn('tahun_pemeriksaan', function (Builder $query, string $keyword) {
+                $query->where(function (Builder $q) use ($keyword) {
+                    foreach (Kasus::SEARCHABLE_COLUMNS as $i => $column) {
+                        $method = $i === 0 ? 'where' : 'orWhere';
+                        $q->{$method}($column, 'LIKE', "%{$keyword}%");
+                    }
+                });
             })
             ->rawColumns(['id_jenis_php', 'tahun_pemeriksaan', 'spt', 'nomor_lhp', 'tanggal_lhp', 'kode_unor', 'action'])
             ->make(true);
@@ -82,15 +95,19 @@ class KasusController extends Controller
     public function store(Request $request)
     {
         $validator  = Validator::make($request->all(), [
-            'id_jenis_php'                  => ['required'],
-            'tahun_pemeriksaan'             => ['required'],
-            'nomor_spt'                     => ['required'],
-            'tanggal_spt'                   => ['required'],
-            'spt_mulai'                     => ['required'],
-            'spt_selesai'                   => ['required'],
-            'nomor_lhp'                     => ['required'],
-            'tanggal_lhp'                   => ['required']
+            'kode_unor'             => ['required'],
+            'nip_ketua'             => ['required'],
+            'id_jenis_php'          => ['required'],
+            'tahun_pemeriksaan'     => ['required'],
+            'nomor_spt'             => ['required'],
+            'tanggal_spt'           => ['required'],
+            'spt_mulai'             => ['required'],
+            'spt_selesai'           => ['required'],
+            'nomor_lhp'             => ['required'],
+            'tanggal_lhp'           => ['required']
         ], [
+            'kode_unor.required'            => 'Tidak boleh kosong',
+            'nip_ketua.required'            => 'Tidak boleh kosong',
             'id_jenis_php.required'         => 'Jenis PHP wajib dipilih',
             'tahun_pemeriksaan.required'    => 'Pilih tahun pemeriksaan',
             'nomor_spt.required'            => 'Nomor SPT wajib diisi',
@@ -109,6 +126,8 @@ class KasusController extends Controller
 
         $validated = $validator->validated();
         $data = [
+            'kode_unor'             => $validated['kode_unor'],
+            'nip_ketua'             => $validated['nip_ketua'],
             'id_jenis_php'          => $validated['id_jenis_php'],
             'tahun_pemeriksaan'     => $validated['tahun_pemeriksaan'],
             'spt_mulai'             => $validated['spt_mulai'],
@@ -125,15 +144,13 @@ class KasusController extends Controller
                     'message' => 'Data tidak ditemukan'
                 ]);
             }
-            $data['spt']        = $request->nomor_spt . "\n" . $request->tanggal_spt;
+            $data['spt']        = $request->nomor_spt . "\n" . Carbon::parse($request->tanggal_spt)->translatedFormat('d F Y');
             $data['edited_by']  = Auth::id();
             $data['edited_at'] = now();
             $kasus->update($data);
             $message = 'Data berhasil diupdate';
         } else {
             $data['spt']        = $validated['nomor_spt'] . "\n" . Carbon::parse($validated['tanggal_spt'])->translatedFormat('d F Y');
-            $data['kode_unor']  = '01.32.07';
-            $data['nip_ketua']  = '199711222025211002';
             $data['created_by'] = Auth::id();
             $data['created_at'] = now();
             $kasus = Kasus::create($data);
