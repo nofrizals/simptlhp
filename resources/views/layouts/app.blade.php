@@ -71,12 +71,12 @@
             font-weight: 600;
         }
 
-        #dataTable {
+        .dt-table {
             border-collapse: separate;
             border-spacing: 0;
         }
 
-        #dataTable thead th {
+        .dt-table thead th {
             background: #F9FAFB;
             color: #6B7280;
             font-size: 12px;
@@ -86,81 +86,147 @@
             border-bottom: 1px solid #E5E7EB;
         }
 
-        .dark #dataTable thead th {
+        .dark .dt-table thead th {
             background: #111827;
             color: #9CA3AF;
         }
 
-        #dataTable tbody td {
+        .dt-table tbody td {
             padding: 16px 24px;
             color: #374151;
         }
 
-        #dataTable tbody tr {
+        .dt-table tbody tr {
             transition: all .15s ease;
         }
 
-        .dark #dataTable tbody td {
+        .dark .dt-table tbody td {
             border-color: #1F2937;
         }
 
-        #dataTable tbody tr:hover {
+        .dt-table tbody tr:hover {
             background: #F9FAFB;
         }
 
-        .dark #dataTable tbody tr:hover {
+        .dark .dt-table tbody tr:hover {
             background: rgba(255, 255, 255, 0.03);
         }
 
-        /* Select2 Tailwind Style */
+        /* Container */
+        .select2-container {
+            width: 100% !important;
+        }
+
+        /* Selection */
         .select2-container--default .select2-selection--single {
             height: 44px;
-            border-radius: 0.5rem;
             border: 1px solid #d1d5db;
-            padding: 6px 10px;
+            border-radius: .5rem;
+            background: #fff;
             display: flex;
             align-items: center;
+            padding: 0 14px;
+            transition: all .2s ease;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, .05);
         }
 
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
+        /* Hover */
+        .select2-container--default .select2-selection--single:hover {
+            border-color: #9ca3af;
+        }
+
+        /* Focus */
+        .select2-container--default.select2-container--open .select2-selection--single {
+            border-color: #465fff;
+            box-shadow: 0 0 0 3px rgba(70, 95, 255, .1);
+        }
+
+        /* Text */
+        .select2-container--default .select2-selection__rendered {
             color: #1f2937;
             font-size: 14px;
+            line-height: 44px;
+            padding-left: 0;
         }
 
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 100%;
-            right: 10px;
+        /* Placeholder */
+        .select2-container--default .select2-selection__placeholder {
+            color: #9ca3af;
         }
 
+        /* Arrow */
+        .select2-container--default .select2-selection__arrow {
+            height: 42px;
+            right: 12px;
+        }
+
+        /* Dropdown */
         .select2-dropdown {
-            border-radius: 0.5rem;
             border: 1px solid #e5e7eb;
+            border-radius: .5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, .08);
+        }
+
+        /* Search */
+        .select2-search--dropdown {
+            padding: 10px;
         }
 
         .select2-search__field {
-            border-radius: 0.375rem;
-            padding: 6px;
+            height: 38px;
+            border: 1px solid #d1d5db !important;
+            border-radius: .5rem !important;
+            padding: 0 10px !important;
+            outline: none;
         }
 
-        /* #jenisPhpTable thead th {
-            text-align: center !important;
+        .select2-search__field:focus {
+            border-color: #465fff !important;
+            box-shadow: 0 0 0 3px rgba(70, 95, 255, .1);
         }
 
-        #nilaiKerugianTable thead th {
-            text-align: center !important;
+        /* Result */
+        .select2-results__option {
+            padding: 10px 14px;
+            font-size: 14px;
         }
 
-        #statusTlTable thead th {
-            text-align: center !important;
+        /* Hover Result */
+        .select2-results__option--highlighted {
+            background: #465fff !important;
         }
 
-        #timTable thead th {
-            text-align: center !important;
+        /* Selected */
+        .select2-results__option--selected {
+            background: #eef2ff;
+            color: #465fff;
         }
 
-        #kasusTable thead th {
-            text-align: center !important;
-        } */
+        .dark .select2-container--default .select2-selection--single {
+            background: #101828;
+            border-color: #344054;
+            color: #fff;
+        }
+
+        .dark .select2-container--default .select2-selection__rendered {
+            color: #fff;
+        }
+
+        .dark .select2-dropdown {
+            background: #101828;
+            border-color: #344054;
+        }
+
+        .dark .select2-results__option {
+            color: #fff;
+        }
+
+        .dark .select2-search__field {
+            background: #101828;
+            color: #fff;
+            border-color: #344054 !important;
+        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

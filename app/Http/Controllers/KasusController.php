@@ -25,11 +25,18 @@ class KasusController extends Controller
 
     public function ajaxDataDaftarKasus()
     {
-        $data = Kasus::with(['jenis_php', 'instansi'])->orderBy('id_kasus', 'desc');
+        $data = Kasus::with(['jenis_php', 'instansi'])
+            ->withCount(['temuans as temuans_count' => function (Builder $query): void {
+                $query->whereNull('deleted_by');
+            }])
+            ->orderBy('id_kasus', 'desc');
         return DataTables::eloquent($data)
             ->addIndexColumn()
-            ->addColumn('id_jenis_php', function ($value) {
-                return ucwords($value->jenis_php->jenis_php) ?? '-';
+            ->addColumn('id_jenis_php', function (Kasus $value): string {
+                $temuanBadge = '<a href="javascript:void(0)" data-id="' . $value->id_kasus . '" '
+                    . 'class="btn-openTemuan mt-1 inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-yellow-500 bg-yellow-200 px-3 py-0.5 text-sm font-medium text-yellow-700 transition-all duration-200 hover:border-yellow-300 hover:bg-yellow-100 hover:text-yellow-800">'
+                    . $value->temuans_count . ' Temuan</a>';
+                return '<div class="flex flex-col items-center gap-1">' . $temuanBadge . '</div>';
             })
             ->addColumn('tahun_pemeriksaan', function ($value) {
                 return $value->tahun_pemeriksaan ?? '-';
