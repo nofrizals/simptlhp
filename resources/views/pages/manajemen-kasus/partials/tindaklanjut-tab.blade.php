@@ -18,7 +18,54 @@
                         + Tambah Tindak Lanjut
                     </button>
                 </div>
-
+                {{-- INFO KASUS --}}
+                <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800">
+                    <input type="hidden" id="idRekomendasi" value="">
+                    <table class="text-sm text-gray-500">
+                        <tr>
+                            <td class="whitespace-nowrap pr-2 py-0.5">Tanggal LHP</td>
+                            <td class="pr-2">:</td>
+                            <td class="font-medium text-gray-500 dark:text-white"><span class="info-tanggal-lhp"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="whitespace-nowrap pr-2 py-0.5">Nomor LHP</td>
+                            <td class="pr-2">:</td>
+                            <td class="font-medium text-gray-500 dark:text-white"><span class="info-nomor-lhp"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="whitespace-nowrap pr-2 py-0.5">Nama Obrik</td>
+                            <td class="pr-2">:</td>
+                            <td class="font-medium text-gray-500 dark:text-white"><span class="info-nama-obrik"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="whitespace-nowrap pr-2 py-0.5">Jenis PHP</td>
+                            <td class="pr-2">:</td>
+                            <td class="font-medium text-gray-500 dark:text-white"><span class="info-jenis-php"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="whitespace-nowrap pr-2 py-0.5 align-top">Temuan</td>
+                            <td class="pr-2 align-top">:</td>
+                            <td class="font-medium text-gray-500 dark:text-white"><span class="info-temuan"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="whitespace-nowrap pr-2 py-0.5 align-top">Penyebab</td>
+                            <td class="pr-2 align-top">:</td>
+                            <td class="font-medium text-gray-500 dark:text-white"><span class="info-penyebab"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="whitespace-nowrap pr-2 py-0.5 align-top">Rekomendasi</td>
+                            <td class="pr-2 align-top">:</td>
+                            <td class="font-medium text-gray-500 dark:text-white"><span class="info-rekomendasi"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 {{-- TOOLBAR --}}
                 <div
                     class="flex flex-col gap-4 border-b border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">

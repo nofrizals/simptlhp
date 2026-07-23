@@ -304,6 +304,11 @@
 
                 $('#btn-backToTemuan').click(function() {
                     showSection('sectionTemuan');
+                    const idTemuan = $('#idTemuan').val();
+                    if (idTemuan) {
+                        showInfoSkeleton()
+                        loadDetailTemuan(idTemuan);
+                    }
                     if ($.fn.DataTable.isDataTable('#dataTable')) {
                         $('#dataTable').DataTable().ajax.reload(null, false);
                     }

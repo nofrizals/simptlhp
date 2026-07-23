@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rekomendasi;
 use App\Models\Temuan;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +26,7 @@ class RekomendasiController extends Controller
                 if ($value->tindak_lanjuts_count > 0) {
                     $status = $value->tindakLanjutAktif?->status?->status_tl ?? '';
                     return '<a href="javascript:void(0)" data-id="' . $value->id_rekomendasi . '"
-                        class="mt-1 inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-yellow-500 bg-yellow-200 px-3 py-0.5 text-sm font-medium text-yellow-700 transition-all duration-200 hover:border-yellow-300 hover:bg-yellow-100 hover:text-yellow-800 btn-openTindakLanjut">
+                        class="mt-1 inline-flex items-center text-center gap-1 rounded-full border border-yellow-500 bg-yellow-200 px-3 py-0.5 text-sm font-medium text-yellow-700 transition-all duration-200 hover:border-yellow-300 hover:bg-yellow-100 hover:text-yellow-800 btn-openTindakLanjut">
                         Tindak Lanjut ' . $status . '
                     </a>';
                 }
@@ -38,14 +39,14 @@ class RekomendasiController extends Controller
                 return e($value->rekomendasi) ?: '-';
             })
             ->addColumn('tgl_input', function (Rekomendasi $value): string {
-                return e(substr($value->created_at, 0, 10)) ?: '-';
+                return Carbon::parse($value->created_at ?? '-')->translatedFormat('d F Y');
             })
             ->addColumn('log', function (Rekomendasi $value): string {
                 if ($value->edited_by) {
-                    return 'Diedit oleh <strong>' . e($value->edited_by) . '</strong><br>'
+                    return 'Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
                         . optional($value->edited_at)->translatedFormat('d F Y');
                 }
-                return 'Ditambah oleh <strong>' . e($value->created_by) . '</strong><br>'
+                return 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
                     . optional($value->created_at)->translatedFormat('d F Y');
             })
             ->addColumn('action', function (Rekomendasi $value): string {
@@ -118,9 +119,9 @@ class RekomendasiController extends Controller
     {
         $data = Rekomendasi::with('temuan.kasus.jenis_php')->findOrFail($id);
         return response()->json([
-            'tanggal_lhp'        => $data->kasus->tanggal_lhp ?? '-',
-            'nomor_lhp'          => $data->kasus->nomor_lhp ?? '-',
-            'kode_unor'          => $data->kasus->kode_unor ?? '-',
+            'tanggal_lhp'        => $data->temuan->kasus->tanggal_lhp ?? '-',
+            'nomor_lhp'          => $data->temuan->kasus->nomor_lhp ?? '-',
+            'kode_unor'          => $data->temuan->kasus->kode_unor ?? '-',
             'id_jenis_php'       => $data->temuan->kasus->jenis_php->jenis_php ?? '-',
             'temuan'             => $data->temuan->temuan ?? '-',
             'penyebab'           => $data->temuan->penyebab ?? '-',

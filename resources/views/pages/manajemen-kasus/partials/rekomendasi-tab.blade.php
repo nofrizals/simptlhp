@@ -21,7 +21,7 @@
 
                 {{-- INFO KASUS --}}
                 <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800">
-                    <input type="hidden" id="idKasus" value="">
+                    <input type="hidden" id="idTemuan" value="">
                     <table class="text-sm text-gray-500">
                         <tr>
                             <td class="whitespace-nowrap pr-2 py-0.5">Tanggal LHP</td>
@@ -340,6 +340,11 @@
 
                 $('#btn-backToRekomendasi').click(function() {
                     showSection('sectionRekomendasi');
+                    const idRekomendasi = $('#idRekomendasi').val();
+                    if (idRekomendasi) {
+                        showInfoSkeleton()
+                        loadDetailRekomendasi(idRekomendasi);
+                    }
                     if ($.fn.DataTable.isDataTable('#dataTable')) {
                         $('#dataTable').DataTable().ajax.reload(null, false);
                     }

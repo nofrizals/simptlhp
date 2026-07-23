@@ -6,12 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Kasus;
 use App\Models\Temuan;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class TemuanController extends Controller
 {
@@ -53,11 +54,11 @@ class TemuanController extends Controller
             })
             ->addColumn('log', function (Temuan $value): string {
                 if ($value->edited_by) {
-                    return 'Diedit oleh <strong>' . e($value->edited_by) . '</strong><br>'
+                    return 'Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
                         . optional($value->edited_at)->translatedFormat('d F Y');
                 }
 
-                return 'Ditambah oleh <strong>' . e($value->created_by) . '</strong><br>'
+                return 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
                     . optional($value->created_at)->translatedFormat('d F Y');
             })
             ->addColumn('action', function (Temuan $value): string {
@@ -143,7 +144,7 @@ class TemuanController extends Controller
             'id_nilai_kerugian4' => $temuan->id_nilai_kerugian4,
             'besaran_kerugian4'  => $temuan->besaran_kerugian4,
             'nomor_lhp'          => $temuan->kasus->nomor_lhp,
-            'tanggal_lhp'        => $temuan->kasus->tanggal_lhp,
+            'tanggal_lhp'        => Carbon::parse($temuan->kasus->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
             'id_jenis_php'       => $temuan->kasus->id_jenis_php,
             'kode_unor'          => $temuan->kasus->kode_unor,
         ]);

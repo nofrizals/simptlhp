@@ -61,4 +61,14 @@ class Temuan extends Model
     {
         return $this->hasMany(Rekomendasi::class, 'id_temuan', 'id_temuan');
     }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(PegawaiSimak::class, 'created_by', 'id_pegawai');
+    }
+
+    public function editedBy()
+    {
+        return $this->belongsTo(PegawaiSimak::class, 'edited_by', 'id_pegawai');
+    }
 }
