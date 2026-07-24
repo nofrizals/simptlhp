@@ -145,8 +145,8 @@ class TemuanController extends Controller
             'besaran_kerugian4'  => $temuan->besaran_kerugian4,
             'nomor_lhp'          => $temuan->kasus->nomor_lhp,
             'tanggal_lhp'        => Carbon::parse($temuan->kasus->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
-            'id_jenis_php'       => $temuan->kasus->id_jenis_php,
-            'kode_unor'          => $temuan->kasus->kode_unor,
+            'id_jenis_php'       => $temuan->kasus->jenis_php->jenis_php,
+            'kode_unor'          => ucwords(strtolower($temuan->kasus->instansi->nama_instansi)),
         ]);
     }
 

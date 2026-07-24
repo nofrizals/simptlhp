@@ -82,7 +82,7 @@ class KasusController extends Controller
 
     public function edit($id)
     {
-        $data = Kasus::with('jenis_php')->findOrFail($id);
+        $data = Kasus::with('jenis_php', 'instansi')->findOrFail($id);
         $spt = explode("\n", $data->spt);
         return response()->json([
             'id'                => $id,
@@ -94,7 +94,7 @@ class KasusController extends Controller
             'spt_selesai'       => $data->spt_selesai,
             'nomor_lhp'         => $data->nomor_lhp,
             'tanggal_lhp'       => Carbon::parse($data->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
-            'kode_unor'         => $data->kode_unor,
+            'kode_unor'         => ucwords(strtolower($data->instansi->nama_instansi)),
             'nip_ketua'         => $data->nip_ketua,
         ]);
     }

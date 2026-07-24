@@ -119,9 +119,9 @@ class RekomendasiController extends Controller
     {
         $data = Rekomendasi::with('temuan.kasus.jenis_php')->findOrFail($id);
         return response()->json([
-            'tanggal_lhp'        => $data->temuan->kasus->tanggal_lhp ?? '-',
+            'tanggal_lhp'        => Carbon::parse($data->temuan->kasus->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
             'nomor_lhp'          => $data->temuan->kasus->nomor_lhp ?? '-',
-            'kode_unor'          => $data->temuan->kasus->kode_unor ?? '-',
+            'kode_unor'          => ucwords(strtolower($data->temuan->kasus->instansi->nama_instansi)) ?? '-',
             'id_jenis_php'       => $data->temuan->kasus->jenis_php->jenis_php ?? '-',
             'temuan'             => $data->temuan->temuan ?? '-',
             'penyebab'           => $data->temuan->penyebab ?? '-',
