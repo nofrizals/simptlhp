@@ -277,7 +277,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="w-full px-2.5">
                                     <div class="mt-1 flex items-center gap-3">
                                         <button type="submit" id="btn-save"
@@ -451,6 +450,11 @@
                 $("#closeModalBtn").click(function() {
                     reset();
                     closeModal();
+                });
+
+                $("#closeModalBtnTemuan").click(function() {
+                    resetFormTemuan();
+                    closeModalTemuan();
                 });
 
                 $('#formKasus').submit(function(e) {
