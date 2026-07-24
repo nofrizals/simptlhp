@@ -102,7 +102,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800 align-top"></tbody>
                     </table>
                 </div>
 
