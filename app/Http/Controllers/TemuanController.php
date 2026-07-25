@@ -75,20 +75,24 @@ class TemuanController extends Controller
     public function store(Request $request, Kasus $kasus): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'id'                 => ['nullable', 'integer', 'exists:kis_temuans,id_temuan'],
-            'temuan'             => ['required', 'string'],
-            'penyebab'           => ['required', 'string'],
-            'id_nilai_kerugian'  => ['nullable', 'integer'],
-            'besaran_kerugian'   => ['nullable', 'numeric', 'min:0'],
-            'id_nilai_kerugian2' => ['nullable', 'integer'],
-            'besaran_kerugian2'  => ['nullable', 'numeric', 'min:0'],
-            'id_nilai_kerugian3' => ['nullable', 'integer'],
-            'besaran_kerugian3'  => ['nullable', 'numeric', 'min:0'],
-            'id_nilai_kerugian4' => ['nullable', 'integer'],
-            'besaran_kerugian4'  => ['nullable', 'numeric', 'min:0'],
+            'id'                    => ['nullable', 'integer', 'exists:kis_temuans,id_temuan'],
+            'temuan'                => ['required', 'string'],
+            'penyebab'              => ['required', 'string'],
+            'id_nilai_kerugian'     => ['nullable', 'integer'],
+            'besaran_kerugian'      => ['required_if:id_nilai_kerugian,1', 'nullable', 'numeric', 'min:0'],
+            'id_nilai_kerugian2'    => ['nullable', 'integer'],
+            'besaran_kerugian2'     => ['required_if:id_nilai_kerugian2,1', 'nullable', 'numeric', 'min:0'],
+            'id_nilai_kerugian3'    => ['nullable', 'integer'],
+            'besaran_kerugian3'     => ['required_if:id_nilai_kerugian3,1', 'nullable', 'numeric', 'min:0'],
+            'id_nilai_kerugian4'    => ['nullable', 'integer'],
+            'besaran_kerugian4'     => ['required_if:id_nilai_kerugian4,1', 'nullable', 'numeric', 'min:0'],
         ], [
-            'temuan.required'   => 'Temuan wajib diisi',
-            'penyebab.required' => 'Penyebab wajib diisi',
+            'temuan.required'               => 'Temuan wajib diisi',
+            'penyebab.required'             => 'Penyebab wajib diisi',
+            'besaran_kerugian.required_if'  => 'Besaran kerugian tidak boleh kosong',
+            'besaran_kerugian2.required_if' => 'Besaran kerugian tidak boleh kosong',
+            'besaran_kerugian3.required_if' => 'Besaran kerugian tidak boleh kosong',
+            'besaran_kerugian4.required_if' => 'Besaran kerugian tidak boleh kosong',
         ]);
 
         if ($validator->fails()) {
@@ -101,21 +105,23 @@ class TemuanController extends Controller
         $validated = $validator->safe()->except('id');
         $validated['id_kasus'] = $kasus->id_kasus;
 
-        // Kolom id_nilai_kerugian2/3/4 di DB tidak punya default → jaga-jaga
-        $validated['id_nilai_kerugian']  ??= 0;
-        $validated['id_nilai_kerugian2'] ??= 0;
-        $validated['id_nilai_kerugian3'] ??= 0;
-        $validated['id_nilai_kerugian4'] ??= 0;
+        for ($i = 1; $i <= 4; $i++) {
+            $suffix = $i == 1 ? '' : $i;
+            if ($validated['id_nilai_kerugian' . $suffix] == 0) {
+                $validated['besaran_kerugian' . $suffix] = 0;
+            }
+        }
 
         if ($request->filled('id')) {
+            dd('edit');
             $temuan = Temuan::where('id_kasus', $kasus->id_kasus)
                 ->findOrFail($request->integer('id'));
-            $validated['edited_by'] = (string) Auth::id();
+            $validated['edited_by'] = (string) session('id_pegawai');
             $validated['edited_at'] = now();
             $temuan->update($validated);
             $message = 'Data berhasil diupdate';
         } else {
-            $validated['created_by'] = (string) Auth::id();
+            $validated['created_by'] = (string) session('id_pegawai');
             $validated['created_at'] = now();
             $temuan = Temuan::create($validated);
             $message = 'Data berhasil ditambahkan';

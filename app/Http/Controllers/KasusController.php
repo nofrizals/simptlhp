@@ -152,13 +152,13 @@ class KasusController extends Controller
                 ]);
             }
             $data['spt']        = $request->nomor_spt . "\n" . Carbon::parse($request->tanggal_spt)->translatedFormat('d F Y');
-            $data['edited_by']  = Auth::id();
+            $data['edited_by']  = (string) session('id_pegawai');
             $data['edited_at'] = now();
             $kasus->update($data);
             $message = 'Data berhasil diupdate';
         } else {
             $data['spt']        = $validated['nomor_spt'] . "\n" . Carbon::parse($validated['tanggal_spt'])->translatedFormat('d F Y');
-            $data['created_by'] = Auth::id();
+            $data['created_by'] = (string) session('id_pegawai');
             $data['created_at'] = now();
             $kasus = Kasus::create($data);
             $message = 'Data berhasil ditambahkan';

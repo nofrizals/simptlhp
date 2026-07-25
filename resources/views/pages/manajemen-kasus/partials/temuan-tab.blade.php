@@ -163,24 +163,24 @@
                         </div>
                         <div class="w-full px-2.5 xl:w-1/2">
                             <div class="flex gap-3">
-                                <div class="w-1/2">
+                                <div id="col_id_nilai_kerugian" class="w-1/2">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Kerugian Pajak <span class="text-red-400">*</span>
                                     </label>
-                                    <select name="id_besaran_kerugian" id="id_besaran_kerugian"
+                                    <select name="id_nilai_kerugian" id="id_nilai_kerugian"
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="ada" selected
+                                        <option value="1" selected
                                             class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             PPN/PPH
                                         </option>
-                                        <option value="tidak_ada"
+                                        <option value="0"
                                             class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             Tidak Ada
                                         </option>
                                     </select>
-                                    <p class="err text-theme-xs text-error-500" id="id_besaran_kerugian_error"></p>
+                                    <p class="err text-theme-xs text-error-500" id="id_nilai_kerugian_error"></p>
                                 </div>
-                                <div class="w-1/2">
+                                <div id="col_besaran_kerugian" class="w-1/2">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Besaran Kerugian Pajak <span class="text-red-400">*</span>
                                     </label>
@@ -193,24 +193,24 @@
                         </div>
                         <div class="w-full px-2.5 xl:w-1/2">
                             <div class="flex gap-3">
-                                <div class="w-1/2">
+                                <div id="col_id_nilai_kerugian2" class="w-1/2">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Kerugian Daerah <span class="text-red-400">*</span>
                                     </label>
-                                    <select name="id_besaran_kerugian2" id="id_besaran_kerugian2"
+                                    <select name="id_nilai_kerugian2" id="id_nilai_kerugian2"
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="ada" selected
+                                        <option value="1" selected
                                             class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             Daerah (Restoran)
                                         </option>
-                                        <option value="tidak_ada"
+                                        <option value="0"
                                             class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             Tidak Ada
                                         </option>
                                     </select>
-                                    <p class="err text-theme-xs text-error-500" id="id_besaran_kerugian2_error"></p>
+                                    <p class="err text-theme-xs text-error-500" id="id_nilai_kerugian2_error"></p>
                                 </div>
-                                <div class="w-1/2">
+                                <div id="col_besaran_kerugian2" class="w-1/2">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Besaran Kerugian Daerah <span class="text-red-400">*</span>
                                     </label>
@@ -223,24 +223,24 @@
                         </div>
                         <div class="w-full px-2.5 xl:w-1/2">
                             <div class="flex gap-3">
-                                <div class="w-1/2">
+                                <div id="col_id_nilai_kerugian3" class="w-1/2">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Kerugian Desa <span class="text-red-400">*</span>
                                     </label>
-                                    <select name="id_besaran_kerugian3" id="id_besaran_kerugian3"
+                                    <select name="id_nilai_kerugian3" id="id_nilai_kerugian3"
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="ada" selected
+                                        <option value="1" selected
                                             class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             Kampung / Desa
                                         </option>
-                                        <option value="tidak_ada"
+                                        <option value="0"
                                             class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             Tidak Ada
                                         </option>
                                     </select>
-                                    <p class="err text-theme-xs text-error-500" id="id_besaran_kerugian3_error"></p>
+                                    <p class="err text-theme-xs text-error-500" id="id_nilai_kerugian3_error"></p>
                                 </div>
-                                <div class="w-1/2">
+                                <div id="col_besaran_kerugian3" class="w-1/2">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Besaran Kerugian Desa <span class="text-red-400">*</span>
                                     </label>
@@ -253,24 +253,24 @@
                         </div>
                         <div class="w-full px-2.5 xl:w-1/2">
                             <div class="flex gap-3">
-                                <div class="w-1/2">
+                                <div id="col_id_nilai_kerugian4" class="w-1/2">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Kerugian BLUD <span class="text-red-400">*</span>
                                     </label>
-                                    <select name="id_besaran_kerugian4" id="id_besaran_kerugian4"
+                                    <select name="id_nilai_kerugian4" id="id_nilai_kerugian4"
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                        <option value="ada" selected
+                                        <option value="1" selected
                                             class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             BLUD
                                         </option>
-                                        <option value="tidak_ada"
+                                        <option value="0"
                                             class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                                             Tidak Ada
                                         </option>
                                     </select>
-                                    <p class="err text-theme-xs text-error-500" id="id_besaran_kerugian4_error"></p>
+                                    <p class="err text-theme-xs text-error-500" id="id_nilai_kerugian4_error"></p>
                                 </div>
-                                <div class="w-1/2">
+                                <div id="col_besaran_kerugian4" class="w-1/2">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                         Besaran Kerugian BLUD <span class="text-red-400">*</span>
                                     </label>

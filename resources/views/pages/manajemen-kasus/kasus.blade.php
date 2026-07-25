@@ -767,6 +767,10 @@
                     $('#temuan_id').val('');
                     $('#formTemuan')[0].reset();
                     $('#formTemuan .err').empty();
+                    toggleBesaranKerugian();
+                    toggleBesaranKerugian(2);
+                    toggleBesaranKerugian(3);
+                    toggleBesaranKerugian(4);
                 }
 
                 $('#btn-add-temuan').click(function() {
@@ -777,6 +781,34 @@
                 $('#btn-cancel-temuan').click(function() {
                     resetFormTemuan();
                     closeModalTemuan();
+                });
+
+                function toggleBesaranKerugian(index = '') {
+                    const suffix = index === 1 ? '' : index;
+                    const nilai = $('#id_nilai_kerugian' + suffix).val();
+                    if (nilai == '0') {
+                        $('#col_besaran_kerugian' + suffix).addClass('hidden');
+                        $('#col_id_nilai_kerugian' + suffix)
+                            .removeClass('w-1/2')
+                            .addClass('w-full');
+                        $('#besaran_kerugian' + suffix).val('');
+                        $('#besaran_kerugian_error' + suffix).text('');
+                    } else {
+                        $('#col_besaran_kerugian' + suffix).removeClass('hidden');
+                        $('#col_id_nilai_kerugian' + suffix)
+                            .removeClass('w-full')
+                            .addClass('w-1/2');
+                    }
+                }
+
+                $(function() {
+                    [1, 2, 3, 4].forEach(function(i) {
+                        toggleBesaranKerugian(i);
+                        $('#id_nilai_kerugian' + (i == 1 ? '' : i))
+                            .on('change', function() {
+                                toggleBesaranKerugian(i);
+                            });
+                    });
                 });
 
                 $('#formTemuan').submit(function(e) {
@@ -792,6 +824,7 @@
                         processData: false,
                         dataType: 'json',
                         beforeSend: function() {
+                            $('.err').empty();
                             $('#btn-save-temuan').prop('disabled', true).text('Menyimpan...');
                         },
                         success: function(response) {
