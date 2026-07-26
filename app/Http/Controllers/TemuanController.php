@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -67,6 +66,14 @@ class TemuanController extends Controller
                         <a href="javascript:void(0)" data-id="' . $value->id_temuan . '" class="btn-editTemuan text-gray-500 hover:text-blue-600" title="Edit">Edit</a>
                         <a href="javascript:void(0)" data-id="' . $value->id_temuan . '" class="btn-deleteTemuan text-gray-500 hover:text-red-500" title="Hapus">Hapus</a>
                     </div>';
+            })
+            ->filterColumn('temuan', function (Builder $query, string $keyword) {
+                $query->where(function (Builder $q) use ($keyword) {
+                    foreach (Temuan::SEARCHABLE_COLUMNS as $i => $column) {
+                        $method = $i === 0 ? 'where' : 'orWhere';
+                        $q->{$method}($column, 'LIKE', "%{$keyword}%");
+                    }
+                });
             })
             ->rawColumns(['total_rekomendasi', 'log', 'action'])
             ->make(true);
@@ -159,7 +166,7 @@ class TemuanController extends Controller
     public function destroy(Temuan $temuan): JsonResponse
     {
         $temuan->update([
-            'deleted_by' => (string) Auth::id(),
+            'deleted_by' => (string) session('id_pegawai'),
             'deleted_at' => now(),
         ]);
 

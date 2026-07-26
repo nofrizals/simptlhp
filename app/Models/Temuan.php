@@ -15,6 +15,9 @@ class Temuan extends Model
     protected $table = 'kis_temuans';
     protected $primaryKey = 'id_temuan';
     public $timestamps = false;
+    public const SEARCHABLE_COLUMNS = [
+        'temuan'
+    ];
 
     protected $fillable = [
         'id_kasus',

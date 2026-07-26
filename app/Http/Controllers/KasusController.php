@@ -8,7 +8,6 @@ use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
@@ -172,10 +171,18 @@ class KasusController extends Controller
 
     public function destroy(Kasus $kasus)
     {
+        if ($kasus->temuans()->exists()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak dapat dihapus karena masih memiliki data temuan.'
+            ], 422);
+        }
+
         $kasus->delete();
+
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Data berhasil dihapus.'
-        ], 200);
+        ]);
     }
 }

@@ -147,7 +147,7 @@
                                                     Pilih ketua tim
                                                 </option>
                                                 @foreach ($ketua_tims as $ketua_tim)
-                                                    <option value="{{ $ketua_tim->id }}"
+                                                    <option value="{{ $ketua_tim->nip_ketua }}"
                                                         class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                                         {{ $ketua_tim->name }} - {{ $ketua_tim->ketua->nama_pegawai }}
                                                     </option>
@@ -543,26 +543,30 @@
                         if (result.isConfirmed) {
                             let id = $(this).data('id');
                             $.ajax({
-                                type: "delete",
+                                type: "DELETE",
                                 url: `${URL.storeKasus}/${id}`,
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
-                                        $('#dataTable').DataTable().ajax.reload(
-                                            function() {
-                                                Swal.fire({
-                                                    title: "Sukses",
-                                                    text: response.message,
-                                                    icon: "success"
-                                                });
-                                            }, false);
-                                    } else {
-                                        Swal.fire({
-                                            title: "Gagal",
-                                            text: "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
-                                            icon: "error"
-                                        });
+                                        $('#dataTable').DataTable().ajax.reload(function() {
+                                            Swal.fire({
+                                                title: "Sukses",
+                                                text: response.message,
+                                                icon: "success"
+                                            });
+                                        }, false);
                                     }
+                                },
+                                error: function(xhr) {
+                                    let message = "Terjadi kesalahan pada server.";
+                                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                                        message = xhr.responseJSON.message;
+                                    }
+                                    Swal.fire({
+                                        title: "Gagal",
+                                        text: message,
+                                        icon: "error"
+                                    });
                                 }
                             });
                         }
