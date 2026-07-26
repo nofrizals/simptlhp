@@ -872,10 +872,16 @@
                             $('#temuan_id').val(response.id);
                             $('#temuan').val(response.temuan);
                             $('#penyebab').val(response.penyebab);
-                            $('#besaran_kerugian').val(response.besaran_kerugian);
-                            $('#besaran_kerugian2').val(response.besaran_kerugian2);
-                            $('#besaran_kerugian3').val(response.besaran_kerugian3);
-                            $('#besaran_kerugian4').val(response.besaran_kerugian4);
+                            for (let i = 1; i <= 4; i++) {
+                                const suffix = i === 1 ? '' : i;
+
+                                $('#id_nilai_kerugian' + suffix).val(response['id_nilai_kerugian' +
+                                    suffix]);
+                                $('#besaran_kerugian' + suffix).val(response['besaran_kerugian' +
+                                    suffix]);
+
+                                toggleBesaranKerugian(i);
+                            }
                         }
                     });
                 });
