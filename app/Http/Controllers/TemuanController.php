@@ -170,14 +170,16 @@ class TemuanController extends Controller
 
     public function destroy(Temuan $temuan): JsonResponse
     {
-        $temuan->update([
-            'deleted_by' => (string) session('id_pegawai'),
-            'deleted_at' => now(),
-        ]);
-
+        if ($temuan->rekomendasi()->exists()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak dapat dihapus karena masih memiliki data rekomendasi.'
+            ], 422);
+        }
+        $temuan->delete();
         return response()->json([
-            'status'  => true,
-            'message' => 'Data berhasil dihapus.',
+            'status' => true,
+            'message' => 'Data berhasil dihapus.'
         ]);
     }
 }
