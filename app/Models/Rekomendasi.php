@@ -10,6 +10,18 @@ class Rekomendasi extends Model
 {
     protected $table = 'kis_rekomendasis';
     protected $primaryKey = 'id_rekomendasi';
+    public $timestamps = false;
+    protected $fillable = [
+        'id_rekomendasi',
+        'id_temuan',
+        'rekomendasi',
+        'created_at',
+        'created_by',
+        'edited_at',
+        'edited_by',
+        'deleted_at',
+        'deleted_by',
+    ];
 
     public function scopeActive(Builder $query): Builder
     {

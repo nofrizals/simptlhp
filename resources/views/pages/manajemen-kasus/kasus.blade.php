@@ -898,15 +898,29 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                type: 'DELETE',
+                                type: "DELETE",
                                 url: `{{ url('temuan') }}/${id}`,
-                                dataType: 'json',
+                                dataType: "json",
                                 success: function(response) {
-                                    $('#dtTemuan').DataTable().ajax.reload(null, false);
+                                    if (response.status) {
+                                        $('#dtTemuan').DataTable().ajax.reload(function() {
+                                            Swal.fire({
+                                                title: "Sukses",
+                                                text: response.message,
+                                                icon: "success"
+                                            });
+                                        }, false);
+                                    }
+                                },
+                                error: function(xhr) {
+                                    let message = "Terjadi kesalahan pada server.";
+                                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                                        message = xhr.responseJSON.message;
+                                    }
                                     Swal.fire({
-                                        title: 'Sukses',
-                                        text: response.message,
-                                        icon: 'success'
+                                        title: "Gagal",
+                                        text: message,
+                                        icon: "error"
                                     });
                                 }
                             });

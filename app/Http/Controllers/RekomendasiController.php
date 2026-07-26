@@ -64,19 +64,9 @@ class RekomendasiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id'                 => ['nullable', 'integer', 'exists:kis_temuans,id_temuan'],
-            'temuan'             => ['required', 'string'],
-            'penyebab'           => ['required', 'string'],
-            'id_nilai_kerugian'  => ['nullable', 'integer'],
-            'besaran_kerugian'   => ['nullable', 'numeric', 'min:0'],
-            'id_nilai_kerugian2' => ['nullable', 'integer'],
-            'besaran_kerugian2'  => ['nullable', 'numeric', 'min:0'],
-            'id_nilai_kerugian3' => ['nullable', 'integer'],
-            'besaran_kerugian3'  => ['nullable', 'numeric', 'min:0'],
-            'id_nilai_kerugian4' => ['nullable', 'integer'],
-            'besaran_kerugian4'  => ['nullable', 'numeric', 'min:0'],
+            'rekomendasi'        => ['required', 'string'],
         ], [
-            'temuan.required'   => 'Temuan wajib diisi',
-            'penyebab.required' => 'Penyebab wajib diisi',
+            'rekomendasi.required'   => 'Rekomendasi wajib diisi'
         ]);
 
         if ($validator->fails()) {
@@ -87,23 +77,17 @@ class RekomendasiController extends Controller
         }
 
         $validated = $validator->safe()->except('id');
-        $validated['id_kasus'] = $kasus->id_kasus;
-
-        // Kolom id_nilai_kerugian2/3/4 di DB tidak punya default → jaga-jaga
-        $validated['id_nilai_kerugian']  ??= 0;
-        $validated['id_nilai_kerugian2'] ??= 0;
-        $validated['id_nilai_kerugian3'] ??= 0;
-        $validated['id_nilai_kerugian4'] ??= 0;
+        $validated['id_temuan'] = $temuan->id_temuan;
 
         if ($request->filled('id')) {
-            $temuan = Rekomendasi::where('id_kasus', $kasus->id_kasus)
+            $temuan = Rekomendasi::where('id_temuan', $temuan->id_temuan)
                 ->findOrFail($request->integer('id'));
-            $validated['edited_by'] = (string) Auth::id();
+            $validated['edited_by'] = (string) session('id_pegawai');
             $validated['edited_at'] = now();
             $temuan->update($validated);
             $message = 'Data berhasil diupdate';
         } else {
-            $validated['created_by'] = (string) Auth::id();
+            $validated['created_by'] = (string) session('id_pegawai');
             $validated['created_at'] = now();
             $temuan = Rekomendasi::create($validated);
             $message = 'Data berhasil ditambahkan';
@@ -129,16 +113,18 @@ class RekomendasiController extends Controller
         ]);
     }
 
-    public function destroy(Temuan $temuan): JsonResponse
+    public function destroy(Rekomendasi $rekomendasi): JsonResponse
     {
-        $temuan->update([
-            'deleted_by' => (string) Auth::id(),
-            'deleted_at' => now(),
-        ]);
-
+        if ($rekomendasi->tindakLanjuts()->exists()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak dapat dihapus karena masih memiliki data tindak lanjut.'
+            ], 422);
+        }
+        $rekomendasi->delete();
         return response()->json([
-            'status'  => true,
-            'message' => 'Data berhasil dihapus.',
+            'status' => true,
+            'message' => 'Data berhasil dihapus.'
         ]);
     }
 }
