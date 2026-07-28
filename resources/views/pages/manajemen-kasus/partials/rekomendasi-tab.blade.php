@@ -190,6 +190,31 @@
                 $('#' + id).removeClass('hidden').css('opacity', 0).animate({
                     opacity: 1
                 }, 200);
+                isTindakLanjutAvailable();
+            }
+
+            function isTindakLanjutAvailable() {
+                let idRekomendasi = $('#idRekomendasi').val();
+                $.ajax({
+                    url: "{{ url('tindak_lanjut/cek') }}",
+                    type: "POST",
+                    data: {
+                        id_rekomendasi: idRekomendasi,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        $('#btn-add-tindak-lanjut').prop('disabled', response.exists);
+
+                        if (response.exists) {
+                            $('#btn-add-tindak-lanjut')
+                                .addClass('opacity-50 cursor-not-allowed');
+                        } else {
+                            $('#btn-add-tindak-lanjut')
+                                .prop('disabled', false)
+                                .removeClass('opacity-50 cursor-not-allowed');
+                        }
+                    }
+                });
             }
 
             let dtTindakLanjutTable = null;
@@ -406,6 +431,7 @@
                                     false);
                                 closeModalTindakLanjut();
                                 resetFormTindakLanjut();
+                                isTindakLanjutAvailable();
                                 Swal.fire({
                                     title: 'Sukses',
                                     text: response.message,
@@ -467,6 +493,10 @@
                                         text: response.message,
                                         icon: 'success'
                                     });
+                                    $('#btn-add-tindak-lanjut')
+                                        .prop('disabled', false)
+                                        .removeClass(
+                                            'opacity-50 cursor-not-allowed');
                                 }
                             });
                         }

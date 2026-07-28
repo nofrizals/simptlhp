@@ -188,16 +188,12 @@ class TindakLanjutController extends Controller
         ]);
     }
 
-    public function destroy(Rekomendasi $rekomendasi): JsonResponse
+    public function destroy(Tindaklanjut $tindaklanjut): JsonResponse
     {
-        $rekomendasi->update([
-            'deleted_by' => (string) Auth::id(),
-            'deleted_at' => now(),
-        ]);
-
+        $tindaklanjut->delete();
         return response()->json([
-            'status'  => true,
-            'message' => 'Data berhasil dihapus.',
+            'status' => true,
+            'message' => 'Data berhasil dihapus.'
         ]);
     }
 
@@ -216,6 +212,14 @@ class TindakLanjutController extends Controller
             'besaran_kerugian3'   => $temuan->besaran_kerugian3,
             'id_nilai_kerugian4'  => $temuan->id_nilai_kerugian4,
             'besaran_kerugian4'   => $temuan->besaran_kerugian4,
+        ]);
+    }
+
+    public function cekTindakLanjut(Request $request)
+    {
+        $exists = Tindaklanjut::where('id_rekomendasi', $request->id_rekomendasi)->whereNull('deleted_by')->exists();
+        return response()->json([
+            'exists' => $exists
         ]);
     }
 }
