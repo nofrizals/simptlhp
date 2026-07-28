@@ -149,7 +149,7 @@
             <div class="space-y-6 border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
                 <form id="formRekomendasi">
                     <div class="-mx-2.5 flex flex-wrap gap-y-5">
-                        <input type="hidden" id="Rekomendasi_id" name="id">
+                        <input type="hidden" id="rekomendasi_id" name="id">
                         <div class="w-full px-2.5 xl:w-1/2">
                             <div class="flex gap-3">
                                 <div class="w-full">
@@ -352,6 +352,8 @@
                 function openModalTindakLanjut() {
                     $('#modalTindakLanjut').removeClass('pointer-events-none opacity-0');
                     $('#modalTindakLanjutContent').removeClass('scale-95').addClass('scale-100');
+                    let idTemuan = $('#idTemuan').val();
+                    loadKerugian(idTemuan);
                 }
 
                 function closeModalTindakLanjut() {
@@ -363,6 +365,10 @@
                     $('#tindak_lanjut_id').val('');
                     $('#formTindakLanjut')[0].reset();
                     $('#formTindakLanjut .err').empty();
+                    $('#besaran_kerugian').val(0);
+                    $('#besaran_kerugian2').val(0);
+                    $('#besaran_kerugian3').val(0);
+                    $('#besaran_kerugian4').val(0);
                 }
 
                 $('#btn-add-tindak-lanjut').click(function() {
@@ -370,7 +376,7 @@
                     openModalTindakLanjut();
                 });
 
-                $('#btn-cancel-tindak-lanjut').click(function() {
+                $('#btn-cancel-tindak-lanjut, #closeModalBtnTindakLanjut').click(function() {
                     resetFormTindakLanjut();
                     closeModalTindakLanjut();
                 });
@@ -466,6 +472,80 @@
                         }
                     });
                 });
+
+                function loadKerugian(idTemuan) {
+                    $.ajax({
+                        url: `{{ url('temuan/kerugian') }}`,
+                        type: 'POST',
+                        data: {
+                            id_temuan: idTemuan,
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(res) {
+                            isiKerugian(res);
+                            $('#btn-save-tindak-lanjut').prop('disabled', false);
+                        },
+                        error: function(xhr) {
+                            console.log(xhr.responseText);
+                            alert('Data kerugian gagal dimuat');
+                        }
+                    });
+                }
+
+                function isiKerugian(data) {
+                    setKerugian(
+                        '#labelPajak',
+                        '#rincianPajak',
+                        '#tl_besaran_kerugian',
+                        data.id_nilai_kerugian,
+                        data.besaran_kerugian,
+                        'Kerugian pajak tidak ditemukan'
+                    );
+                    setKerugian(
+                        '#labelDaerah',
+                        '#rincianDaerah',
+                        '#tl_besaran_kerugian2',
+                        data.id_nilai_kerugian2,
+                        data.besaran_kerugian2,
+                        'Kerugian daerah tidak ditemukan'
+                    );
+                    setKerugian(
+                        '#labelDesa',
+                        '#rincianDesa',
+                        '#tl_besaran_kerugian3',
+                        data.id_nilai_kerugian3,
+                        data.besaran_kerugian3,
+                        'Kerugian desa tidak ditemukan'
+                    );
+                    setKerugian(
+                        '#labelBlud',
+                        '#rincianBlud',
+                        '#tl_besaran_kerugian4',
+                        data.id_nilai_kerugian4,
+                        data.besaran_kerugian4,
+                        'Kerugian BLUD tidak ditemukan'
+                    );
+                }
+
+                function setKerugian(label, input, hidden, idNilai, besaran, pesan) {
+                    if (idNilai === null || idNilai == 0) {
+                        $(label).text(pesan);
+                        $(input).val(0).prop('readonly', true);
+                        $(hidden).val(0);
+
+                    } else {
+
+                        $(label).html(
+                            'Besaran Kerugian : <span class="font-semibold text-error-500">Rp ' +
+                            Number(besaran).toLocaleString('id-ID') +
+                            '</span>'
+                        );
+
+                        $(input).prop('readonly', false);
+                        $(hidden).val(besaran);
+
+                    }
+                }
             });
         });
     </script>

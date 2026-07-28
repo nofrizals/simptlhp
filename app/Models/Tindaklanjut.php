@@ -9,6 +9,8 @@ class Tindaklanjut extends Model
 {
     protected $table = 'kis_tindak_lanjuts';
     protected $primaryKey = 'id_tindak_lanjut';
+    public $timestamps = false;
+    protected $guarded = [];
 
     public function status(): BelongsTo
     {

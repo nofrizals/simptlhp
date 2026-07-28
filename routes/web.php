@@ -108,10 +108,8 @@ Route::middleware('auth')->group(function () {
     Route::get('rekomendasi/{rekomendasi}/edit', [RekomendasiController::class, 'edit'])->name('rekomendasi.edit');
     Route::delete('rekomendasi/{rekomendasi}', [RekomendasiController::class, 'destroy'])->name('rekomendasi.destroy');
 
-
-
-
     Route::post('daftar-kasus/{rekomendasi}/tindak_lanjut/ajax', [TindakLanjutController::class, 'ajaxData'])->name('tindak_lanjut.ajax');
+    Route::post('/temuan/kerugian', [TindakLanjutController::class, 'getTemuanKerugian'])->name('tindak_lanjut.kerugian');
     Route::post('daftar-kasus/{rekomendasi}/tindak_lanjut', [TindakLanjutController::class, 'store'])->name('tindak_lanjut.store');
     Route::get('tindak_lanjut/{tindak_lanjut}/edit', [TindakLanjutController::class, 'edit'])->name('tindak_lanjut.edit');
     Route::delete('tindak_lanjut/{tindak_lanjut}', [TindakLanjutController::class, 'destroy'])->name('tindak_lanjut.destroy');

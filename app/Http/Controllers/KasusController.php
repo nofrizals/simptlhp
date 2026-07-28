@@ -7,10 +7,11 @@ use App\Models\Tim;
 use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
+use App\Models\StatusTl;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
 
 class KasusController extends Controller
 {
@@ -19,7 +20,8 @@ class KasusController extends Controller
         $ketua_tims = Tim::with('ketua')->get();
         $obriks = Instansi::where('kode_instansi', 'not like', 'obrik%')->get();
         $jenisPhp = JenisPhp::get();
-        return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'obriks', 'ketua_tims'));
+        $status = StatusTl::get();
+        return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'obriks', 'ketua_tims', 'status'));
     }
 
     public function ajaxDataDaftarKasus()

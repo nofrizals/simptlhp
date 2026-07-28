@@ -11,6 +11,9 @@ class Rekomendasi extends Model
     protected $table = 'kis_rekomendasis';
     protected $primaryKey = 'id_rekomendasi';
     public $timestamps = false;
+    public const SEARCHABLE_COLUMNS = [
+        'rekomendasi'
+    ];
     protected $fillable = [
         'id_rekomendasi',
         'id_temuan',
