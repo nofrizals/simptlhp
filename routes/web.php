@@ -115,6 +115,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('tindak_lanjut/{tindaklanjut}', [TindakLanjutController::class, 'destroy'])->name('tindak_lanjut.destroy');
 
     Route::post('tindak_lanjut/cek', [TindakLanjutController::class, 'cekTindakLanjut']);
+    Route::post('tindak_lanjut/pembayaran', [TindakLanjutController::class, 'pembayaran']);
 
     // Manajemen Kasus -> Verifikasi SSR
     Route::get('verifikasi-ssr', [VerifikasiSsrController::class, 'index']);

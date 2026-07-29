@@ -8,7 +8,6 @@ use App\Models\Tindaklanjut;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -221,5 +220,11 @@ class TindakLanjutController extends Controller
         return response()->json([
             'exists' => $exists
         ]);
+    }
+
+    public function pembayaran(Request $request)
+    {
+        $data = Tindaklanjut::with('rekomendasi.temuan')->where('id_rekomendasi', $request->id_tindak_lanjut)->get();
+        return response()->json($data);
     }
 }

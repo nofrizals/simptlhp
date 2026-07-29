@@ -21,4 +21,9 @@ class Tindaklanjut extends Model
     {
         return $this->belongsTo(PegawaiSimak::class, 'created_by', 'id_pegawai');
     }
+
+    public function rekomendasi(): belongsTo
+    {
+        return $this->belongsTo(Rekomendasi::class, 'id_rekomendasi', 'id_rekomendasi');
+    }
 }

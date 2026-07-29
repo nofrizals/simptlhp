@@ -503,6 +503,101 @@
                     });
                 });
 
+                $(document).on('click', '.pembayaran', function() {
+                    $('#containerTable').addClass('hidden');
+                    $('#pembayaranTable').removeClass('hidden');
+                    let id_tindak_lanjut = $('#idRekomendasi').val();
+                    loadTemuan(id_tindak_lanjut)
+                });
+
+                function loadTemuan(id_tindak_lanjut) {
+                    $.ajax({
+                        url: `{{ url('tindak_lanjut/pembayaran') }}`,
+                        type: 'POST',
+                        data: {
+                            id_tindak_lanjut: id_tindak_lanjut,
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(res) {
+                            const kerugianPajak = res[0].rincian_keuangan
+                            const kerugianDaerah = res[0].rincian_keuangan2
+                            const kerugianDesa = res[0].rincian_keuangan3
+                            const kerugianBlud = res[0].rincian_keuangan4
+                            const pajakDibayar = res[0].setor
+                            const daerahDibayar = res[0].setor2
+                            const desaDibayar = res[0].setor3
+                            const bludDibayar = res[0].setor4
+                            const sisaPajak = res[0].rincian_keuangan
+                            const sisaDaerah = res[0].rincian_keuangan2
+                            const sisaDesa = res[0].rincian_keuangan3
+                            const sisaBlud = res[0].rincian_keuangan4
+                            $('#nilai_rugi_pajak').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(kerugianPajak));
+                            $('#pajak_dibayar').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(pajakDibayar));
+                            $('#sisa_pajak').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(sisaPajak));
+                            $('#nilai_rugi_daerah').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(kerugianDaerah));
+                            $('#daerah_dibayar').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(daerahDibayar));
+                            $('#sisa_daerah').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(sisaDaerah));
+                            $('#nilai_rugi_desa').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(kerugianDesa));
+                            $('#desa_dibayar').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(desaDibayar));
+                            $('#sisa_desa').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(sisaDesa));
+                            $('#nilai_rugi_blud').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(kerugianBlud));
+                            $('#blud_dibayar').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(bludDibayar));
+                            $('#sisa_blud').text(
+                                new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR'
+                                }).format(sisaBlud));
+                        },
+                        error: function(xhr) {
+                            alert('Data kerugian gagal dimuat');
+                        }
+                    });
+                }
+
                 function loadKerugian(idTemuan) {
                     $.ajax({
                         url: `{{ url('temuan/kerugian') }}`,
