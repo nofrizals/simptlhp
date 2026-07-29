@@ -70,10 +70,10 @@ class TindakLanjutController extends Controller
 
                 if ($value->edited_by) {
                     $log = 'Diedit oleh <strong>' . e($value->edited_by) . '</strong><br>'
-                        . optional($value->edited_at)->translatedFormat('d F Y');
+                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
                 } else {
                     $log = 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
-                        . optional($value->created_at)->translatedFormat('d F Y');
+                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y');
                 }
 
                 return $status . '<br>' . $log;

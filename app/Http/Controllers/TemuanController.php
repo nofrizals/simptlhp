@@ -54,11 +54,11 @@ class TemuanController extends Controller
             ->addColumn('log', function (Temuan $value): string {
                 if ($value->edited_by) {
                     return 'Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
-                        . optional($value->edited_at)->translatedFormat('d F Y');
+                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
                 }
 
                 return 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
-                    . optional($value->created_at)->translatedFormat('d F Y');
+                    . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y');
             })
             ->addColumn('action', function (Temuan $value): string {
                 return '
