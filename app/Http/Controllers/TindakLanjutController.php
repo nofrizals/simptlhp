@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pembayaran;
 use App\Models\Rekomendasi;
 use App\Models\Temuan;
 use App\Models\Tindaklanjut;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -226,5 +229,111 @@ class TindakLanjutController extends Controller
     {
         $data = Tindaklanjut::with('rekomendasi.temuan')->where('id_rekomendasi', $request->id_tindak_lanjut)->get();
         return response()->json($data);
+    }
+
+    public function saveBuktiPembayaran(Request $request, $id_tindak_lanjut)
+    {
+        $validator = Validator::make($request->all(), [
+            'jenis_pembayaran'                  => 'required',
+            'nominal_pembayaran'                => 'required|numeric',
+            'bukti_pembayaran'                  => 'required|file|mimes:pdf|max:2048',
+            'keterangan_pembayaran'             => 'required',
+        ], [
+            'jenis_pembayaran.required'         => 'Pilih jenis pembayaran',
+            'nominal_pembayaran.required'       => 'Wajib diisi',
+            'bukti_pembayaran.required'         => 'Tidak boleh kosong',
+            'bukti_pembayaran.mimes'            => 'Format harus pdf',
+            'bukti_pembayaran.max'              => 'File yang diupload maksimal 2MB',
+            'keterangan_pembayaran.required'    => 'Tidak boleh kosong',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error'  => $validator->errors(),
+            ]);
+        }
+
+        $validated = $validator->validated();
+        $data = [
+            'jenis'         => $validated['jenis_pembayaran'],
+            'nominal'       => $validated['nominal_pembayaran'],
+            'keterangan'    => $validated['keterangan_pembayaran']
+        ];
+
+        // $data['file_bukti']         = $request->file('bukti_pembayaran')->store('bukti_pembayaran', 'public');
+        // $data['id_tindak_lanjut']   = $id_tindak_lanjut;
+        // $data['created_by']         = (string) session('id_pegawai');
+        // $data['created_at']         = now();
+        // $bukti_pembayaran           = Pembayaran::create($data);
+        // return response()->json([
+        //     'status'  => (bool) $bukti_pembayaran,
+        //     'message' => $bukti_pembayaran
+        //         ? 'Data berhasil ditambahkan'
+        //         : 'Gagal menyimpan data',
+        // ]);
+
+
+
+        DB::beginTransaction();
+        try {
+            $data['file_bukti'] = $request->file('bukti_pembayaran')->store('bukti_pembayaran', 'public');
+            $data['id_tindak_lanjut'] = $id_tindak_lanjut;
+            $data['created_by'] = session('id_pegawai');
+            $data['created_at']         = now();
+            $buktiPembayaran = Pembayaran::create($data);
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'message' => 'Data berhasil ditambahkan',
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            if (!empty($data['file_bukti'])) {
+                Storage::disk('public')->delete($data['file_bukti']);
+            }
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function ajaxDataPembayaran(Request $request, $id_tindak_lanjut): JsonResponse
+    {
+        $data = Pembayaran::query()
+            ->where('id_tindak_lanjut', $id_tindak_lanjut)
+            ->orderByDesc('id');
+        return DataTables::eloquent($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function (Pembayaran $value): string {
+                return e(ucwords($value->jenis)) ?: '-';
+            })
+            ->addColumn('tanggal', function (Pembayaran $value): string {
+                return Carbon::parse($value->created_at ?? '-')->translatedFormat('d F Y');
+            })
+            ->addColumn('bukti', function (Pembayaran $value): string {
+                return e($value->file_bukti) ?: '-';
+            })
+            ->addColumn('nominal', function (Pembayaran $value): string {
+                return 'Rp ' . number_format((float) $value->nominal, 2, ',', '.');
+            })
+            ->addColumn('date', function (Pembayaran $value): string {
+
+                $status = $value->deleted_by === null
+                    ? '<span class="inline-flex items-center rounded-full border border-green-200 bg-green-100 px-3 py-1 text-xs font-medium text-green-700">Aktif</span>'
+                    : '<span class="inline-flex items-center rounded-full border border-red-200 bg-red-100 px-3 py-1 text-xs font-medium text-red-700">Tidak Aktif</span>';
+
+                if ($value->edited_by) {
+                    $log = 'Diedit oleh <strong>' . e($value->edited_by) . '</strong><br>'
+                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
+                } else {
+                    $log = 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y');
+                }
+
+                return $status . '<br>' . $log;
+            })
+            ->rawColumns(['tanggal', 'bukti', 'nominal', 'date'])
+            ->make(true);
     }
 }

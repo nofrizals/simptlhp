@@ -528,6 +528,107 @@
                                 </div>
                             </div>
                         </div>
+                        <form id="formBuktiPembayaran">
+                            <input type="hidden" name="id_tindak_lanjut" id="id_tindak_lanjut">
+                            <div
+                                class="mt-8 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+                                <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Jenis Pembayaran
+                                </label>
+                                <select name="jenis_pembayaran" id="jenis_pembayaran"
+                                    class="mt-5 dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                    <option value="" disabled selected
+                                        class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">Pilih</option>
+                                    <option value="pajak" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        Pajak
+                                    </option>
+                                    <option value="daerah" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        Daerah</option>
+                                    <option value="desa" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        Desa
+                                    </option>
+                                    <option value="blud" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        BLUD
+                                    </option>
+                                </select>
+                                <label
+                                    class="nominal_pembayaran hidden m-3 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Nominal
+                                </label>
+                                <input type="number" name="nominal_pembayaran" id="nominal_pembayaran"
+                                    placeholder="Besaran Kerugian"
+                                    class="nominal_pembayaran hidden dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <p class="err text-theme-xs text-error-500" id="nominal_pembayaran_error"></p>
+                                <label
+                                    class="bukti_pembayaran hidden m-3 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Bukti
+                                </label>
+                                <input type="file" name="bukti_pembayaran" id="bukti_pembayaran"
+                                    class="bukti_pembayaran hidden focus:border-ring-brand-300 shadow-theme-xs focus:file:ring-brand-300 h-11 w-full overflow-hidden rounded-lg border border-gray-300 bg-transparent text-sm text-gray-500 transition-colors file:mr-5 file:border-collapse file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-solid file:border-gray-200 file:bg-gray-50 file:py-3 file:pr-3 file:pl-3.5 file:text-sm file:text-gray-700 placeholder:text-gray-400 hover:file:bg-gray-100 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:text-white/90 dark:file:border-gray-800 dark:file:bg-white/[0.03] dark:file:text-gray-400 dark:placeholder:text-gray-400">
+                                <p class="err text-theme-xs text-error-500" id="bukti_pembayaran_error"></p>
+                                <label
+                                    class="keterangan_pembayaran hidden m-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Keterangan
+                                </label>
+                                <textarea
+                                    class="keterangan_pembayaran hidden dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                    name="keterangan_pembayaran" id="keterangan_pembayaran" rows="6"></textarea>
+                                <p class="err text-theme-xs text-error-500" id="keterangan_pembayaran_error"></p>
+                                <button type="submit" id="btn-save-bukti-pembayaran"
+                                    class="mt-4 flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white hover:bg-brand-600">
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                        <div id="dinamisFormPembayaran"
+                            class="mt-8 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 hidden">
+                            {{-- Loading --}}
+                            <div id="tableLoadingTindakLanjut"
+                                class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                                <div class="flex flex-col items-center gap-2">
+                                    <div
+                                        class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                                    </div>
+                                    <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table id="dtBuktiPembayaran" class="min-w-full text-sm dt-table">
+                                    <thead class="bg-gray-50 dark:bg-gray-800">
+                                        <tr>
+                                            <th
+                                                class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                #</th>
+                                            <th
+                                                class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                Jenis
+                                            </th>
+                                            <th
+                                                class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                Tanggal
+                                            </th>
+                                            <th
+                                                class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                Bukti
+                                            </th>
+                                            <th
+                                                class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                Nominal
+                                            </th>
+                                            <th
+                                                class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                Keterangan
+                                            </th>
+                                            <th
+                                                class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                Date
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

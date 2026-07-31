@@ -238,6 +238,7 @@
                     processing) {
                     $('#tableLoadingTindakLanjut').toggleClass('hidden', !processing);
                 });
+
                 dtTindakLanjutTable = $('#dtTindakLanjut').DataTable({
                     processing: true,
                     serverSide: true,
@@ -503,12 +504,158 @@
                     });
                 });
 
+                let tindak_lanjut = '';
+
                 $(document).on('click', '.pembayaran', function() {
                     $('#containerTable').addClass('hidden');
                     $('#pembayaranTable').removeClass('hidden');
                     let id_tindak_lanjut = $('#idRekomendasi').val();
-                    loadTemuan(id_tindak_lanjut)
+                    loadTemuan(id_tindak_lanjut);
+                    id_tindak_lanjut = $(this).data('id');
+                    $('#id_tindak_lanjut').val(id_tindak_lanjut);
+
+                    if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
+                        dtBuktiPembayaranTable.ajax.url(
+                            `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajax`
+                        ).load();
+                    } else {
+                        dtBuktiPembayaranTable = $('#dtBuktiPembayaran')
+                            .DataTable({
+                                processing: true,
+                                serverSide: true,
+                                responsive: false,
+                                scrollX: true,
+                                dom: 'rtip',
+                                searching: true,
+                                ordering: false,
+                                lengthChange: false,
+                                ajax: {
+                                    type: 'POST',
+                                    url: `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
+                                },
+                                columns: [{
+                                        data: 'DT_RowIndex',
+                                        name: 'DT_RowIndex',
+                                        orderable: false,
+                                        searchable: false,
+                                        className: 'text-center'
+                                    },
+                                    {
+                                        data: 'jenis',
+                                        name: 'jenis',
+                                        className: 'text-left'
+                                    },
+                                    {
+                                        data: 'tanggal',
+                                        name: 'tanggal',
+                                        className: 'text-left'
+                                    },
+                                    {
+                                        data: 'bukti',
+                                        name: 'bukti',
+                                        className: 'text-left'
+                                    },
+                                    {
+                                        data: 'nominal',
+                                        name: 'nominal',
+                                        className: 'text-left'
+                                    },
+                                    {
+                                        data: 'keterangan',
+                                        name: 'keterangan',
+                                        className: 'text-left'
+                                    },
+                                    {
+                                        data: 'date',
+                                        name: 'date',
+                                        className: 'text-left'
+                                    }
+                                ],
+                                language: {
+                                    processing: "",
+                                    zeroRecords: "Data tidak ditemukan",
+                                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                                    paginate: {
+                                        previous: "←",
+                                        next: "→"
+                                    }
+                                },
+                                // initComplete: function() {
+                                //     $('#dtRekomendasi_info').appendTo(
+                                //         '#tableInfoRekomendasi');
+                                //     $('#dtRekomendasi_paginate').appendTo(
+                                //         '#tablePaginationRekomendasi');
+                                // }
+                            });
+                    }
                 });
+
+                $('#formBuktiPembayaran').submit(function(e) {
+                    e.preventDefault();
+                    let id_tindak_lanjut = $('#id_tindak_lanjut').val();
+                    const formData = new FormData(this);
+                    $.ajax({
+                        type: 'POST',
+                        url: `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/saveBuktiPembayaran`,
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        beforeSend: function() {
+                            $('#btn-save-bukti-pembayaran').prop('disabled',
+                                true).text(
+                                'Menyimpan...');
+                        },
+                        success: function(response) {
+                            if (response.status === false) {
+                                $.each(response.error, function(key, val) {
+                                    $('#' + key + '_error').html(
+                                        val[0]);
+                                });
+                            } else {
+                                $('#formBuktiPembayaran')
+                                    .find(':input')
+                                    .not('#jenis_pembayaran')
+                                    .each(function() {
+                                        switch (this.type) {
+                                            case 'checkbox':
+                                            case 'radio':
+                                                this.checked = false;
+                                                break;
+                                            default:
+                                                $(this).val('');
+                                        }
+                                    });
+                                $('.err').text('');
+                                if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
+                                    dtBuktiPembayaranTable.ajax
+                                        .url(
+                                            `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
+                                        )
+                                        .load();
+                                }
+                                Swal.fire({
+                                    title: 'Sukses',
+                                    text: response.message,
+                                    icon: 'success'
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Terjadi kesalahan server',
+                                icon: 'error'
+                            });
+                        },
+                        complete: function() {
+                            $('#btn-save-bukti-pembayaran').prop('disabled',
+                                    false)
+                                .text(
+                                    'Simpan');
+                        }
+                    });
+                })
 
                 function loadTemuan(id_tindak_lanjut) {
                     $.ajax({
@@ -591,6 +738,30 @@
                                     style: 'currency',
                                     currency: 'IDR'
                                 }).format(sisaBlud));
+
+                            let jenis_pembayaran = $('#jenis_pembayaran').val()
+                            $('#jenis_pembayaran').change(function(e) {
+                                e.preventDefault();
+                                jenis_pembayaran = $('#jenis_pembayaran').val()
+                                if (jenis_pembayaran == 'pajak' && (parseInt(res[0]
+                                        .rincian_keuangan) <= 0) || (
+                                        jenis_pembayaran == 'daerah' && parseInt(
+                                            res[0].rincian_keuangan2) <= 0) || (
+                                        jenis_pembayaran == 'desa' && parseInt(res[0]
+                                            .rincian_keuangan3) <= 0) || (
+                                        jenis_pembayaran == 'blud' && parseInt(res[0]
+                                            .rincian_keuangan4) <= 0)) {
+                                    $('.nominal_pembayaran').addClass('hidden');
+                                    $('.bukti_pembayaran').addClass('hidden');
+                                    $('.keterangan_pembayaran').addClass('hidden');
+                                    $('#dinamisFormPembayaran').addClass('hidden');
+                                } else {
+                                    $('.nominal_pembayaran').removeClass('hidden');
+                                    $('.bukti_pembayaran').removeClass('hidden');
+                                    $('.keterangan_pembayaran').removeClass('hidden');
+                                    $('#dinamisFormPembayaran').removeClass('hidden');
+                                }
+                            });
                         },
                         error: function(xhr) {
                             alert('Data kerugian gagal dimuat');
