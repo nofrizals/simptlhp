@@ -336,15 +336,24 @@
                 });
 
                 $('#btn-backToRekomendasi').click(function() {
-                    showSection('sectionRekomendasi');
-                    const idRekomendasi = $('#idRekomendasi').val();
-                    if (idRekomendasi) {
-                        showInfoSkeleton()
-                        loadDetailRekomendasi(idRekomendasi);
+                    const containerHidden = $('#containerTable').hasClass('hidden');
+                    const pembayaranHidden = $('#pembayaranTable').hasClass('hidden');
+                    if (containerHidden && !pembayaranHidden) {
+                        $('#containerTable').removeClass('hidden');
+                        $('#pembayaranTable').addClass('hidden');
+                    } else {
+                        showSection('sectionRekomendasi');
+                        const idRekomendasi = $('#idRekomendasi').val();
+                        if (idRekomendasi) {
+                            showInfoSkeleton();
+                            loadDetailRekomendasi(idRekomendasi);
+                        }
+                        if ($.fn.DataTable.isDataTable('#dataTable')) {
+                            $('#dataTable').DataTable().ajax.reload(null, false);
+                        }
+
                     }
-                    if ($.fn.DataTable.isDataTable('#dataTable')) {
-                        $('#dataTable').DataTable().ajax.reload(null, false);
-                    }
+
                 });
 
                 function showInfoSkeleton() {
@@ -516,7 +525,7 @@
 
                     if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
                         dtBuktiPembayaranTable.ajax.url(
-                            `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajax`
+                            `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
                         ).load();
                     } else {
                         dtBuktiPembayaranTable = $('#dtBuktiPembayaran')
