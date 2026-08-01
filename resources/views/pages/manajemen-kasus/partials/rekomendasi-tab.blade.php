@@ -465,12 +465,11 @@
             });
 
             $(document).on('click', '.btn-editTindakLanjut', function() {
-                const id = $(this).data('id');
+                const tindaklanjut = $(this).data('id');
                 resetFormTindakLanjut();
                 openModalTindakLanjut();
-
                 $.ajax({
-                    url: `{{ url('tindak_lanjut') }}/${id}/edit`,
+                    url: `{{ url('tindak_lanjut') }}/${tindaklanjut}/edit`,
                     type: 'GET',
                     success: function(response) {
                         $('#tindak_lanjut_id').val(response.id);

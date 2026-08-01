@@ -185,8 +185,14 @@ class TindakLanjutController extends Controller
     {
         return response()->json([
             'id'                 => $tindaklanjut->id_tindak_lanjut,
-            'id_rekomendasi'     => $tindaklanjut->id_rekomendasi,
-            'tindak_lanjut'      => $tindaklanjut->tindak_lanjut
+            'tgl_tindak_lanjut'      => $tindaklanjut->tgl_tindak_lanjut,
+            'id_status'      => $tindaklanjut->id_status,
+            'tindak_lanjut'      => $tindaklanjut->tindak_lanjut,
+            'keterangan'      => $tindaklanjut->keterangan,
+            'setor'     => $tindaklanjut->setor,
+            'setor2'     => $tindaklanjut->setor2,
+            'setor3'     => $tindaklanjut->setor3,
+            'setor4'     => $tindaklanjut->setor4,
         ]);
     }
 
