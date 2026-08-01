@@ -362,20 +362,85 @@ class TindakLanjutController extends Controller
             ->make(true);
     }
 
+    // public function destroyPembayaran($id): JsonResponse
+    // {
+    //     $pembayaran = Pembayaran::findOrFail($id);
+    //     if (
+    //         $pembayaran->file_bukti &&
+    //         Storage::disk('public')->exists($pembayaran->file_bukti)
+    //     ) {
+    //         Storage::disk('public')->delete($pembayaran->file_bukti);
+    //     }
+
+    //     $pembayaran->delete();
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Data berhasil dihapus.'
+    //     ]);
+    // }
+
     public function destroyPembayaran($id): JsonResponse
     {
-        $pembayaran = Pembayaran::findOrFail($id);
-        if (
-            $pembayaran->file_bukti &&
-            Storage::disk('public')->exists($pembayaran->file_bukti)
-        ) {
-            Storage::disk('public')->delete($pembayaran->file_bukti);
+        DB::beginTransaction();
+
+        try {
+
+            $pembayaran = Pembayaran::findOrFail($id);
+
+            $idTindakLanjut = $pembayaran->id_tindak_lanjut;
+            $jenis = $pembayaran->jenis;
+            $file = $pembayaran->file_bukti;
+
+            // Hapus data pembayaran
+            $pembayaran->delete();
+
+            // Hitung ulang total setoran
+            $this->updateSetor($idTindakLanjut, $jenis);
+
+            DB::commit();
+
+            // Hapus file setelah transaksi berhasil
+            if ($file && Storage::disk('public')->exists($file)) {
+                Storage::disk('public')->delete($file);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil dihapus.'
+            ]);
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function updateSetor($idTindakLanjut, $jenis)
+    {
+        $mappingSetor = [
+            'pajak'  => 'setor',
+            'daerah' => 'setor2',
+            'desa'   => 'setor3',
+            'blud'   => 'setor4',
+        ];
+
+        if (!isset($mappingSetor[$jenis])) {
+            return;
         }
 
-        $pembayaran->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil dihapus.'
-        ]);
+        $fieldSetor = $mappingSetor[$jenis];
+
+        $total = Pembayaran::where('id_tindak_lanjut', $idTindakLanjut)
+            ->where('jenis', $jenis)
+            ->sum('nominal');
+
+        Tindaklanjut::where('id_tindak_lanjut', $idTindakLanjut)
+            ->update([
+                $fieldSetor => $total
+            ]);
     }
 }
