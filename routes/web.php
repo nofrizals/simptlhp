@@ -118,6 +118,7 @@ Route::middleware('auth')->group(function () {
     Route::post('tindak_lanjut/pembayaran', [TindakLanjutController::class, 'pembayaran']);
     Route::post('daftar-kasus/{id_tindak_lanjut}/saveBuktiPembayaran', [TindakLanjutController::class, 'saveBuktiPembayaran']);
     Route::post('daftar-kasus/{id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran', [TindakLanjutController::class, 'ajaxDataPembayaran'])->name('tindak_lanjut.ajaxTindakLanjut');
+    Route::delete('pembayaran/{id}', [TindakLanjutController::class, 'destroyPembayaran'])->name('tindak_lanjut.destroyPembayaran');
 
     // Manajemen Kasus -> Verifikasi SSR
     Route::get('verifikasi-ssr', [VerifikasiSsrController::class, 'index']);

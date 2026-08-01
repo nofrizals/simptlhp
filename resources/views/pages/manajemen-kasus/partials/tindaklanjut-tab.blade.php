@@ -623,6 +623,10 @@
                                                 class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
                                                 Date
                                             </th>
+                                            <th
+                                                class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                Aksi
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>

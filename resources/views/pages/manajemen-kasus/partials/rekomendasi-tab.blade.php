@@ -334,524 +334,560 @@
                 $('#pageLengthTindakLanjut').off('change').on('change', function() {
                     dtTindakLanjutTable.page.len(this.value).draw();
                 });
+            });
 
-                $('#btn-backToRekomendasi').click(function() {
-                    const containerHidden = $('#containerTable').hasClass('hidden');
-                    const pembayaranHidden = $('#pembayaranTable').hasClass('hidden');
-                    if (containerHidden && !pembayaranHidden) {
-                        $('#containerTable').removeClass('hidden');
-                        $('#pembayaranTable').addClass('hidden');
-                    } else {
-                        showSection('sectionRekomendasi');
-                        const idRekomendasi = $('#idRekomendasi').val();
-                        if (idRekomendasi) {
-                            showInfoSkeleton();
-                            loadDetailRekomendasi(idRekomendasi);
-                        }
-                        if ($.fn.DataTable.isDataTable('#dataTable')) {
-                            $('#dataTable').DataTable().ajax.reload(null, false);
-                        }
-
-                    }
-
-                });
-
-                function showInfoSkeleton() {
-                    const skeleton =
-                        '<span class="inline-block h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></span>';
-                    $('.info-tanggal-lhp, .info-nomor-lhp, .info-nama-obrik, .info-jenis-php, .info-temuan, .info-penyebab, .info-rekomendasi')
-                        .html(skeleton);
-                }
-
-                function loadDetailRekomendasi(idRekomendasi) {
-                    $.ajax({
-                        url: `{{ url('rekomendasi') }}/${idRekomendasi}/edit`,
-                        type: 'GET',
-                        success: function(response) {
-                            $('.info-tanggal-lhp').html(response.tanggal_lhp ?? '-');
-                            $('.info-nomor-lhp').html(response.nomor_lhp ?? '-');
-                            $('.info-nama-obrik').html(response.kode_unor ?? '-');
-                            $('.info-jenis-php').html(response.id_jenis_php ?? '-');
-                            $('.info-temuan').html(response.temuan ?? '-');
-                            $('.info-penyebab').html(response.penyebab ?? '-');
-                            $('.info-rekomendasi').html(response.rekomendasi ?? '-');
-                        },
-                        error: function() {
-                            $('.info-tanggal-lhp, .info-nomor-lhp, .info-nama-obrik, .info-jenis-php, .info-temuan, .info-penyebab, .info-rekomendasi')
-                                .html(
-                                    '<span class="text-red-500">Gagal memuat</span>');
-                        }
-                    });
-                }
-
-                function openModalTindakLanjut() {
-                    $('#modalTindakLanjut').removeClass('pointer-events-none opacity-0');
-                    $('#modalTindakLanjutContent').removeClass('scale-95').addClass('scale-100');
-                    let idTemuan = $('#idTemuan').val();
-                    loadKerugian(idTemuan);
-                }
-
-                function closeModalTindakLanjut() {
-                    $('#modalTindakLanjut').addClass('opacity-0 pointer-events-none');
-                    $('#modalTindakLanjutContent').removeClass('scale-100').addClass('scale-95');
-                }
-
-                function resetFormTindakLanjut() {
-                    $('#tindak_lanjut_id').val('');
-                    $('#formTindakLanjut')[0].reset();
-                    $('#formTindakLanjut .err').empty();
-                    $('#besaran_kerugian').val(0);
-                    $('#besaran_kerugian2').val(0);
-                    $('#besaran_kerugian3').val(0);
-                    $('#besaran_kerugian4').val(0);
-                }
-
-                $('#btn-add-tindak-lanjut').click(function() {
-                    resetFormTindakLanjut();
-                    openModalTindakLanjut();
-                });
-
-                $('#btn-cancel-tindak-lanjut, #closeModalBtnTindakLanjut').click(function() {
-                    resetFormTindakLanjut();
-                    closeModalTindakLanjut();
-                });
-
-                $('#formTindakLanjut').submit(function(e) {
-                    e.preventDefault();
+            $('#btn-backToRekomendasi').click(function() {
+                const containerHidden = $('#containerTable').hasClass('hidden');
+                const pembayaranHidden = $('#pembayaranTable').hasClass('hidden');
+                if (containerHidden && !pembayaranHidden) {
+                    $('#containerTable').removeClass('hidden');
+                    $('#pembayaranTable').addClass('hidden');
+                } else {
+                    showSection('sectionRekomendasi');
                     const idRekomendasi = $('#idRekomendasi').val();
-                    const formData = new FormData(this);
-                    $.ajax({
-                        type: 'POST',
-                        url: `{{ url('daftar-kasus') }}/${idRekomendasi}/tindak_lanjut`,
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        dataType: 'json',
-                        beforeSend: function() {
-                            $('#btn-save-tindak-lanjut').prop('disabled', true).text(
-                                'Menyimpan...');
-                        },
-                        success: function(response) {
-                            if (response.status === false) {
-                                $.each(response.error, function(key, val) {
-                                    $('#' + key + '_error').html(val[0]);
-                                });
-                            } else {
-                                $('#dtTindakLanjut').DataTable().ajax.reload(null,
-                                    false);
-                                closeModalTindakLanjut();
-                                resetFormTindakLanjut();
-                                isTindakLanjutAvailable();
+                    if (idRekomendasi) {
+                        showInfoSkeleton();
+                        loadDetailRekomendasi(idRekomendasi);
+                    }
+                    if ($.fn.DataTable.isDataTable('#dtRekomendasi')) {
+                        $('#dtRekomendasi').DataTable().ajax.reload(null, true);
+                    }
+
+                }
+
+            });
+
+            function showInfoSkeleton() {
+                const skeleton =
+                    '<span class="inline-block h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></span>';
+                $('.info-tanggal-lhp, .info-nomor-lhp, .info-nama-obrik, .info-jenis-php, .info-temuan, .info-penyebab, .info-rekomendasi')
+                    .html(skeleton);
+            }
+
+            function loadDetailRekomendasi(idRekomendasi) {
+                $.ajax({
+                    url: `{{ url('rekomendasi') }}/${idRekomendasi}/edit`,
+                    type: 'GET',
+                    success: function(response) {
+                        $('.info-tanggal-lhp').html(response.tanggal_lhp ?? '-');
+                        $('.info-nomor-lhp').html(response.nomor_lhp ?? '-');
+                        $('.info-nama-obrik').html(response.kode_unor ?? '-');
+                        $('.info-jenis-php').html(response.id_jenis_php ?? '-');
+                        $('.info-temuan').html(response.temuan ?? '-');
+                        $('.info-penyebab').html(response.penyebab ?? '-');
+                        $('.info-rekomendasi').html(response.rekomendasi ?? '-');
+                    },
+                    error: function() {
+                        $('.info-tanggal-lhp, .info-nomor-lhp, .info-nama-obrik, .info-jenis-php, .info-temuan, .info-penyebab, .info-rekomendasi')
+                            .html(
+                                '<span class="text-red-500">Gagal memuat</span>');
+                    }
+                });
+            }
+
+            function openModalTindakLanjut() {
+                $('#modalTindakLanjut').removeClass('pointer-events-none opacity-0');
+                $('#modalTindakLanjutContent').removeClass('scale-95').addClass('scale-100');
+                let idTemuan = $('#idTemuan').val();
+                loadKerugian(idTemuan);
+            }
+
+            function closeModalTindakLanjut() {
+                $('#modalTindakLanjut').addClass('opacity-0 pointer-events-none');
+                $('#modalTindakLanjutContent').removeClass('scale-100').addClass('scale-95');
+            }
+
+            function resetFormTindakLanjut() {
+                $('#tindak_lanjut_id').val('');
+                $('#formTindakLanjut')[0].reset();
+                $('#formTindakLanjut .err').empty();
+                $('#besaran_kerugian').val(0);
+                $('#besaran_kerugian2').val(0);
+                $('#besaran_kerugian3').val(0);
+                $('#besaran_kerugian4').val(0);
+            }
+
+            $('#btn-add-tindak-lanjut').click(function() {
+                resetFormTindakLanjut();
+                openModalTindakLanjut();
+            });
+
+            $('#btn-cancel-tindak-lanjut, #closeModalBtnTindakLanjut').click(function() {
+                resetFormTindakLanjut();
+                closeModalTindakLanjut();
+            });
+
+            $('#formTindakLanjut').submit(function(e) {
+                e.preventDefault();
+                const idRekomendasi = $('#idRekomendasi').val();
+                const formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('daftar-kasus') }}/${idRekomendasi}/tindak_lanjut`,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#btn-save-tindak-lanjut').prop('disabled', true).text(
+                            'Menyimpan...');
+                    },
+                    success: function(response) {
+                        if (response.status === false) {
+                            $.each(response.error, function(key, val) {
+                                $('#' + key + '_error').html(val[0]);
+                            });
+                        } else {
+                            $('#dtTindakLanjut').DataTable().ajax.reload(null,
+                                false);
+                            closeModalTindakLanjut();
+                            resetFormTindakLanjut();
+                            isTindakLanjutAvailable();
+                            Swal.fire({
+                                title: 'Sukses',
+                                text: response.message,
+                                icon: 'success'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan server',
+                            icon: 'error'
+                        });
+                    },
+                    complete: function() {
+                        $('#btn-save-tindak-lanjut').prop('disabled', false).text(
+                            'Simpan');
+                    }
+                });
+            });
+
+            $(document).on('click', '.btn-editTindakLanjut', function() {
+                const id = $(this).data('id');
+                resetFormTindakLanjut();
+                openModalTindakLanjut();
+
+                $.ajax({
+                    url: `{{ url('tindak_lanjut') }}/${id}/edit`,
+                    type: 'GET',
+                    success: function(response) {
+                        $('#tindak_lanjut_id').val(response.id);
+                        $('#tindak_lanjut').val(response.tindak_lanjut);
+                    }
+                });
+            });
+
+            $(document).on('click', '.btn-deleteTindakLanjut', function() {
+                const id = $(this).data('id');
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Yakin',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: `{{ url('tindak_lanjut') }}/${id}`,
+                            dataType: 'json',
+                            success: function(response) {
+                                $('#dtTindakLanjut').DataTable().ajax
+                                    .reload(
+                                        null,
+                                        false);
                                 Swal.fire({
                                     title: 'Sukses',
                                     text: response.message,
                                     icon: 'success'
                                 });
+                                $('#btn-add-tindak-lanjut')
+                                    .prop('disabled', false)
+                                    .removeClass(
+                                        'opacity-50 cursor-not-allowed');
                             }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                title: 'Gagal',
-                                text: 'Terjadi kesalahan server',
-                                icon: 'error'
-                            });
-                        },
-                        complete: function() {
-                            $('#btn-save-tindak-lanjut').prop('disabled', false).text(
-                                'Simpan');
-                        }
-                    });
-                });
-
-                $(document).on('click', '.btn-editTindakLanjut', function() {
-                    const id = $(this).data('id');
-                    resetFormTindakLanjut();
-                    openModalTindakLanjut();
-
-                    $.ajax({
-                        url: `{{ url('tindak_lanjut') }}/${id}/edit`,
-                        type: 'GET',
-                        success: function(response) {
-                            $('#tindak_lanjut_id').val(response.id);
-                            $('#tindak_lanjut').val(response.tindak_lanjut);
-                        }
-                    });
-                });
-
-                $(document).on('click', '.btn-deleteTindakLanjut', function() {
-                    const id = $(this).data('id');
-                    Swal.fire({
-                        title: 'Apakah anda yakin?',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        cancelButtonText: 'Batal',
-                        confirmButtonText: 'Yakin',
-                        reverseButtons: true,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                type: 'DELETE',
-                                url: `{{ url('tindak_lanjut') }}/${id}`,
-                                dataType: 'json',
-                                success: function(response) {
-                                    $('#dtTindakLanjut').DataTable().ajax
-                                        .reload(
-                                            null,
-                                            false);
-                                    Swal.fire({
-                                        title: 'Sukses',
-                                        text: response.message,
-                                        icon: 'success'
-                                    });
-                                    $('#btn-add-tindak-lanjut')
-                                        .prop('disabled', false)
-                                        .removeClass(
-                                            'opacity-50 cursor-not-allowed');
-                                }
-                            });
-                        }
-                    });
-                });
-
-                let tindak_lanjut = '';
-
-                $(document).on('click', '.pembayaran', function() {
-                    $('#containerTable').addClass('hidden');
-                    $('#pembayaranTable').removeClass('hidden');
-                    let id_tindak_lanjut = $('#idRekomendasi').val();
-                    loadTemuan(id_tindak_lanjut);
-                    id_tindak_lanjut = $(this).data('id');
-                    $('#id_tindak_lanjut').val(id_tindak_lanjut);
-
-                    if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
-                        dtBuktiPembayaranTable.ajax.url(
-                            `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
-                        ).load();
-                    } else {
-                        dtBuktiPembayaranTable = $('#dtBuktiPembayaran')
-                            .DataTable({
-                                processing: true,
-                                serverSide: true,
-                                responsive: false,
-                                scrollX: true,
-                                dom: 'rtip',
-                                searching: true,
-                                ordering: false,
-                                lengthChange: false,
-                                ajax: {
-                                    type: 'POST',
-                                    url: `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
-                                },
-                                columns: [{
-                                        data: 'DT_RowIndex',
-                                        name: 'DT_RowIndex',
-                                        orderable: false,
-                                        searchable: false,
-                                        className: 'text-center'
-                                    },
-                                    {
-                                        data: 'jenis',
-                                        name: 'jenis',
-                                        className: 'text-left'
-                                    },
-                                    {
-                                        data: 'tanggal',
-                                        name: 'tanggal',
-                                        className: 'text-left'
-                                    },
-                                    {
-                                        data: 'bukti',
-                                        name: 'bukti',
-                                        className: 'text-left'
-                                    },
-                                    {
-                                        data: 'nominal',
-                                        name: 'nominal',
-                                        className: 'text-left'
-                                    },
-                                    {
-                                        data: 'keterangan',
-                                        name: 'keterangan',
-                                        className: 'text-left'
-                                    },
-                                    {
-                                        data: 'date',
-                                        name: 'date',
-                                        className: 'text-left'
-                                    }
-                                ],
-                                language: {
-                                    processing: "",
-                                    zeroRecords: "Data tidak ditemukan",
-                                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
-                                    paginate: {
-                                        previous: "←",
-                                        next: "→"
-                                    }
-                                },
-                                // initComplete: function() {
-                                //     $('#dtRekomendasi_info').appendTo(
-                                //         '#tableInfoRekomendasi');
-                                //     $('#dtRekomendasi_paginate').appendTo(
-                                //         '#tablePaginationRekomendasi');
-                                // }
-                            });
+                        });
                     }
                 });
+            });
 
-                $('#formBuktiPembayaran').submit(function(e) {
-                    e.preventDefault();
-                    let id_tindak_lanjut = $('#id_tindak_lanjut').val();
-                    const formData = new FormData(this);
-                    $.ajax({
-                        type: 'POST',
-                        url: `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/saveBuktiPembayaran`,
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        dataType: 'json',
-                        beforeSend: function() {
-                            $('#btn-save-bukti-pembayaran').prop('disabled',
-                                true).text(
-                                'Menyimpan...');
-                        },
-                        success: function(response) {
-                            if (response.status === false) {
-                                $.each(response.error, function(key, val) {
-                                    $('#' + key + '_error').html(
-                                        val[0]);
-                                });
-                            } else {
-                                $('#formBuktiPembayaran')
-                                    .find(':input')
-                                    .not('#jenis_pembayaran')
-                                    .each(function() {
-                                        switch (this.type) {
-                                            case 'checkbox':
-                                            case 'radio':
-                                                this.checked = false;
-                                                break;
-                                            default:
-                                                $(this).val('');
-                                        }
-                                    });
-                                $('.err').text('');
-                                if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
-                                    dtBuktiPembayaranTable.ajax
-                                        .url(
-                                            `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
-                                        )
-                                        .load();
+            let tindak_lanjut = '';
+
+            $(document).on('click', '.pembayaran', function() {
+                $('#containerTable').addClass('hidden');
+                $('#pembayaranTable').removeClass('hidden');
+                let id_tindak_lanjut = $('#idRekomendasi').val();
+                loadTemuan(id_tindak_lanjut);
+                id_tindak_lanjut = $(this).data('id');
+                $('#id_tindak_lanjut').val(id_tindak_lanjut);
+
+                if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
+                    dtBuktiPembayaranTable.ajax.url(
+                        `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
+                    ).load();
+                } else {
+                    dtBuktiPembayaranTable = $('#dtBuktiPembayaran')
+                        .DataTable({
+                            processing: true,
+                            serverSide: true,
+                            responsive: false,
+                            scrollX: true,
+                            dom: 'rtip',
+                            searching: true,
+                            ordering: false,
+                            lengthChange: false,
+                            ajax: {
+                                type: 'POST',
+                                url: `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
+                            },
+                            columns: [{
+                                    data: 'DT_RowIndex',
+                                    name: 'DT_RowIndex',
+                                    orderable: false,
+                                    searchable: false,
+                                    className: 'text-center'
+                                },
+                                {
+                                    data: 'jenis',
+                                    name: 'jenis',
+                                    className: 'text-center'
+                                },
+                                {
+                                    data: 'tanggal',
+                                    name: 'tanggal',
+                                    className: 'text-center'
+                                },
+                                {
+                                    data: 'bukti',
+                                    name: 'bukti',
+                                    className: 'text-center'
+                                },
+                                {
+                                    data: 'nominal',
+                                    name: 'nominal',
+                                    className: 'text-center'
+                                },
+                                {
+                                    data: 'keterangan',
+                                    name: 'keterangan',
+                                    className: 'text-center'
+                                },
+                                {
+                                    data: 'date',
+                                    name: 'date',
+                                    className: 'text-center'
+                                },
+                                {
+                                    data: 'action',
+                                    name: 'action',
+                                    className: 'text-center'
                                 }
-                                Swal.fire({
-                                    title: 'Sukses',
-                                    text: response.message,
-                                    icon: 'success'
-                                });
+                            ],
+                            language: {
+                                processing: "",
+                                zeroRecords: "Data tidak ditemukan",
+                                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                                paginate: {
+                                    previous: "←",
+                                    next: "→"
+                                }
+                            },
+                            initComplete: function() {
+                                $('#dtPembayaran_info').appendTo(
+                                    '#tableInfoPembayaran');
+                                $('#dtPembayaran_paginate').appendTo(
+                                    '#tablePaginationPembayaran');
                             }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                title: 'Gagal',
-                                text: 'Terjadi kesalahan server',
-                                icon: 'error'
-                            });
-                        },
-                        complete: function() {
-                            $('#btn-save-bukti-pembayaran').prop('disabled',
-                                    false)
-                                .text(
-                                    'Simpan');
-                        }
-                    });
-                })
-
-                function loadTemuan(id_tindak_lanjut) {
-                    $.ajax({
-                        url: `{{ url('tindak_lanjut/pembayaran') }}`,
-                        type: 'POST',
-                        data: {
-                            id_tindak_lanjut: id_tindak_lanjut,
-                            _token: $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(res) {
-                            const kerugianPajak = res[0].rincian_keuangan
-                            const kerugianDaerah = res[0].rincian_keuangan2
-                            const kerugianDesa = res[0].rincian_keuangan3
-                            const kerugianBlud = res[0].rincian_keuangan4
-                            const pajakDibayar = res[0].setor
-                            const daerahDibayar = res[0].setor2
-                            const desaDibayar = res[0].setor3
-                            const bludDibayar = res[0].setor4
-                            const sisaPajak = res[0].rincian_keuangan
-                            const sisaDaerah = res[0].rincian_keuangan2
-                            const sisaDesa = res[0].rincian_keuangan3
-                            const sisaBlud = res[0].rincian_keuangan4
-                            $('#nilai_rugi_pajak').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(kerugianPajak));
-                            $('#pajak_dibayar').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(pajakDibayar));
-                            $('#sisa_pajak').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(sisaPajak));
-                            $('#nilai_rugi_daerah').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(kerugianDaerah));
-                            $('#daerah_dibayar').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(daerahDibayar));
-                            $('#sisa_daerah').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(sisaDaerah));
-                            $('#nilai_rugi_desa').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(kerugianDesa));
-                            $('#desa_dibayar').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(desaDibayar));
-                            $('#sisa_desa').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(sisaDesa));
-                            $('#nilai_rugi_blud').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(kerugianBlud));
-                            $('#blud_dibayar').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(bludDibayar));
-                            $('#sisa_blud').text(
-                                new Intl.NumberFormat('id-ID', {
-                                    style: 'currency',
-                                    currency: 'IDR'
-                                }).format(sisaBlud));
-
-                            let jenis_pembayaran = $('#jenis_pembayaran').val()
-                            $('#jenis_pembayaran').change(function(e) {
-                                e.preventDefault();
-                                jenis_pembayaran = $('#jenis_pembayaran').val()
-                                if (jenis_pembayaran == 'pajak' && (parseInt(res[0]
-                                        .rincian_keuangan) <= 0) || (
-                                        jenis_pembayaran == 'daerah' && parseInt(
-                                            res[0].rincian_keuangan2) <= 0) || (
-                                        jenis_pembayaran == 'desa' && parseInt(res[0]
-                                            .rincian_keuangan3) <= 0) || (
-                                        jenis_pembayaran == 'blud' && parseInt(res[0]
-                                            .rincian_keuangan4) <= 0)) {
-                                    $('.nominal_pembayaran').addClass('hidden');
-                                    $('.bukti_pembayaran').addClass('hidden');
-                                    $('.keterangan_pembayaran').addClass('hidden');
-                                    $('#dinamisFormPembayaran').addClass('hidden');
-                                } else {
-                                    $('.nominal_pembayaran').removeClass('hidden');
-                                    $('.bukti_pembayaran').removeClass('hidden');
-                                    $('.keterangan_pembayaran').removeClass('hidden');
-                                    $('#dinamisFormPembayaran').removeClass('hidden');
-                                }
-                            });
-                        },
-                        error: function(xhr) {
-                            alert('Data kerugian gagal dimuat');
-                        }
-                    });
-                }
-
-                function loadKerugian(idTemuan) {
-                    $.ajax({
-                        url: `{{ url('temuan/kerugian') }}`,
-                        type: 'POST',
-                        data: {
-                            id_temuan: idTemuan,
-                            _token: $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(res) {
-                            isiKerugian(res);
-                            $('#btn-save-tindak-lanjut').prop('disabled', false);
-                        },
-                        error: function(xhr) {
-                            console.log(xhr.responseText);
-                            alert('Data kerugian gagal dimuat');
-                        }
-                    });
-                }
-
-                function isiKerugian(data) {
-                    setKerugian(
-                        '#labelPajak',
-                        '#rincianPajak',
-                        '#tl_besaran_kerugian',
-                        data.id_nilai_kerugian,
-                        data.besaran_kerugian,
-                        'Kerugian pajak tidak ditemukan'
-                    );
-                    setKerugian(
-                        '#labelDaerah',
-                        '#rincianDaerah',
-                        '#tl_besaran_kerugian2',
-                        data.id_nilai_kerugian2,
-                        data.besaran_kerugian2,
-                        'Kerugian daerah tidak ditemukan'
-                    );
-                    setKerugian(
-                        '#labelDesa',
-                        '#rincianDesa',
-                        '#tl_besaran_kerugian3',
-                        data.id_nilai_kerugian3,
-                        data.besaran_kerugian3,
-                        'Kerugian desa tidak ditemukan'
-                    );
-                    setKerugian(
-                        '#labelBlud',
-                        '#rincianBlud',
-                        '#tl_besaran_kerugian4',
-                        data.id_nilai_kerugian4,
-                        data.besaran_kerugian4,
-                        'Kerugian BLUD tidak ditemukan'
-                    );
-                }
-
-                function setKerugian(label, input, hidden, idNilai, besaran, pesan) {
-                    if (idNilai === null || idNilai == 0) {
-                        $(label).text(pesan);
-                        $(input).val(0).prop('readonly', true);
-                        $(hidden).val(0);
-
-                    } else {
-
-                        $(label).html(
-                            'Besaran Kerugian : <span class="font-semibold text-error-500">Rp ' +
-                            Number(besaran).toLocaleString('id-ID') +
-                            '</span>'
-                        );
-
-                        $(input).prop('readonly', false);
-                        $(hidden).val(besaran);
-
-                    }
+                        });
                 }
             });
+
+            $(document).on('click', '.btn-deletePembayaran', function() {
+                const id = $(this).data('id');
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Yakin',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: `{{ url('pembayaran') }}/${id}`,
+                            dataType: 'json',
+                            success: function(response) {
+                                $('#dtBuktiPembayaran').DataTable().ajax
+                                    .reload(
+                                        null,
+                                        false);
+                                Swal.fire({
+                                    title: 'Sukses',
+                                    text: response.message,
+                                    icon: 'success'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#formBuktiPembayaran').submit(function(e) {
+                e.preventDefault();
+                let id_tindak_lanjut = $('#id_tindak_lanjut').val();
+                const formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/saveBuktiPembayaran`,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#btn-save-bukti-pembayaran').prop('disabled',
+                            true).text(
+                            'Menyimpan...');
+                    },
+                    success: function(response) {
+                        if (response.status === false) {
+                            $.each(response.error, function(key, val) {
+                                $('#' + key + '_error').html(
+                                    val[0]);
+                            });
+                        } else {
+                            $('#formBuktiPembayaran')
+                                .find(':input')
+                                .not('#jenis_pembayaran, #id_tindak_lanjut')
+                                .each(function() {
+                                    switch (this.type) {
+                                        case 'checkbox':
+                                        case 'radio':
+                                            this.checked = false;
+                                            break;
+                                        default:
+                                            $(this).val('');
+                                    }
+                                });
+                            $('.err').text('');
+                            if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
+                                dtBuktiPembayaranTable.ajax
+                                    .url(
+                                        `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
+                                    )
+                                    .load();
+                            }
+                            Swal.fire({
+                                title: 'Sukses',
+                                text: response.message,
+                                icon: 'success'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan server',
+                            icon: 'error'
+                        });
+                    },
+                    complete: function() {
+                        $('#btn-save-bukti-pembayaran').prop('disabled',
+                                false)
+                            .text(
+                                'Simpan');
+                    }
+                });
+            })
+
+            function loadTemuan(id_tindak_lanjut) {
+                $.ajax({
+                    url: `{{ url('tindak_lanjut/pembayaran') }}`,
+                    type: 'POST',
+                    data: {
+                        id_tindak_lanjut: id_tindak_lanjut,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res) {
+                        const kerugianPajak = res[0].rincian_keuangan
+                        const kerugianDaerah = res[0].rincian_keuangan2
+                        const kerugianDesa = res[0].rincian_keuangan3
+                        const kerugianBlud = res[0].rincian_keuangan4
+                        const pajakDibayar = res[0].setor
+                        const daerahDibayar = res[0].setor2
+                        const desaDibayar = res[0].setor3
+                        const bludDibayar = res[0].setor4
+                        const sisaPajak = res[0].rincian_keuangan
+                        const sisaDaerah = res[0].rincian_keuangan2
+                        const sisaDesa = res[0].rincian_keuangan3
+                        const sisaBlud = res[0].rincian_keuangan4
+                        $('#nilai_rugi_pajak').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(kerugianPajak));
+                        $('#pajak_dibayar').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(pajakDibayar));
+                        $('#sisa_pajak').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(sisaPajak));
+                        $('#nilai_rugi_daerah').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(kerugianDaerah));
+                        $('#daerah_dibayar').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(daerahDibayar));
+                        $('#sisa_daerah').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(sisaDaerah));
+                        $('#nilai_rugi_desa').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(kerugianDesa));
+                        $('#desa_dibayar').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(desaDibayar));
+                        $('#sisa_desa').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(sisaDesa));
+                        $('#nilai_rugi_blud').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(kerugianBlud));
+                        $('#blud_dibayar').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(bludDibayar));
+                        $('#sisa_blud').text(
+                            new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(sisaBlud));
+
+                        let jenis_pembayaran = $('#jenis_pembayaran').val()
+                        $('#jenis_pembayaran').change(function(e) {
+                            e.preventDefault();
+                            jenis_pembayaran = $('#jenis_pembayaran').val()
+                            if (jenis_pembayaran == 'pajak' && (parseInt(res[0]
+                                    .rincian_keuangan) <= 0) || (
+                                    jenis_pembayaran == 'daerah' && parseInt(
+                                        res[0].rincian_keuangan2) <= 0) || (
+                                    jenis_pembayaran == 'desa' && parseInt(res[0]
+                                        .rincian_keuangan3) <= 0) || (
+                                    jenis_pembayaran == 'blud' && parseInt(res[0]
+                                        .rincian_keuangan4) <= 0)) {
+                                $('.nominal_pembayaran').addClass('hidden');
+                                $('.bukti_pembayaran').addClass('hidden');
+                                $('.keterangan_pembayaran').addClass('hidden');
+                                $('#dinamisFormPembayaran').addClass('hidden');
+                            } else {
+                                $('.nominal_pembayaran').removeClass('hidden');
+                                $('.bukti_pembayaran').removeClass('hidden');
+                                $('.keterangan_pembayaran').removeClass('hidden');
+                                $('#dinamisFormPembayaran').removeClass('hidden');
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        alert('Data kerugian gagal dimuat');
+                    }
+                });
+            }
+
+            function loadKerugian(idTemuan) {
+                $.ajax({
+                    url: `{{ url('temuan/kerugian') }}`,
+                    type: 'POST',
+                    data: {
+                        id_temuan: idTemuan,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res) {
+                        isiKerugian(res);
+                        $('#btn-save-tindak-lanjut').prop('disabled', false);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                        alert('Data kerugian gagal dimuat');
+                    }
+                });
+            }
+
+            function isiKerugian(data) {
+                setKerugian(
+                    '#labelPajak',
+                    '#rincianPajak',
+                    '#tl_besaran_kerugian',
+                    data.id_nilai_kerugian,
+                    data.besaran_kerugian,
+                    'Kerugian pajak tidak ditemukan'
+                );
+                setKerugian(
+                    '#labelDaerah',
+                    '#rincianDaerah',
+                    '#tl_besaran_kerugian2',
+                    data.id_nilai_kerugian2,
+                    data.besaran_kerugian2,
+                    'Kerugian daerah tidak ditemukan'
+                );
+                setKerugian(
+                    '#labelDesa',
+                    '#rincianDesa',
+                    '#tl_besaran_kerugian3',
+                    data.id_nilai_kerugian3,
+                    data.besaran_kerugian3,
+                    'Kerugian desa tidak ditemukan'
+                );
+                setKerugian(
+                    '#labelBlud',
+                    '#rincianBlud',
+                    '#tl_besaran_kerugian4',
+                    data.id_nilai_kerugian4,
+                    data.besaran_kerugian4,
+                    'Kerugian BLUD tidak ditemukan'
+                );
+            }
+
+            function setKerugian(label, input, hidden, idNilai, besaran, pesan) {
+                if (idNilai === null || idNilai == 0) {
+                    $(label).text(pesan);
+                    $(input).val(0).prop('readonly', true);
+                    $(hidden).val(0);
+
+                } else {
+
+                    $(label).html(
+                        'Besaran Kerugian : <span class="font-semibold text-error-500">Rp ' +
+                        Number(besaran).toLocaleString('id-ID') +
+                        '</span>'
+                    );
+
+                    $(input).prop('readonly', false);
+                    $(hidden).val(besaran);
+
+                }
+            }
         });
     </script>
 @endpush
