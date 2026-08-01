@@ -710,6 +710,8 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(res) {
+                        console.log(res[0].rincian_keuangan3 - res[0].setor3);
+
                         const kerugianPajak = res[0].rincian_keuangan
                         const kerugianDaerah = res[0].rincian_keuangan2
                         const kerugianDesa = res[0].rincian_keuangan3
@@ -718,10 +720,10 @@
                         const daerahDibayar = res[0].setor2
                         const desaDibayar = res[0].setor3
                         const bludDibayar = res[0].setor4
-                        const sisaPajak = res[0].rincian_keuangan
-                        const sisaDaerah = res[0].rincian_keuangan2
-                        const sisaDesa = res[0].rincian_keuangan3
-                        const sisaBlud = res[0].rincian_keuangan4
+                        const sisaPajak = res[0].rincian_keuangan - res[0].setor
+                        const sisaDaerah = res[0].rincian_keuangan2 - res[0].setor2
+                        const sisaDesa = res[0].rincian_keuangan3 - res[0].setor3
+                        const sisaBlud = res[0].rincian_keuangan4 - res[0].setor4
                         $('#nilai_rugi_pajak').text(
                             new Intl.NumberFormat('id-ID', {
                                 style: 'currency',

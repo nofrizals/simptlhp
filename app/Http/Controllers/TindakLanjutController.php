@@ -362,23 +362,6 @@ class TindakLanjutController extends Controller
             ->make(true);
     }
 
-    // public function destroyPembayaran($id): JsonResponse
-    // {
-    //     $pembayaran = Pembayaran::findOrFail($id);
-    //     if (
-    //         $pembayaran->file_bukti &&
-    //         Storage::disk('public')->exists($pembayaran->file_bukti)
-    //     ) {
-    //         Storage::disk('public')->delete($pembayaran->file_bukti);
-    //     }
-
-    //     $pembayaran->delete();
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Data berhasil dihapus.'
-    //     ]);
-    // }
-
     public function destroyPembayaran($id): JsonResponse
     {
         DB::beginTransaction();
