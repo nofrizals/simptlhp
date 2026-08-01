@@ -273,6 +273,23 @@ class TindakLanjutController extends Controller
             $data['created_by'] = session('id_pegawai');
             $data['created_at']         = now();
             $buktiPembayaran = Pembayaran::create($data);
+
+            $mappingSetor = [
+                'pajak'  => 'setor',
+                'daerah' => 'setor2',
+                'desa'   => 'setor3',
+                'blud'   => 'setor4',
+            ];
+            if (isset($mappingSetor[$validated['jenis_pembayaran']])) {
+                $fieldSetor = $mappingSetor[$validated['jenis_pembayaran']];
+                $total = Pembayaran::where('id_tindak_lanjut', $id_tindak_lanjut)
+                    ->where('jenis', $validated['jenis_pembayaran'])
+                    ->sum('nominal');
+                Tindaklanjut::where('id_tindak_lanjut', $id_tindak_lanjut)
+                    ->update([
+                        $fieldSetor => $total
+                    ]);
+            }
             DB::commit();
             return response()->json([
                 'status' => true,
