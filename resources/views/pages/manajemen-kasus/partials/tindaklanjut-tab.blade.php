@@ -583,7 +583,7 @@
                         <div id="dinamisFormPembayaran"
                             class="mt-8 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 hidden">
                             {{-- Loading --}}
-                            <div id="tableLoadingTindakLanjut"
+                            <div id="tableLoadingPembayaran"
                                 class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
                                 <div class="flex flex-col items-center gap-2">
                                     <div
@@ -631,6 +631,12 @@
                                     </thead>
                                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
                                 </table>
+                            </div>
+                            {{-- FOOTER --}}
+                            <div
+                                class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
+                                <div id="tableInfoPembayaran" class="text-sm text-gray-500"></div>
+                                <div id="tablePaginationPembayaran"></div>
                             </div>
                         </div>
                     </div>

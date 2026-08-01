@@ -596,9 +596,8 @@
                                 }
                             },
                             initComplete: function() {
-                                $('#dtPembayaran_info').appendTo(
-                                    '#tableInfoPembayaran');
-                                $('#dtPembayaran_paginate').appendTo(
+                                $('#dtBuktiPembayaran_info').appendTo('#tableInfoPembayaran');
+                                $('#dtBuktiPembayaran_paginate').appendTo(
                                     '#tablePaginationPembayaran');
                             }
                         });
