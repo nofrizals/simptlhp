@@ -231,10 +231,38 @@ class TindakLanjutController extends Controller
         ]);
     }
 
-    public function pembayaran(Request $request)
+    public function ajaxSummary(Request $request)
     {
-        $data = Tindaklanjut::with('rekomendasi.temuan')->where('id_rekomendasi', $request->id_tindak_lanjut)->get();
-        return response()->json($data);
+        $data = Tindaklanjut::with('rekomendasi.temuan')
+            ->where('id_tindak_lanjut', $request->id_tindak_lanjut)
+            ->first();
+        if (!$data) {
+            return response()->json([
+                'message' => 'Data tindak lanjut tidak ditemukan'
+            ], 404);
+        }
+        return response()->json([
+            'pajak' => [
+                'rekomendasi' => (float) $data->rincian_keuangan,
+                'dibayar'     => (float) $data->setor,
+                'sisa'        => (float) $data->rincian_keuangan - (float) $data->setor,
+            ],
+            'daerah' => [
+                'rekomendasi' => (float) $data->rincian_keuangan2,
+                'dibayar'     => (float) $data->setor2,
+                'sisa'        => (float) $data->rincian_keuangan2 - (float) $data->setor2,
+            ],
+            'desa' => [
+                'rekomendasi' => (float) $data->rincian_keuangan3,
+                'dibayar'     => (float) $data->setor3,
+                'sisa'        => (float) $data->rincian_keuangan3 - (float) $data->setor3,
+            ],
+            'blud' => [
+                'rekomendasi' => (float) $data->rincian_keuangan4,
+                'dibayar'     => (float) $data->setor4,
+                'sisa'        => (float) $data->rincian_keuangan4 - (float) $data->setor4,
+            ],
+        ]);
     }
 
     public function saveBuktiPembayaran(Request $request, $id_tindak_lanjut)
@@ -367,34 +395,26 @@ class TindakLanjutController extends Controller
         DB::beginTransaction();
 
         try {
-
             $pembayaran = Pembayaran::findOrFail($id);
-
             $idTindakLanjut = $pembayaran->id_tindak_lanjut;
             $jenis = $pembayaran->jenis;
             $file = $pembayaran->file_bukti;
 
-            // Hapus data pembayaran
             $pembayaran->delete();
-
-            // Hitung ulang total setoran
             $this->updateSetor($idTindakLanjut, $jenis);
 
             DB::commit();
-
-            // Hapus file setelah transaksi berhasil
             if ($file && Storage::disk('public')->exists($file)) {
                 Storage::disk('public')->delete($file);
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Data berhasil dihapus.'
+                'message' => 'Data berhasil dihapus.',
+                'id_tindak_lanjut' => $idTindakLanjut
             ]);
         } catch (\Throwable $e) {
-
             DB::rollBack();
-
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()

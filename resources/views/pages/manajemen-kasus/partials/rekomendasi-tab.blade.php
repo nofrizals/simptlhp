@@ -518,10 +518,9 @@
             $(document).on('click', '.pembayaran', function() {
                 $('#containerTable').addClass('hidden');
                 $('#pembayaranTable').removeClass('hidden');
-                let id_tindak_lanjut = $('#idRekomendasi').val();
-                loadTemuan(id_tindak_lanjut);
-                id_tindak_lanjut = $(this).data('id');
+                let id_tindak_lanjut = $(this).data('id');
                 $('#id_tindak_lanjut').val(id_tindak_lanjut);
+                loadTemuan(id_tindak_lanjut);
 
                 if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
                     dtBuktiPembayaranTable.ajax.url(
@@ -623,6 +622,7 @@
                                     .reload(
                                         null,
                                         false);
+                                loadTemuan(response.id_tindak_lanjut);
                                 Swal.fire({
                                     title: 'Sukses',
                                     text: response.message,
@@ -678,6 +678,7 @@
                                     )
                                     .load();
                             }
+                            loadTemuan(id_tindak_lanjut);
                             Swal.fire({
                                 title: 'Sukses',
                                 text: response.message,
@@ -703,114 +704,82 @@
 
             function loadTemuan(id_tindak_lanjut) {
                 $.ajax({
-                    url: `{{ url('tindak_lanjut/pembayaran') }}`,
+                    url: `{{ url('tindak_lanjut/ajaxSummary') }}`,
                     type: 'POST',
                     data: {
                         id_tindak_lanjut: id_tindak_lanjut,
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(res) {
-                        console.log(res[0].rincian_keuangan3 - res[0].setor3);
-
-                        const kerugianPajak = res[0].rincian_keuangan
-                        const kerugianDaerah = res[0].rincian_keuangan2
-                        const kerugianDesa = res[0].rincian_keuangan3
-                        const kerugianBlud = res[0].rincian_keuangan4
-                        const pajakDibayar = res[0].setor
-                        const daerahDibayar = res[0].setor2
-                        const desaDibayar = res[0].setor3
-                        const bludDibayar = res[0].setor4
-                        const sisaPajak = res[0].rincian_keuangan - res[0].setor
-                        const sisaDaerah = res[0].rincian_keuangan2 - res[0].setor2
-                        const sisaDesa = res[0].rincian_keuangan3 - res[0].setor3
-                        const sisaBlud = res[0].rincian_keuangan4 - res[0].setor4
-                        $('#nilai_rugi_pajak').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(kerugianPajak));
-                        $('#pajak_dibayar').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(pajakDibayar));
-                        $('#sisa_pajak').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(sisaPajak));
-                        $('#nilai_rugi_daerah').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(kerugianDaerah));
-                        $('#daerah_dibayar').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(daerahDibayar));
-                        $('#sisa_daerah').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(sisaDaerah));
-                        $('#nilai_rugi_desa').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(kerugianDesa));
-                        $('#desa_dibayar').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(desaDibayar));
-                        $('#sisa_desa').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(sisaDesa));
-                        $('#nilai_rugi_blud').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(kerugianBlud));
-                        $('#blud_dibayar').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(bludDibayar));
-                        $('#sisa_blud').text(
-                            new Intl.NumberFormat('id-ID', {
-                                style: 'currency',
-                                currency: 'IDR'
-                            }).format(sisaBlud));
-
-                        let jenis_pembayaran = $('#jenis_pembayaran').val()
-                        $('#jenis_pembayaran').change(function(e) {
-                            e.preventDefault();
-                            jenis_pembayaran = $('#jenis_pembayaran').val()
-                            if (jenis_pembayaran == 'pajak' && (parseInt(res[0]
-                                    .rincian_keuangan) <= 0) || (
-                                    jenis_pembayaran == 'daerah' && parseInt(
-                                        res[0].rincian_keuangan2) <= 0) || (
-                                    jenis_pembayaran == 'desa' && parseInt(res[0]
-                                        .rincian_keuangan3) <= 0) || (
-                                    jenis_pembayaran == 'blud' && parseInt(res[0]
-                                        .rincian_keuangan4) <= 0)) {
-                                $('.nominal_pembayaran').addClass('hidden');
-                                $('.bukti_pembayaran').addClass('hidden');
-                                $('.keterangan_pembayaran').addClass('hidden');
-                                $('#dinamisFormPembayaran').addClass('hidden');
-                            } else {
-                                $('.nominal_pembayaran').removeClass('hidden');
-                                $('.bukti_pembayaran').removeClass('hidden');
-                                $('.keterangan_pembayaran').removeClass('hidden');
-                                $('#dinamisFormPembayaran').removeClass('hidden');
-                            }
+                        updateSummaryCard(res);
+                        cekFormPembayaran(res);
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Data kerugian gagal dimuat',
+                            icon: 'error'
                         });
                     },
-                    error: function(xhr) {
-                        alert('Data kerugian gagal dimuat');
+                });
+            }
+
+            function updateSummaryCard(res) {
+                $('#nilai_rugi_pajak')
+                    .text(formatRupiah(res.pajak.rekomendasi));
+                $('#pajak_dibayar')
+                    .text(formatRupiah(res.pajak.dibayar));
+                $('#sisa_pajak')
+                    .text(formatRupiah(res.pajak.sisa));
+
+                $('#nilai_rugi_daerah')
+                    .text(formatRupiah(res.daerah.rekomendasi));
+                $('#daerah_dibayar')
+                    .text(formatRupiah(res.daerah.dibayar));
+                $('#sisa_daerah')
+                    .text(formatRupiah(res.daerah.sisa));
+
+                $('#nilai_rugi_desa')
+                    .text(formatRupiah(res.desa.rekomendasi));
+                $('#desa_dibayar')
+                    .text(formatRupiah(res.desa.dibayar));
+                $('#sisa_desa')
+                    .text(formatRupiah(res.desa.sisa));
+
+                $('#nilai_rugi_blud')
+                    .text(formatRupiah(res.blud.rekomendasi));
+                $('#blud_dibayar')
+                    .text(formatRupiah(res.blud.dibayar));
+                $('#sisa_blud')
+                    .text(formatRupiah(res.blud.sisa));
+            }
+
+            function formatRupiah(value) {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR'
+                }).format(value ?? 0);
+            }
+
+            function cekFormPembayaran(res) {
+                $('#jenis_pembayaran').off('change').on('change', function(e) {
+                    let jenis_pembayaran = $(this).val();
+                    let kosong =
+                        (jenis_pembayaran == 'pajak' && parseInt(res.pajak.rekomendasi) <= 0) ||
+                        (jenis_pembayaran == 'daerah' && parseInt(res.daerah.rekomendasi) <= 0) ||
+                        (jenis_pembayaran == 'desa' && parseInt(res.desa.rekomendasi) <= 0) ||
+                        (jenis_pembayaran == 'blud' && parseInt(res.blud.rekomendasi) <= 0);
+
+                    if (kosong) {
+                        $('.nominal_pembayaran').addClass('hidden');
+                        $('.bukti_pembayaran').addClass('hidden');
+                        $('.keterangan_pembayaran').addClass('hidden');
+                        $('#dinamisFormPembayaran').addClass('hidden');
+                    } else {
+                        $('.nominal_pembayaran').removeClass('hidden');
+                        $('.bukti_pembayaran').removeClass('hidden');
+                        $('.keterangan_pembayaran').removeClass('hidden');
+                        $('#dinamisFormPembayaran').removeClass('hidden');
                     }
                 });
             }
@@ -828,7 +797,6 @@
                         $('#btn-save-tindak-lanjut').prop('disabled', false);
                     },
                     error: function(xhr) {
-                        console.log(xhr.responseText);
                         alert('Data kerugian gagal dimuat');
                     }
                 });

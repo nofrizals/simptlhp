@@ -115,7 +115,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('tindak_lanjut/{tindaklanjut}', [TindakLanjutController::class, 'destroy'])->name('tindak_lanjut.destroy');
 
     Route::post('tindak_lanjut/cek', [TindakLanjutController::class, 'cekTindakLanjut']);
-    Route::post('tindak_lanjut/pembayaran', [TindakLanjutController::class, 'pembayaran']);
+    Route::post('tindak_lanjut/ajaxSummary', [TindakLanjutController::class, 'ajaxSummary']);
     Route::post('daftar-kasus/{id_tindak_lanjut}/saveBuktiPembayaran', [TindakLanjutController::class, 'saveBuktiPembayaran']);
     Route::post('daftar-kasus/{id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran', [TindakLanjutController::class, 'ajaxDataPembayaran'])->name('tindak_lanjut.ajaxTindakLanjut');
     Route::delete('pembayaran/{id}', [TindakLanjutController::class, 'destroyPembayaran'])->name('tindak_lanjut.destroyPembayaran');
