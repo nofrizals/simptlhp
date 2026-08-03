@@ -474,6 +474,13 @@
                     success: function(response) {
                         $('#tindak_lanjut_id').val(response.id);
                         $('#tindak_lanjut').val(response.tindak_lanjut);
+                        $('#tgl_tindak_lanjut').val(response.tgl_tindak_lanjut);
+                        $('#id_status').val(response.id_status).change();
+                        $('#keterangan').val(response.keterangan);
+                        $('#rincianPajak').val(response.rincian_keuangan);
+                        $('#rincianDaerah').val(response.rincian_keuangan2);
+                        $('#rincianDesa').val(response.rincian_keuangan3);
+                        $('#rincianBlud').val(response.rincian_keuangan4);
                     }
                 });
             });

@@ -71,7 +71,7 @@ class TindakLanjutController extends Controller
                     : '<span class="inline-flex items-center rounded-full border border-red-200 bg-red-100 px-3 py-1 text-xs font-medium text-red-700">Tidak Aktif</span>';
 
                 if ($value->edited_by) {
-                    $log = 'Diedit oleh <strong>' . e($value->edited_by) . '</strong><br>'
+                    $log = 'Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
                         . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
                 } else {
                     $log = 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
@@ -184,15 +184,15 @@ class TindakLanjutController extends Controller
     public function edit(Tindaklanjut $tindaklanjut): JsonResponse
     {
         return response()->json([
-            'id'                 => $tindaklanjut->id_tindak_lanjut,
-            'tgl_tindak_lanjut'      => $tindaklanjut->tgl_tindak_lanjut,
-            'id_status'      => $tindaklanjut->id_status,
-            'tindak_lanjut'      => $tindaklanjut->tindak_lanjut,
-            'keterangan'      => $tindaklanjut->keterangan,
-            'setor'     => $tindaklanjut->setor,
-            'setor2'     => $tindaklanjut->setor2,
-            'setor3'     => $tindaklanjut->setor3,
-            'setor4'     => $tindaklanjut->setor4,
+            'id'                    => $tindaklanjut->id_tindak_lanjut,
+            'tgl_tindak_lanjut'     => $tindaklanjut->tgl_tindak_lanjut,
+            'id_status'             => $tindaklanjut->id_status,
+            'tindak_lanjut'         => $tindaklanjut->tindak_lanjut,
+            'keterangan'            => $tindaklanjut->keterangan,
+            'rincian_keuangan'      => $tindaklanjut->rincian_keuangan,
+            'rincian_keuangan2'     => $tindaklanjut->rincian_keuangan2,
+            'rincian_keuangan3'     => $tindaklanjut->rincian_keuangan3,
+            'rincian_keuangan4'     => $tindaklanjut->rincian_keuangan4,
         ]);
     }
 
