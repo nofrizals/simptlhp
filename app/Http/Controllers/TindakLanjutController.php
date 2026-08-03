@@ -198,6 +198,12 @@ class TindakLanjutController extends Controller
 
     public function destroy(Tindaklanjut $tindaklanjut): JsonResponse
     {
+        if ($tindaklanjut->pembayarans()->exists()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak dapat dihapus karena masih memiliki data pembayaran.'
+            ], 422);
+        }
         $tindaklanjut->delete();
         return response()->json([
             'status' => true,

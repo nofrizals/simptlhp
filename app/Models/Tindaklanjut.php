@@ -31,4 +31,9 @@ class Tindaklanjut extends Model
     {
         return $this->belongsTo(PegawaiSimak::class, 'edited_by', 'id_pegawai');
     }
+
+    public function pembayarans()
+    {
+        return $this->hasMany(Pembayaran::class, 'id_tindak_lanjut', 'id_tindak_lanjut')->whereNull('deleted_by');
+    }
 }

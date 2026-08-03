@@ -514,6 +514,19 @@
                                     .prop('disabled', false)
                                     .removeClass(
                                         'opacity-50 cursor-not-allowed');
+                            },
+                            error: function(xhr) {
+                                let message =
+                                    "Terjadi kesalahan pada server.";
+                                if (xhr.responseJSON && xhr.responseJSON
+                                    .message) {
+                                    message = xhr.responseJSON.message;
+                                }
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: message,
+                                    icon: "error"
+                                });
                             }
                         });
                     }
