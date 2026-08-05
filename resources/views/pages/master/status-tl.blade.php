@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table id="dataTable" class="min-w-full text-sm">
+                    <table id="dataTable" class="min-w-full text-sm dt-table">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
