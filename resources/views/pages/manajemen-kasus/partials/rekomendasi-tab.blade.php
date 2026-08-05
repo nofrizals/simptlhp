@@ -354,9 +354,11 @@
                 const pembayaranHidden = $('#pembayaranTable').hasClass('hidden');
                 const fileUploadHidden = $('#fileUpload').hasClass('hidden');
                 if (containerHidden && !pembayaranHidden) {
+                    $('#dtTindakLanjut').DataTable().ajax.reload(null, true);
                     $('#containerTable').removeClass('hidden');
                     $('#pembayaranTable').addClass('hidden');
                 } else if (containerHidden && !fileUploadHidden) {
+                    $('#dtTindakLanjut').DataTable().ajax.reload(null, true);
                     $('#containerTable').removeClass('hidden');
                     $('#fileUpload').addClass('hidden');
                     $('#tableUploadFile').addClass('hidden');
