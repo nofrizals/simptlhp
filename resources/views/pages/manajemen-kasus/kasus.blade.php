@@ -121,7 +121,7 @@
                                                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                                 Nama Obrik <span class="text-red-400">*</span>
                                             </label>
-                                            <select name="kode_unor" id="kode_unor"
+                                            <select name="kode_unor" id="kode_unor" data-placeholder="Pilih OPD"
                                                 class="opd h-11 w-full rounded-lg border border-gray-300 text-sm">
                                                 <option value="" disabled selected
                                                     class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">Pilih OPD
@@ -140,16 +140,16 @@
                                                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                                 Ketua Tim <span class="text-red-400">*</span>
                                             </label>
-                                            <select name="nip_ketua" id="nip_ketua"
-                                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                            <select name="nip_ketua" id="nip_ketua" data-placeholder="Pilih Ketua Tim"
+                                                class="opd h-11 w-full rounded-lg border border-gray-300 text-sm">
                                                 <option value="" selected disabled
                                                     class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                    Pilih ketua tim
                                                 </option>
                                                 @foreach ($ketua_tims as $ketua_tim)
-                                                    <option value="{{ $ketua_tim->nip_ketua }}"
+                                                    <option value="{{ $ketua_tim->nip_baru }}"
                                                         class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                        {{ $ketua_tim->name }} - {{ $ketua_tim->ketua->nama_pegawai }}
+                                                        {{ ucwords(strtolower($ketua_tim->nama_pegawai)) }} -
+                                                        {{ $ketua_tim->nip_baru }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -432,10 +432,11 @@
                         if ($(this).hasClass('select2-hidden-accessible')) {
                             return;
                         }
+
                         $(this).select2({
                             dropdownParent: $('#modalKasus'),
                             width: '100%',
-                            placeholder: 'Pilih OPD',
+                            placeholder: $(this).data('placeholder'),
                             allowClear: true
                         });
                     });
@@ -592,7 +593,7 @@
                             $('#tanggal_lhp').val(response.tanggal_lhp);
                             initSelect2();
                             $('#kode_unor').val(response.kode_unor).trigger('change');
-                            $('#nip_ketua').val(response.nip_ketua);
+                            $('#nip_ketua').val(response.nip_ketua).trigger('change');
                         },
                         error: function(xhr) {
                             Swal.fire({
