@@ -13,10 +13,12 @@
                         </h3>
                         <p class="text-sm text-gray-500">Kelola tindak lanjut untuk rekomendasi terpilih</p>
                     </div>
-                    <button type="button" id="btn-add-tindak-lanjut"
-                        class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
-                        + Tambah Tindak Lanjut
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-add-tindak-lanjut"
+                            class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                            + Tambah Tindak Lanjut
+                        </button>
+                    </div>
                 </div>
                 {{-- INFO KASUS --}}
                 <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800">
@@ -637,6 +639,110 @@
                                 class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
                                 <div id="tableInfoPembayaran" class="text-sm text-gray-500"></div>
                                 <div id="tablePaginationPembayaran"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- File Tindak Lanjut --}}
+    <div id="fileUpload" class="hidden">
+        <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+            <div class="space-y-6">
+                <div
+                    class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900 p-6">
+                    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div class="px-5 py-4 sm:px-6 sm:py-5">
+                            <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                                Upload File
+                            </h3>
+                        </div>
+                        <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
+                            <form id="formUploadFile" enctype="multipart/form-data">
+                                @csrf
+                                <div class="dropzone hover:border-brand-500! dark:hover:border-brand-500! rounded-xl border border-dashed! border-gray-300! bg-gray-50 p-7 lg:p-10 dark:border-gray-700! dark:bg-gray-900"
+                                    id="demo-upload">
+                                    <div class="fallback">
+                                        <input name="file" type="file" multiple />
+                                    </div>
+                                    <div class="dz-message m-0!">
+                                        <div class="mb-[22px] flex justify-center">
+                                            <div
+                                                class="flex h-[68px] w-[68px] items-center justify-center rounded-full bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                                                <svg class="fill-current" width="29" height="28"
+                                                    viewBox="0 0 29 28" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M14.5019 3.91699C14.2852 3.91699 14.0899 4.00891 13.953 4.15589L8.57363 9.53186C8.28065 9.82466 8.2805 10.2995 8.5733 10.5925C8.8661 10.8855 9.34097 10.8857 9.63396 10.5929L13.7519 6.47752V18.667C13.7519 19.0812 14.0877 19.417 14.5019 19.417C14.9161 19.417 15.2519 19.0812 15.2519 18.667V6.48234L19.3653 10.5929C19.6583 10.8857 20.1332 10.8855 20.426 10.5925C20.7188 10.2995 20.7186 9.82463 20.4256 9.53184L15.0838 4.19378C14.9463 4.02488 14.7367 3.91699 14.5019 3.91699ZM5.91626 18.667C5.91626 18.2528 5.58047 17.917 5.16626 17.917C4.75205 17.917 4.41626 18.2528 4.41626 18.667V21.8337C4.41626 23.0763 5.42362 24.0837 6.66626 24.0837H22.3339C23.5766 24.0837 24.5839 23.0763 24.5839 21.8337V18.667C24.5839 18.2528 24.2482 17.917 23.8339 17.917C23.4197 17.917 23.0839 18.2528 23.0839 18.667V21.8337C23.0839 22.2479 22.7482 22.5837 22.3339 22.5837H6.66626C6.25205 22.5837 5.91626 22.2479 5.91626 21.8337V18.667Z"
+                                                        fill="" />
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        <h4 class="text-theme-xl mb-3 font-semibold text-gray-800 dark:text-white/90">
+                                            Unggah File
+                                        </h4>
+                                        <span
+                                            class="mx-auto mb-5 block w-full max-w-[290px] text-sm text-gray-700 dark:text-gray-400">
+                                            Seret file ke area ini atau klik <strong>"Pilih File"</strong> untuk
+                                            mengunggah
+                                            file dari perangkat Anda. Format yang didukung: PNG, JPG, JPEG, dan PDF.
+                                        </span>
+                                        <span class="text-theme-sm text-brand-500 font-medium underline">
+                                            Pilih File
+                                        </span>
+                                    </div>
+                                </div>
+                                <p class="err text-theme-xs text-error-500" id="file_error"></p>
+                                <button type="submit" id="btn-upload-file"
+                                    class="mt-5 mx-auto flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white hover:bg-brand-600">
+                                    Upload
+                                </button>
+                            </form>
+                            <div id="tableUploadFile"
+                                class="mt-8 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 hidden">
+                                {{-- Loading --}}
+                                <div id="tableLoadingUploadFile"
+                                    class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <div
+                                            class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                                        </div>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table id="dtUploadFile" class="min-w-full text-sm dt-table">
+                                        <thead class="bg-gray-50 dark:bg-gray-800">
+                                            <tr>
+                                                <th
+                                                    class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">
+                                                    No</th>
+                                                <th
+                                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                                    File
+                                                </th>
+                                                <th
+                                                    class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">
+                                                    Log
+                                                </th>
+                                                <th
+                                                    class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+                                    </table>
+                                </div>
+                                {{-- FOOTER --}}
+                                <div
+                                    class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
+                                    <div id="tableInfoUploadFile" class="text-sm text-gray-500"></div>
+                                    <div id="tablePaginationUploadFile"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

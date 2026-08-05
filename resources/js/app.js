@@ -45,11 +45,20 @@ flatpickr(".datepicker", {
   },
 });
 
-// Init Dropzone
 const dropzoneArea = document.querySelectorAll("#demo-upload");
-
+let myDropzone = null;
 if (dropzoneArea.length) {
-  let myDropzone = new Dropzone("#demo-upload", { url: "/file/post" });
+    Dropzone.autoDiscover = false;
+    window.myDropzone = new Dropzone("#demo-upload", {
+      url: "#",
+      paramName: "file",
+      uploadMultiple: true,
+      parallelUploads: 20,
+      maxFiles: 20,
+      acceptedFiles: ".jpg,.jpeg,.png,.pdf",
+      addRemoveLinks: true,
+      autoProcessQueue: false
+  });
 }
 
 // Document Loaded

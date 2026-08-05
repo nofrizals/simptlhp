@@ -339,9 +339,14 @@
             $('#btn-backToRekomendasi').click(function() {
                 const containerHidden = $('#containerTable').hasClass('hidden');
                 const pembayaranHidden = $('#pembayaranTable').hasClass('hidden');
+                const fileUploadHidden = $('#fileUpload').hasClass('hidden');
                 if (containerHidden && !pembayaranHidden) {
                     $('#containerTable').removeClass('hidden');
                     $('#pembayaranTable').addClass('hidden');
+                } else if (containerHidden && !fileUploadHidden) {
+                    $('#containerTable').removeClass('hidden');
+                    $('#fileUpload').addClass('hidden');
+                    $('#tableUploadFile').addClass('hidden');
                 } else {
                     showSection('sectionRekomendasi');
                     const idRekomendasi = $('#idRekomendasi').val();
@@ -876,6 +881,143 @@
 
                 }
             }
+
+            let id_tindak_lanjut = null;
+            $(document).on('click', '.fileTindakLanjut', function() {
+                $('#containerTable').addClass('hidden');
+                $('#fileUpload').removeClass('hidden');
+                $('#tableUploadFile').removeClass('hidden');
+                id_tindak_lanjut = $(this).data('id');
+
+                dtUploadFileTable = $('#dtUploadFile').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: false,
+                    scrollX: true,
+                    dom: 'rtip',
+                    searching: true,
+                    ordering: false,
+                    lengthChange: false,
+                    ajax: {
+                        type: 'POST',
+                        url: `{{ url('tindak-lanjut') }}/${id_tindak_lanjut}/pembayaran/ajaxUploadFile`
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false,
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'file',
+                            name: 'file',
+                            className: 'text-left'
+                        },
+                        {
+                            data: 'log',
+                            name: 'log',
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            className: 'text-center'
+                        }
+                    ],
+                    language: {
+                        processing: "",
+                        zeroRecords: "Data tidak ditemukan",
+                        info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                        paginate: {
+                            previous: "←",
+                            next: "→"
+                        }
+                    },
+                    initComplete: function() {
+                        $('#dtUploadFile_info').appendTo('#tableInfoUploadFile');
+                        $('#dtUploadFile_paginate').appendTo(
+                            '#tablePaginationUploadFile');
+                    }
+                });
+            })
+
+            $('#formUploadFile').submit(function(e) {
+                e.preventDefault();
+                const formData = new FormData();
+                myDropzone.getAcceptedFiles().forEach(function(file) {
+                    formData.append('file[]', file);
+                });
+
+                formData.append('_token', '{{ csrf_token() }}');
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('tindak-lanjut') }}/${id_tindak_lanjut}/uploadFile`,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#btn-upload-file').prop('disabled',
+                            true).text(
+                            'Menyimpan...');
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            myDropzone.removeAllFiles(true);
+
+                            Swal.fire({
+                                title: 'Sukses',
+                                text: response.message,
+                                icon: 'success'
+                            });
+                        }
+                        // }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan server',
+                            icon: 'error'
+                        });
+                    },
+                    complete: function() {
+                        $('#btn-upload-file').prop('disabled', false).text(
+                            'Upload');
+                    }
+                });
+            })
+
+            $(document).on('click', '.btn-deleteUploadFile', function() {
+                const id = $(this).data('id');
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Yakin',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: `{{ url('file-tindak-lanjut') }}/${id}`,
+                            dataType: 'json',
+                            success: function(response) {
+                                $('#dtUploadFile').DataTable().ajax
+                                    .reload(
+                                        null,
+                                        false);
+                                Swal.fire({
+                                    title: 'Sukses',
+                                    text: response.message,
+                                    icon: 'success'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 @endpush

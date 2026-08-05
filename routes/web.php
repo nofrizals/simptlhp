@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FileTindakLanjutController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KasusController;
@@ -119,6 +120,9 @@ Route::middleware('auth')->group(function () {
     Route::post('daftar-kasus/{id_tindak_lanjut}/saveBuktiPembayaran', [TindakLanjutController::class, 'saveBuktiPembayaran']);
     Route::post('daftar-kasus/{id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran', [TindakLanjutController::class, 'ajaxDataPembayaran'])->name('tindak_lanjut.ajaxTindakLanjut');
     Route::delete('pembayaran/{id}', [TindakLanjutController::class, 'destroyPembayaran'])->name('tindak_lanjut.destroyPembayaran');
+    Route::post('tindak-lanjut/{id_tindak_lanjut}/uploadFile', [FileTindakLanjutController::class, 'storeFile'])->name('tindak_lanjut.storeFile');
+    Route::post('tindak-lanjut/{id_tindak_lanjut}/pembayaran/ajaxUploadFile', [FileTindakLanjutController::class, 'ajaxUploadFile'])->name('tindak_lanjut.ajaxUploadFile');
+    Route::delete('file-tindak-lanjut/{id}', [FileTindakLanjutController::class, 'destroyFileTindakLanjut'])->name('tindak_lanjut.destroyFileTindakLanjut');
 
     // Manajemen Kasus -> Verifikasi SSR
     Route::get('verifikasi-ssr', [VerifikasiSsrController::class, 'index']);
