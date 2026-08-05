@@ -13,10 +13,23 @@
                         </h3>
                         <p class="text-sm text-gray-500">Kelola temuan untuk kasus terpilih</p>
                     </div>
-                    <button type="button" id="btn-add-temuan"
-                        class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
-                        + Tambah Temuan
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-add-temuan"
+                            class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                            + Tambah Temuan
+                        </button>
+                        <!-- Reload -->
+                        <button type="button" id="btnReloadTemuan"
+                            class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                            title="Reload Data">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4 4v6h6M20 20v-6h-6M20 9A8 8 0 006.34 5.34L4 10M4 15a8 8 0 0013.66 3.66L20 14" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 {{-- INFO KASUS --}}

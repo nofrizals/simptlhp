@@ -13,10 +13,23 @@
                         </h3>
                         <p class="text-sm text-gray-500">Kelola rekomendasi untuk temuan terpilih</p>
                     </div>
-                    <button type="button" id="btn-add-rekomendasi"
-                        class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
-                        + Tambah Rekomendasi
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-add-rekomendasi"
+                            class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                            + Tambah Rekomendasi
+                        </button>
+                        <!-- Reload -->
+                        <button type="button" id="btnReloadRekomendasi"
+                            class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                            title="Reload Data">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4 4v6h6M20 20v-6h-6M20 9A8 8 0 006.34 5.34L4 10M4 15a8 8 0 0013.66 3.66L20 14" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 {{-- INFO KASUS --}}
@@ -362,6 +375,16 @@
 
             });
 
+            $('#btnReloadTemuan').on('click', function() {
+                $('#dtTemuan').DataTable().ajax.reload(null, false);
+            });
+            $('#btnReloadRekomendasi').on('click', function() {
+                $('#dtRekomendasi').DataTable().ajax.reload(null, false);
+            });
+            $('#btnReloadTindakLanjut').on('click', function() {
+                $('#dtTindakLanjut').DataTable().ajax.reload(null, false);
+            });
+
             function showInfoSkeleton() {
                 const skeleton =
                     '<span class="inline-block h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></span>';
@@ -545,8 +568,10 @@
                 $('#pembayaranTable').removeClass('hidden');
                 let id_tindak_lanjut = $(this).data('id');
                 $('#id_tindak_lanjut').val(id_tindak_lanjut);
+                $('#btnReloadTindakLanjut').on('click', function() {
+                    $('#dtBuktiPembayaran').DataTable().ajax.reload(null, false);
+                });
                 loadTemuan(id_tindak_lanjut);
-
                 if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
                     dtBuktiPembayaranTable.ajax.url(
                         `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
@@ -888,7 +913,9 @@
                 $('#fileUpload').removeClass('hidden');
                 $('#tableUploadFile').removeClass('hidden');
                 id_tindak_lanjut = $(this).data('id');
-
+                $('#btnReloadTindakLanjut').on('click', function() {
+                    $('#dtUploadFile').DataTable().ajax.reload(null, false);
+                });
                 dtUploadFileTable = $('#dtUploadFile').DataTable({
                     processing: true,
                     serverSide: true,
