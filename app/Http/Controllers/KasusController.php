@@ -86,18 +86,39 @@ class KasusController extends Controller
     public function edit($id)
     {
         $data = Kasus::with('jenis_php', 'instansi')->findOrFail($id);
-        $spt = explode("\n", $data->spt);
+        $spt = preg_split('/\r\n|\r|\n/', $data->spt);
+        $tanggal = '';
+
+        if (!empty($spt[1])) {
+
+            $bulan = [
+                'Januari'   => '01',
+                'Februari'  => '02',
+                'Maret'     => '03',
+                'April'     => '04',
+                'Mei'       => '05',
+                'Juni'      => '06',
+                'Juli'      => '07',
+                'Agustus'   => '08',
+                'September' => '09',
+                'Oktober'   => '10',
+                'November'  => '11',
+                'Desember'  => '12',
+            ];
+            [$hari, $namaBulan, $tahun] = explode(' ', trim($spt[1]));
+            $tanggal = $tahun . '-' . $bulan[$namaBulan] . '-' . sprintf('%02d', $hari);
+        }
         return response()->json([
             'id'                => $id,
             'id_jenis_php'      => $data->id_jenis_php,
             'tahun_pemeriksaan' => $data->tahun_pemeriksaan,
             'nomor_spt'         => $spt[0] ?? '',
-            'tanggal_spt'       => $spt[1] ?? '',
+            'tanggal_spt'       => $tanggal,
             'spt_mulai'         => $data->spt_mulai,
             'spt_selesai'       => $data->spt_selesai,
             'nomor_lhp'         => $data->nomor_lhp,
-            'tanggal_lhp'       => Carbon::parse($data->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
-            'kode_unor'         => ucwords(strtolower($data->instansi->nama_instansi)),
+            'tanggal_lhp'       => $data->tanggal_lhp,
+            'kode_unor'         => $data->kode_unor,
             'nip_ketua'         => $data->nip_ketua,
         ]);
     }

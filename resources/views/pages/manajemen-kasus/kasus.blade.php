@@ -939,9 +939,11 @@
                     $('#id').val('');
                     $('#formKasus')[0].reset();
                     $('.err').empty();
-                    if ($('#kode_unor').hasClass('select2-hidden-accessible')) {
-                        $('#kode_unor').val(null).trigger('change');
-                    }
+                    $('#kode_unor, #nip_ketua').each(function() {
+                        if ($(this).hasClass('select2-hidden-accessible')) {
+                            $(this).val(null).trigger('change');
+                        }
+                    });
                 }
             });
         </script>
