@@ -138,50 +138,6 @@
                                         <div class="w-1/2">
                                             <label
                                                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                                Ketua Tim <span class="text-red-400">*</span>
-                                            </label>
-                                            <select name="nip_ketua" id="nip_ketua" data-placeholder="Pilih Ketua Tim"
-                                                class="opd h-11 w-full rounded-lg border border-gray-300 text-sm">
-                                                <option value="" selected disabled
-                                                    class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                </option>
-                                                @foreach ($ketua_tims as $ketua_tim)
-                                                    <option value="{{ $ketua_tim->nip_baru }}"
-                                                        class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                        {{ ucwords(strtolower($ketua_tim->nama_pegawai)) }} -
-                                                        {{ $ketua_tim->nip_baru }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <p class="err text-theme-xs text-error-500" id="nip_ketua_error"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="w-full px-2.5 xl:w-1/2">
-                                    <div class="flex gap-3">
-                                        <div class="w-1/2">
-                                            <label
-                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                                Jenis PHP <span class="text-red-400">*</span>
-                                            </label>
-                                            <select name="id_jenis_php" id="id_jenis_php"
-                                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                                <option value="" selected disabled
-                                                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                                                    Jenis PHP
-                                                </option>
-                                                @foreach ($jenisPhp as $item)
-                                                    <option value="{{ $item->id_jenis_php }}"
-                                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                                                        {{ $item->jenis_php }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <p class="err text-theme-xs text-error-500" id="id_jenis_php_error"></p>
-                                        </div>
-                                        <div class="w-1/2">
-                                            <label
-                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                                 Tahun Pemeriksaan <span class="text-red-400">*</span>
                                             </label>
                                             <select name="tahun_pemeriksaan" id="tahun_pemeriksaan"
@@ -198,6 +154,39 @@
                                                 @endfor
                                             </select>
                                             <p class="err text-theme-xs text-error-500" id="tahun_pemeriksaan_error"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full px-2.5 xl:w-1/2">
+                                    <div class="flex gap-3">
+                                        <div class="w-1/2">
+                                            <label
+                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Nomor LHP <span class="text-red-400">*</span>
+                                            </label>
+                                            <input type="text" name="nomor_lhp" id="nomor_lhp" placeholder="No. LHP"
+                                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                            <p class="err text-theme-xs text-error-500" id="nomor_lhp_error"></p>
+                                        </div>
+                                        <div class="w-1/2">
+                                            <label
+                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Ketua Tim <span class="text-red-400">*</span>
+                                            </label>
+                                            <select name="nip_ketua" id="nip_ketua" data-placeholder="Pilih Ketua Tim"
+                                                class="opd h-11 w-full rounded-lg border border-gray-300 text-sm">
+                                                <option value="" selected disabled
+                                                    class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                                </option>
+                                                @foreach ($ketua_tims as $ketua_tim)
+                                                    <option value="{{ $ketua_tim->nip_baru }}"
+                                                        class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                                        {{ ucwords(strtolower($ketua_tim->nama_pegawai)) }} -
+                                                        {{ $ketua_tim->nip_baru }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <p class="err text-theme-xs text-error-500" id="nip_ketua_error"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -259,11 +248,22 @@
                                         <div class="w-1/2">
                                             <label
                                                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                                Nomor LHP <span class="text-red-400">*</span>
+                                                Jenis PHP <span class="text-red-400">*</span>
                                             </label>
-                                            <input type="text" name="nomor_lhp" id="nomor_lhp" placeholder="No. LHP"
-                                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                            <p class="err text-theme-xs text-error-500" id="nomor_lhp_error"></p>
+                                            <select name="id_jenis_php" id="id_jenis_php"
+                                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                                <option value="" selected disabled
+                                                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                                    Jenis PHP
+                                                </option>
+                                                @foreach ($jenisPhp as $item)
+                                                    <option value="{{ $item->id_jenis_php }}"
+                                                        class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                                        {{ $item->jenis_php }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <p class="err text-theme-xs text-error-500" id="id_jenis_php_error"></p>
                                         </div>
                                         <div class="w-1/2">
                                             <label
@@ -457,6 +457,38 @@
                     resetFormTemuan();
                     closeModalTemuan();
                 });
+
+                function cekNomorLhp() {
+
+                    let kode_unor = $('#kode_unor').val();
+                    let tahun = $('#tahun_pemeriksaan').val();
+                    let nomor = $('#nomor_lhp').val();
+                    let id = $('#id').val();
+
+                    if (!kode_unor || !tahun || !nomor) return;
+
+                    $.post('/cek-nomor-lhp', {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        kode_unor: kode_unor,
+                        tahun_pemeriksaan: tahun,
+                        nomor_lhp: nomor,
+                        id: id
+                    }, function(res) {
+
+                        if (res.exists) {
+                            $('#nomor_lhp_error').html(
+                                'Nomor LHP sudah digunakan pada OPD dan tahun tersebut.'
+                            );
+                            $('#btn-save').prop('disabled', true);
+                        } else {
+                            $('#nomor_lhp_error').html('');
+                            $('#btn-save').prop('disabled', false);
+                        }
+
+                    });
+                }
+
+                $('#kode_unor,#tahun_pemeriksaan,#nomor_lhp').on('change blur', cekNomorLhp);
 
                 $('#formKasus').submit(function(e) {
                     e.preventDefault();

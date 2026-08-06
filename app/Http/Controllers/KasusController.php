@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
+use App\Models\Kasus;
 use App\Models\PegawaiSimak;
 use App\Models\StatusTl;
-use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Yajra\DataTables\Facades\DataTables;
 
 class KasusController extends Controller
 {
@@ -123,6 +124,21 @@ class KasusController extends Controller
         ]);
     }
 
+    public function cekNomorLhp(Request $request)
+    {
+        $query = Kasus::where('kode_unor', $request->kode_unor)
+            ->where('tahun_pemeriksaan', $request->tahun_pemeriksaan)
+            ->where('nomor_lhp', $request->nomor_lhp);
+
+        if ($request->id) {
+            $query->where('id_kasus', '!=', $request->id);
+        }
+
+        return response()->json([
+            'exists' => $query->exists()
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validator  = Validator::make($request->all(), [
@@ -134,8 +150,18 @@ class KasusController extends Controller
             'tanggal_spt'           => ['required'],
             'spt_mulai'             => ['required'],
             'spt_selesai'           => ['required'],
-            'nomor_lhp'             => ['required'],
-            'tanggal_lhp'           => ['required']
+            'tanggal_lhp'           => ['required'],
+            // 'nomor_lhp'             => ['required'],
+            'nomor_lhp' => [
+                'required',
+                Rule::unique('kis_kasus', 'nomor_lhp')
+                    ->where(function ($query) use ($request) {
+                        return $query
+                            ->where('kode_unor', $request->kode_unor)
+                            ->where('tahun_pemeriksaan', $request->tahun_pemeriksaan);
+                    })
+                    ->ignore($request->id, 'id_kasus')
+            ],
         ], [
             'kode_unor.required'            => 'Tidak boleh kosong',
             'nip_ketua.required'            => 'Tidak boleh kosong',
@@ -145,8 +171,9 @@ class KasusController extends Controller
             'tanggal_spt.required'          => 'Tanggal SPT wajib diisi',
             'spt_mulai.required'            => 'SPT mulai wajib diisi',
             'spt_selesai.required'          => 'SPT selesai wajib diisi',
+            'tanggal_lhp.required'          => 'Tanggal LHP wajib diisi',
             'nomor_lhp.required'            => 'Nomor LHP wajib diisi',
-            'tanggal_lhp.required'          => 'Tanggal LHP wajib diisi'
+            'nomor_lhp.unique'              => 'Nomor LHP untuk OPD dan tahun pemeriksaan tersebut sudah ada.',
         ]);
         if ($validator->fails()) {
             return response()->json([
