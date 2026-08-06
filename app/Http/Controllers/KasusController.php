@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Tim;
 use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
@@ -52,7 +51,9 @@ class KasusController extends Controller
                 return $value->nomor_lhp ?? '-';
             })
             ->addColumn('tanggal_lhp', function ($value) {
-                return Carbon::parse($value->tanggal_lhp ?? '-')->translatedFormat('d F Y');
+                return $value->tanggal_lhp
+                    ? Carbon::parse($value->tanggal_lhp)->translatedFormat('d F Y')
+                    : '-';
             })
             ->addColumn('kode_unor', function ($value) {
                 return ucwords(strtolower($value->instansi->nama_instansi)) ?? '-';
