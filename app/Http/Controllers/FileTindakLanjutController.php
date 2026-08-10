@@ -56,17 +56,21 @@ class FileTindakLanjutController extends Controller
     public function storeFile(Request $request, $id_tindak_lanjut): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|array',
+            'file' => 'required|array|max:20',
             'file.*' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
         ], [
             'file.required' => 'Gambar tidak boleh kosong',
+            'file.array' => 'Format file tidak valid.',
+            'file.*.file' => 'File yang diupload tidak valid.',
+            'file.*.mimes' => 'File harus berformat JPG, JPEG, PNG, atau PDF.',
+            'file.*.max' => 'Ukuran file maksimal 2 MB.',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'error'  => $validator->errors(),
-            ]);
+            ], 422);
         }
         DB::beginTransaction();
         $uploadedFiles = [];

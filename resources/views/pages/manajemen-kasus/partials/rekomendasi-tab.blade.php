@@ -167,7 +167,8 @@
                             <div class="flex gap-3">
                                 <div class="w-full">
                                     <label for="rekomendasi"
-                                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Rekomendasi</label>
+                                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Rekomendasi
+                                        <span class="text-red-400">*</span></label>
                                     <textarea
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                         name="rekomendasi" id="rekomendasi" rows="6"></textarea>
@@ -826,11 +827,13 @@
                         $('.nominal_pembayaran').addClass('hidden');
                         $('.bukti_pembayaran').addClass('hidden');
                         $('.keterangan_pembayaran').addClass('hidden');
+                        $('#btn-save-bukti-pembayaran').addClass('hidden');
                         $('#dinamisFormPembayaran').addClass('hidden');
                     } else {
                         $('.nominal_pembayaran').removeClass('hidden');
                         $('.bukti_pembayaran').removeClass('hidden');
                         $('.keterangan_pembayaran').removeClass('hidden');
+                        $('#btn-save-bukti-pembayaran').removeClass('hidden');
                         $('#dinamisFormPembayaran').removeClass('hidden');
                     }
                 });
@@ -973,8 +976,14 @@
 
             $('#formUploadFile').submit(function(e) {
                 e.preventDefault();
+                $('#file_error').text('');
+                const acceptedFiles = myDropzone.getAcceptedFiles();
+                if (acceptedFiles.length === 0) {
+                    $('#file_error').text('Gambar tidak boleh kosong.');
+                    return;
+                }
                 const formData = new FormData();
-                myDropzone.getAcceptedFiles().forEach(function(file) {
+                acceptedFiles.forEach(function(file) {
                     formData.append('file[]', file);
                 });
 
@@ -1000,13 +1009,42 @@
                                 text: response.message,
                                 icon: 'success'
                             });
+                        } else {
+                            let messages = [];
+                            if (response.errors) {
+                                Object.values(response.errors).forEach(function(errorMessages) {
+                                    errorMessages.forEach(function(message) {
+                                        messages.push(message);
+                                    });
+                                });
+                            }
+                            $('#file_error').html(
+                                messages.length ?
+                                messages.join('<br>') :
+                                'Upload gagal.'
+                            );
                         }
-                        // }
                     },
-                    error: function() {
+                    error: function(xhr) {
+                        if (xhr.status === 422 && xhr.responseJSON?.errors) {
+                            let messages = [];
+
+                            Object.values(xhr.responseJSON.errors).forEach(function(
+                                errorMessages) {
+                                errorMessages.forEach(function(message) {
+                                    messages.push(message);
+                                });
+                            });
+
+                            $('#file_error').html(messages.join('<br>'));
+
+                            return;
+                        }
+
                         Swal.fire({
                             title: 'Gagal',
-                            text: 'Terjadi kesalahan server',
+                            text: xhr.responseJSON?.message ??
+                                'Terjadi kesalahan server',
                             icon: 'error'
                         });
                     },

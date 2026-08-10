@@ -55,9 +55,28 @@ if (dropzoneArea.length) {
       uploadMultiple: true,
       parallelUploads: 20,
       maxFiles: 20,
+      maxFilesize: 2,
       acceptedFiles: ".jpg,.jpeg,.png,.pdf",
       addRemoveLinks: true,
-      autoProcessQueue: false
+      autoProcessQueue: false,
+      init: function() {
+          this.on("error", function(file, message) {
+              let errorMessage = message;
+              if (typeof message === 'object' && message.message) {
+                  errorMessage = message.message;
+              }
+              $('#file_error').text(errorMessage);
+          });
+          this.on("addedfile", function(file) {
+              $('#file_error').text('');
+          });
+          this.on("maxfilesexceeded", function(file) {
+              $('#file_error').text(
+                  'Maksimal 20 file yang dapat diunggah.'
+              );
+              this.removeFile(file);
+          });
+      }
   });
 }
 

@@ -566,7 +566,7 @@
                                 </select>
                                 <label
                                     class="nominal_pembayaran hidden m-3 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nominal
+                                    Nominal <span class="text-red-400">*</span>
                                 </label>
                                 <input type="number" name="nominal_pembayaran" id="nominal_pembayaran"
                                     placeholder="Besaran Kerugian"
@@ -574,21 +574,24 @@
                                 <p class="err text-theme-xs text-error-500" id="nominal_pembayaran_error"></p>
                                 <label
                                     class="bukti_pembayaran hidden m-3 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Bukti
+                                    Bukti <span class="text-red-400">*</span>
                                 </label>
+                                <small class="bukti_pembayaran hidden text-red-400">File yang didukung png,pdf,jpg, dan
+                                    jpeg dengan size
+                                    maksimal 2 MB</small>
                                 <input type="file" name="bukti_pembayaran" id="bukti_pembayaran"
                                     class="bukti_pembayaran hidden focus:border-ring-brand-300 shadow-theme-xs focus:file:ring-brand-300 h-11 w-full overflow-hidden rounded-lg border border-gray-300 bg-transparent text-sm text-gray-500 transition-colors file:mr-5 file:border-collapse file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-solid file:border-gray-200 file:bg-gray-50 file:py-3 file:pr-3 file:pl-3.5 file:text-sm file:text-gray-700 placeholder:text-gray-400 hover:file:bg-gray-100 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:text-white/90 dark:file:border-gray-800 dark:file:bg-white/[0.03] dark:file:text-gray-400 dark:placeholder:text-gray-400">
                                 <p class="err text-theme-xs text-error-500" id="bukti_pembayaran_error"></p>
                                 <label
                                     class="keterangan_pembayaran hidden m-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Keterangan
+                                    Keterangan <span class="text-red-400">*</span>
                                 </label>
                                 <textarea
                                     class="keterangan_pembayaran hidden dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                     name="keterangan_pembayaran" id="keterangan_pembayaran" rows="6"></textarea>
                                 <p class="err text-theme-xs text-error-500" id="keterangan_pembayaran_error"></p>
                                 <button type="submit" id="btn-save-bukti-pembayaran"
-                                    class="mt-4 flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white hover:bg-brand-600">
+                                    class="hidden mt-4 flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white hover:bg-brand-600">
                                     Simpan
                                 </button>
                             </div>
@@ -667,7 +670,7 @@
                     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                         <div class="px-5 py-4 sm:px-6 sm:py-5">
                             <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                                Upload File
+                                Upload File <span class="text-red-400">*</span>
                             </h3>
                         </div>
                         <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
@@ -676,7 +679,7 @@
                                 <div class="dropzone hover:border-brand-500! dark:hover:border-brand-500! rounded-xl border border-dashed! border-gray-300! bg-gray-50 p-7 lg:p-10 dark:border-gray-700! dark:bg-gray-900"
                                     id="demo-upload">
                                     <div class="fallback">
-                                        <input name="file" type="file" multiple />
+                                        <input name="file" id="file" type="file" multiple />
                                     </div>
                                     <div class="dz-message m-0!">
                                         <div class="mb-[22px] flex justify-center">

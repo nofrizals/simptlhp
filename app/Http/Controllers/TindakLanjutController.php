@@ -276,7 +276,7 @@ class TindakLanjutController extends Controller
         $validator = Validator::make($request->all(), [
             'jenis_pembayaran'                  => 'required',
             'nominal_pembayaran'                => 'required|numeric',
-            'bukti_pembayaran'                  => 'required|file|mimes:pdf|max:2048',
+            'bukti_pembayaran'                  => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'keterangan_pembayaran'             => 'required',
         ], [
             'jenis_pembayaran.required'         => 'Pilih jenis pembayaran',
