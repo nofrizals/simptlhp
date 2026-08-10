@@ -118,8 +118,8 @@ class KasusController extends Controller
             'spt_mulai'         => $data->spt_mulai,
             'spt_selesai'       => $data->spt_selesai,
             'nomor_lhp'         => $data->nomor_lhp,
-            'tanggal_lhp'       => $data->tanggal_lhp,
-            'kode_unor'         => $data->kode_unor,
+            'tanggal_lhp'       => Carbon::parse($data->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
+            'kode_unor'         => ucwords(strtolower($data->instansi->nama_instansi)),
             'nip_ketua'         => $data->nip_ketua,
         ]);
     }
