@@ -6,12 +6,14 @@ use App\Models\Pembayaran;
 use App\Models\Rekomendasi;
 use App\Models\Temuan;
 use App\Models\Tindaklanjut;
+use App\Models\VerifikasiSsr;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 class TindakLanjutController extends Controller
@@ -59,7 +61,7 @@ class TindakLanjutController extends Controller
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('status_tindak_lanjut', function (Tindaklanjut $value): string {
-                return e($value->status->status_tl) ?: '-';
+                return e($value->status?->status_tl) ?: '-';
             })
             ->addColumn('keterangan', function (Tindaklanjut $value): string {
                 return e($value->keterangan) ?: '-';
@@ -169,9 +171,19 @@ class TindakLanjutController extends Controller
             $temuan->update($validated);
             $message = 'Data berhasil diupdate';
         } else {
-            $validated['created_by'] = (string) session('id_pegawai');
-            $validated['created_at'] = now();
-            $temuan = Tindaklanjut::create($validated);
+            DB::transaction(function () use ($validated, &$temuan) {
+                $idStatus = $validated['id_status'];
+                if ((int) $validated['id_status'] === 1) {
+                    $validated['id_status'] = NULL;
+                }
+                $validated['created_by'] = (string) session('id_pegawai');
+                $validated['created_at'] = now();
+                $temuan = Tindaklanjut::create($validated);
+                $validated['label'] = Str::uuid();
+                $validated['id_status'] = $idStatus;
+                $validated['id_tindak_lanjut'] = $temuan->id_tindak_lanjut;
+                $temuan = VerifikasiSsr::create($validated);
+            });
             $message = 'Data berhasil ditambahkan';
         }
 

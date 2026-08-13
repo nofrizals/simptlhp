@@ -5,12 +5,12 @@
         class="flex items-center gap-2 pt-8 sidebar-header pb-7">
         <a href="{{ url('dashboard') }}">
             <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-                <img class="dark:hidden" src="./images/logo/logo.svg" alt="Logo" />
-                <img class="hidden dark:block" src="./images/logo/logo-dark.svg" alt="Logo" />
+                <img class="dark:hidden" src="{{ asset('images/logo/logo.svg') }}" alt="Logo" />
+                <img class="hidden dark:block" src="{{ asset('images/logo/logo-dark.svg') }}" alt="Logo" />
             </span>
 
-            <img class="logo-icon" :class="sidebarToggle ? 'lg:block' : 'hidden'" src="./images/logo/logo-icon.svg"
-                alt="Logo" />
+            <img class="logo-icon" :class="sidebarToggle ? 'lg:block' : 'hidden'"
+                src="{{ asset('images/logo/logo-icon.svg') }}" alt="Logo" />
         </a>
     </div>
     <!-- SIDEBAR HEADER -->
@@ -273,8 +273,14 @@
                                 </li>
                                 <li>
                                     <a href="{{ url('verifikasi-ssr') }}"
-                                        class="menu-dropdown-item group {{ request()->is('verifikasi-ssr') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Verifikasi SSR
+                                        class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('verifikasi-ssr') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                        <span>Verifikasi SSR</span>
+                                        @if ($countApprove > 0)
+                                            <span
+                                                class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+                                                {{ $countApprove }}
+                                            </span>
+                                        @endif
                                     </a>
                                 </li>
                             </ul>

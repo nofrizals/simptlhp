@@ -127,11 +127,12 @@ Route::middleware('auth')->group(function () {
 
     // Manajemen Kasus -> Verifikasi SSR
     Route::get('verifikasi-ssr', [VerifikasiSsrController::class, 'index']);
-    Route::get('verifikasi-ssr/{id}/edit', [VerifikasiSsrController::class, 'edit']);
-    Route::post('verifikasi-ssr', [VerifikasiSsrController::class, 'store']);
-    Route::delete('verifikasi-ssr/{kasus}', [VerifikasiSsrController::class, 'destroy']);
+    // Route::get('verifikasi-ssr/{id}/edit', [VerifikasiSsrController::class, 'edit']);
+    // Route::post('verifikasi-ssr', [VerifikasiSsrController::class, 'store']);
+    // Route::delete('verifikasi-ssr/{kasus}', [VerifikasiSsrController::class, 'destroy']);
     Route::post('ajax-data-verifikasi-ssr', [VerifikasiSsrController::class, 'ajaxDataVerifikasiSsr']);
-
+    Route::get('verifikasi-ssr/approve/{label}', [VerifikasiSsrController::class, 'approve']);
+    Route::get('verifikasi-ssr/approve/{label}/info', [VerifikasiSsrController::class, 'info']);
 
     //Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

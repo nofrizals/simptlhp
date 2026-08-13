@@ -91,11 +91,12 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             </div>
 
             <div class="relative items-center hidden w-full h-full lg:grid lg:w-1/2 overflow-hidden">
-                <img src="./images/bg-login-simptlhp.png" class="absolute inset-0 w-full h-full object-cover">
+                <img src="{{ asset('images/bg-login-simptlhp.png') }}"
+                    class="absolute inset-0 w-full h-full object-cover">
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div class="relative z-10 flex items-center justify-center">
                     <div class="flex flex-col items-center max-w-xs">
-                        <img src="./images/logo/logo-dark.svg" width="250" alt="Logo" />
+                        <img src="{{ asset('images/logo/logo-dark.svg') }}" width="250" alt="Logo" />
                         <p class="text-center text-white">
                             Sistem Informasi Manajemen Tindak Lanjut Hasil Pemeriksaan
                         </p>
