@@ -133,6 +133,7 @@ Route::middleware('auth')->group(function () {
     Route::post('ajax-data-verifikasi-ssr', [VerifikasiSsrController::class, 'ajaxDataVerifikasiSsr']);
     Route::get('verifikasi-ssr/approve/{label}', [VerifikasiSsrController::class, 'approve']);
     Route::get('verifikasi-ssr/approve/{label}/info', [VerifikasiSsrController::class, 'info']);
+    Route::post('verifikasi-ssr/kerugian', [VerifikasiSsrController::class, 'getTindakLanjutKerugian'])->name('verifikasi-ssr.kerugian');
 
     //Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

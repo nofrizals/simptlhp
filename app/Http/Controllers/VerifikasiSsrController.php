@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tindaklanjut;
-use Carbon\Carbon;
 use App\Models\VerifikasiSsr;
-use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class VerifikasiSsrController extends Controller
 {
@@ -17,7 +18,7 @@ class VerifikasiSsrController extends Controller
 
     public function ajaxDataVerifikasiSsr()
     {
-        $data = VerifikasiSsr::with('status')->orderBy('id', 'desc');
+        $data = VerifikasiSsr::with(['status', 'rekomendasi'])->orderBy('id', 'desc');
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('tgl_tindak_lanjut', function ($value) {
@@ -82,15 +83,16 @@ class VerifikasiSsrController extends Controller
 
     public function approve($label)
     {
+        $temuan = VerifikasiSsr::where('label', $label)->first();
         return view('pages.manajemen-kasus.form-approve-ssr', [
-            'label' => $label
+            'label' => $label,
+            'tindak_lanjut' => $temuan->id_tindak_lanjut
         ]);
     }
 
     public function info($label)
     {
         $data = VerifikasiSsr::with(['tindakLanjut', 'rekomendasi.temuan.kasus', 'status'])->where('label', $label)->firstOrFail();
-        // dd($data);
         return response()->json([
             'id'                => $data->id,
             'oleh'              => $data->tindakLanjut->created_by,
@@ -107,95 +109,25 @@ class VerifikasiSsrController extends Controller
         ]);
     }
 
-    // public function store(Request $request)
-    // {
-    //     $validator  = Validator::make($request->all(), [
-    //         'id_rekomendasi'    => ['required'],
-    //         'tgl_tindak_lanjut' => ['required'],
-    //         'tindak_lanjut'     => ['required'],
-    //         'file'              => ['required'],
-    //         'rincian_keuangan'  => ['required'],
-    //         'setor'             => ['required'],
-    //         'rincian_keuangan2' => ['required'],
-    //         'setor2'            => ['required'],
-    //         'rincian_keuangan3' => ['required'],
-    //         'setor3'            => ['required'],
-    //         'rincian_keuangan4' => ['required'],
-    //         'setor4'            => ['required'],
-    //         'id_status'         => ['required'],
-    //         'keterangan'        => ['required']
-    //     ], [
-    //         'id_rekomendasi.required'       => 'Jenis PHP wajib dipilih',
-    //         'tgl_tindak_lanjut.required'    => 'Pilih tahun pemeriksaan',
-    //         'tindak_lanjut.required'        => 'Nomor SPT wajib diisi',
-    //         'file.required'                 => 'Tanggal SPT wajib diisi',
-    //         'rincian_keuangan.required'     => 'SPT mulai wajib diisi',
-    //         'setor.required'                => 'SPT selesai wajib diisi',
-    //         'rincian_keuangan2.required'    => 'Nomor LHP wajib diisi',
-    //         'setor2.required'               => 'Tanggal LHP wajib diisi',
-    //         'rincian_keuangan3.required'    => 'Tanggal LHP wajib diisi',
-    //         'setor3.required'               => 'Tanggal LHP wajib diisi',
-    //         'rincian_keuangan4.required'    => 'Tanggal LHP wajib diisi',
-    //         'setor4.required'               => 'Tanggal LHP wajib diisi',
-    //         'id_status.required'            => 'Tanggal LHP wajib diisi',
-    //         'keterangan.required'           => 'Tanggal LHP wajib diisi'
-    //     ]);
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'error' => $validator->errors()
-    //         ]);
-    //     }
-
-    //     $validated = $validator->validated();
-    //     $data = [
-    //         'id_rekomendasi'    => $validated['id_rekomendasi'],
-    //         'tgl_tindak_lanjut' => $validated['tgl_tindak_lanjut'],
-    //         'tindak_lanjut'     => $validated['tindak_lanjut'],
-    //         'file'              => $validated['file'],
-    //         'rincian_keuangan'  => $validated['rincian_keuangan'],
-    //         'setor'             => $validated['setor'],
-    //         'rincian_keuangan2' => $validated['rincian_keuangan2'],
-    //         'setor2'            => $validated['setor2'],
-    //         'rincian_keuangan3' => $validated['rincian_keuangan3'],
-    //         'setor3'            => $validated['setor3'],
-    //         'rincian_keuangan4' => $validated['rincian_keuangan4'],
-    //         'setor4'            => $validated['setor4'],
-    //         'id_status'         => $validated['id_status'],
-    //         'keterangan'        => $validated['keterangan']
-    //     ];
-
-    //     if ($request->id) {
-    //         $verifikasi_ssr = VerifikasiSsr::find($request->id);
-    //         if (!$verifikasi_ssr) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => 'Data tidak ditemukan'
-    //             ]);
-    //         }
-    //         $data['edited_by']  = 1;
-    //         $data['edited_at'] = now();
-    //         $verifikasi_ssr->update($data);
-    //         $message = 'Data berhasil diupdate';
-    //     } else {
-    //         $data['created_by'] = 1;
-    //         $data['created_at'] = now();
-    //         $verifikasi_ssr = VerifikasiSsr::create($data);
-    //         $message = 'Data berhasil ditambahkan';
-    //     }
-
-    //     return response()->json([
-    //         'status'  => (bool) $verifikasi_ssr,
-    //         'message' => $verifikasi_ssr ? $message : 'Gagal menyimpan data'
-    //     ]);
-    // }
-
-    // public function destroy(VerifikasiSsr $verifikasi_ssr)
-    // {
-    //     $verifikasi_ssr->delete();
-    //     return response()->json([
-    //         'status'  => true,
-    //         'message' => 'Data berhasil dihapus.'
-    //     ], 200);
-    // }
+    public function getTindakLanjutKerugian(Request $request)
+    {
+        $request->validate([
+            'id_tindak_lanjut' => 'required|exists:kis_tindak_lanjuts,id_tindak_lanjut'
+        ]);
+        $tindak_lanjut = Tindaklanjut::with('rekomendasi.temuan')->findOrFail($request->id_tindak_lanjut);
+        return response()->json([
+            'id_nilai_kerugian'   => $tindak_lanjut->rekomendasi->temuan->id_nilai_kerugian,
+            'besaran_kerugian'    => $tindak_lanjut->rekomendasi->temuan->besaran_kerugian,
+            'rincian_keuangan'    => $tindak_lanjut->rincian_keuangan,
+            'id_nilai_kerugian2'  => $tindak_lanjut->rekomendasi->temuan->id_nilai_kerugian2,
+            'besaran_kerugian2'   => $tindak_lanjut->rekomendasi->temuan->besaran_kerugian2,
+            'rincian_keuangan2'   => $tindak_lanjut->rincian_keuangan2,
+            'id_nilai_kerugian3'  => $tindak_lanjut->rekomendasi->temuan->id_nilai_kerugian3,
+            'besaran_kerugian3'   => $tindak_lanjut->rekomendasi->temuan->besaran_kerugian3,
+            'rincian_keuangan3'   => $tindak_lanjut->rincian_keuangan3,
+            'id_nilai_kerugian4'  => $tindak_lanjut->rekomendasi->temuan->id_nilai_kerugian4,
+            'besaran_kerugian4'   => $tindak_lanjut->rekomendasi->temuan->besaran_kerugian4,
+            'rincian_keuangan4'   => $tindak_lanjut->rincian_keuangan4,
+        ]);
+    }
 }

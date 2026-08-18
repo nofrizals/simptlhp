@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800">
-                    <input type="hidden" id="idTemuan" value="">
+                    <input type="hidden" id="id_tindak_lanjut" value="{{ $tindak_lanjut }}">
                     <table class="text-sm text-gray-500">
                         <tr>
                             <td class="whitespace-nowrap pr-2 py-0.5">Tanggal Tindak Lanjut </td>
@@ -111,6 +111,10 @@
                     </div>
                 </div>
                 <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800">
+                    <input type="hidden" name="besaran_kerugian" id="tl_besaran_kerugian">
+                    <input type="hidden" name="besaran_kerugian2" id="tl_besaran_kerugian2">
+                    <input type="hidden" name="besaran_kerugian3" id="tl_besaran_kerugian3">
+                    <input type="hidden" name="besaran_kerugian4" id="tl_besaran_kerugian4">
                     <div class="space-y-5 p-6">
                         <!-- Pajak -->
                         <div class="grid grid-cols-3 gap-4 items-start">
@@ -128,7 +132,7 @@
                                         Rincian (Rp)
                                     </span>
                                     <input id="rincianPajak" name="rincian_keuangan" type="number" value="0"
-                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm">
+                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500">
                                 </div>
                                 <p id="rincian_keuangan_error" class="err mt-1 text-xs text-red-500">
                                 </p>
@@ -151,7 +155,7 @@
                                         Rincian (Rp)
                                     </span>
                                     <input id="rincianDaerah" name="rincian_keuangan2" type="number" value="0"
-                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm">
+                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500">
                                 </div>
                                 <p id="rincian_keuangan2_error" class="err mt-1 text-xs text-red-500">
                                 </p>
@@ -174,7 +178,7 @@
                                         Rincian (Rp)
                                     </span>
                                     <input id="rincianDesa" name="rincian_keuangan3" type="number" value="0"
-                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm">
+                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500">
                                 </div>
                                 <p id="rincian_keuangan3_error" class="err mt-1 text-xs text-red-500">
                                 </p>
@@ -197,7 +201,7 @@
                                         Rincian (Rp)
                                     </span>
                                     <input id="rincianBlud" name="rincian_keuangan4" type="number" value="0"
-                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm">
+                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500">
                                 </div>
                                 <p id="rincian_keuangan4_error" class="err mt-1 text-xs text-red-500">
                                 </p>
@@ -332,7 +336,18 @@
     <script>
         $(document).ready(function() {
             const label = $('#idRekomendasi').val();
+            const id_tindak_lanjut = $('#id_tindak_lanjut').val();
+
             loadDetailRekomendasi(label)
+            showInfoSkeleton()
+            loadKerugian(id_tindak_lanjut)
+
+            function showInfoSkeleton() {
+                const skeleton =
+                    '<span class="inline-block h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></span>';
+                $('.info-oleh, .info-tanggal-lhp, .info-nomor-lhp, .info-nama-obrik, .info-jenis-php, .info-temuan, .info-penyebab, .info-rekomendasi, .info-tanggal-tindak-lanjut, .info-tindak-lanjut, .info-keterangan')
+                    .html(skeleton);
+            }
 
             function loadDetailRekomendasi(label) {
                 $.ajax({
@@ -356,6 +371,82 @@
                             '<span class="text-red-500">Gagal memuat</span>');
                     }
                 });
+            }
+
+            function loadKerugian(id_tindak_lanjut) {
+                $.ajax({
+                    url: `{{ url('verifikasi-ssr/kerugian') }}`,
+                    type: 'POST',
+                    data: {
+                        id_tindak_lanjut: id_tindak_lanjut,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res) {
+                        isiKerugian(res);
+                        $('#btn-save-tindak-lanjut').prop('disabled', false);
+                    },
+                    error: function(xhr) {
+                        alert('Data kerugian gagal dimuat');
+                    }
+                });
+            }
+
+            function isiKerugian(data) {
+                setKerugian(
+                    '#labelPajak',
+                    '#rincianPajak',
+                    '#tl_besaran_kerugian',
+                    data.id_nilai_kerugian,
+                    data.besaran_kerugian,
+                    data.rincian_keuangan,
+                    'Kerugian pajak tidak ditemukan'
+                );
+                setKerugian(
+                    '#labelDaerah',
+                    '#rincianDaerah',
+                    '#tl_besaran_kerugian2',
+                    data.id_nilai_kerugian2,
+                    data.besaran_kerugian2,
+                    data.rincian_keuangan2,
+                    'Kerugian daerah tidak ditemukan'
+                );
+                setKerugian(
+                    '#labelDesa',
+                    '#rincianDesa',
+                    '#tl_besaran_kerugian3',
+                    data.id_nilai_kerugian3,
+                    data.besaran_kerugian3,
+                    data.rincian_keuangan3,
+                    'Kerugian desa tidak ditemukan'
+                );
+                setKerugian(
+                    '#labelBlud',
+                    '#rincianBlud',
+                    '#tl_besaran_kerugian4',
+                    data.id_nilai_kerugian4,
+                    data.besaran_kerugian4,
+                    data.rincian_keuangan4,
+                    'Kerugian BLUD tidak ditemukan'
+                );
+            }
+
+            function setKerugian(label, input, hidden, idNilai, besaran, rincian, pesan) {
+                // console.log(input);
+                if (idNilai === null || idNilai == 0) {
+
+                    $(label).text(pesan);
+                    $(input).val(0).prop('readonly', true);
+                    $(hidden).val(0);
+                } else {
+                    $(label).html(
+                        'Besaran Kerugian : <span class="font-semibold text-error-500">Rp ' +
+                        Number(besaran).toLocaleString('id-ID') +
+                        '</span>'
+                    );
+                    $(input).val(rincian ?? 0);
+                    $(input).prop('readonly', true);
+                    $(hidden).val(besaran);
+                }
             }
         });
     </script>
