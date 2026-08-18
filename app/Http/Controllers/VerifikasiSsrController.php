@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pembayaran;
 use App\Models\Tindaklanjut;
 use App\Models\VerifikasiSsr;
 use Carbon\Carbon;
@@ -129,5 +130,32 @@ class VerifikasiSsrController extends Controller
             'besaran_kerugian4'   => $tindak_lanjut->rekomendasi->temuan->besaran_kerugian4,
             'rincian_keuangan4'   => $tindak_lanjut->rincian_keuangan4,
         ]);
+    }
+
+    public function ajax($id_tindak_lanjut)
+    {
+        $data = Pembayaran::where('id_tindak_lanjut', $id_tindak_lanjut)->orderBy('id', 'desc');
+        return DataTables::eloquent($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function (Pembayaran $value): string {
+                return e(ucwords($value->jenis)) ?: '-';
+            })
+            ->addColumn('tanggal', function (Pembayaran $value): string {
+                return Carbon::parse($value->created_at ?? '-')->translatedFormat('d F Y');
+            })
+            ->addColumn('bukti', function (Pembayaran $value): string {
+                if (!$value->file_bukti) {
+                    return '-';
+                }
+                $url = asset('storage/' . $value->file_bukti);
+                return '<a href="' . e($url) . '" target="_blank">
+                <img src="' . asset('images/pdf.png') . '" alt="PDF" width="40">
+            </a>';
+            })
+            ->addColumn('nominal', function (Pembayaran $value): string {
+                return 'Rp ' . number_format((float) $value->nominal, 2, ',', '.');
+            })
+            ->rawColumns(['jenis', 'tanggal', 'bukti', 'nominal'])
+            ->make(true);
     }
 }

@@ -223,10 +223,10 @@
             </div>
 
             <!-- 2 Table -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <!-- Table File -->
                 <div
-                    class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900 p-6">
+                    class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900 p-6 lg:col-span-2">
                     <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
                         <div>
                             <p class="text-sm text-gray-500">
@@ -274,7 +274,7 @@
                 </div>
                 <!-- Table Riwayat Pembayaran -->
                 <div
-                    class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900 p-6">
+                    class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900 p-6 lg:col-span-3">
                     <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
                         <div>
                             <p class="text-sm text-gray-500">
@@ -331,10 +331,14 @@
     </div>
 @endsection
 
-
 @push('scripts')
     <script>
         $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             const label = $('#idRekomendasi').val();
             const id_tindak_lanjut = $('#id_tindak_lanjut').val();
 
@@ -448,6 +452,67 @@
                     $(hidden).val(besaran);
                 }
             }
+
+            dtRiwayatPembayaranTable = $('#dtRiwayatPembayaran').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: false,
+                scrollX: true,
+                dom: 'rtip',
+                searching: true,
+                ordering: false,
+                lengthChange: false,
+                ajax: {
+                    type: 'POST',
+                    url: `{{ url('verifikasi-ssr') }}/${id_tindak_lanjut}/ajax`
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'jenis',
+                        name: 'jenis',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'bukti',
+                        name: 'bukti',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'nominal',
+                        name: 'nominal',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'keterangan',
+                        name: 'keterangan',
+                        className: 'text-center'
+                    }
+                ],
+                language: {
+                    processing: "",
+                    zeroRecords: "Data tidak ditemukan",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                    paginate: {
+                        previous: "←",
+                        next: "→"
+                    }
+                },
+                initComplete: function() {
+                    $('#dtRiwayatPembayaran_info').appendTo('#tableInfoRiwayat');
+                    $('#dtRiwayatPembayaran_paginate').appendTo('#tablePaginationRiwayat');
+                }
+            });
         });
     </script>
 @endpush
