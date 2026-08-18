@@ -249,13 +249,13 @@
 
                             <thead class="bg-gray-50 dark:bg-gray-800">
                                 <tr>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                    <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">
                                         NO
                                     </th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                    <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">
                                         FILE
                                     </th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                    <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">
                                         LOG
                                     </th>
                                 </tr>
@@ -546,17 +546,17 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
-                        className: 'text-left'
+                        className: 'text-center'
                     },
                     {
                         data: 'file',
                         name: 'file',
-                        className: 'text-left'
+                        className: 'text-center'
                     },
                     {
                         data: 'log',
                         name: 'log',
-                        className: 'text-left'
+                        className: 'text-center'
                     }
                 ],
                 language: {

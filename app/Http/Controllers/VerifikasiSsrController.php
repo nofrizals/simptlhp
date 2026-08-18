@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FileTindakLanjut;
+use Carbon\Carbon;
 use App\Models\Pembayaran;
 use App\Models\Tindaklanjut;
-use App\Models\VerifikasiSsr;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use App\Models\VerifikasiSsr;
+use App\Models\FileTindakLanjut;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
 
 class VerifikasiSsrController extends Controller
 {
@@ -97,15 +97,15 @@ class VerifikasiSsrController extends Controller
         $data = VerifikasiSsr::with(['tindakLanjut', 'rekomendasi.temuan.kasus', 'status'])->where('label', $label)->firstOrFail();
         return response()->json([
             'id'                => $data->id,
-            'oleh'              => $data->tindakLanjut->created_by,
-            'tanggal_lhp'       => $data->rekomendasi->temuan->kasus->tanggal_lhp,
+            'oleh'              => $data->tindakLanjut->createdBy->nama_pegawai,
+            'tanggal_lhp'       => Carbon::parse($data->rekomendasi->temuan->kasus->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
             'nomor_lhp'         => $data->rekomendasi->temuan->kasus->nomor_lhp,
-            'nama_obrik'        => $data->rekomendasi->temuan->kasus->kode_unor,
-            'jenis_php'         => $data->rekomendasi->temuan->kasus->id_jenis_php,
+            'nama_obrik'        => ucwords(strtolower($data->rekomendasi->temuan->kasus->instansi->nama_instansi)),
+            'jenis_php'         => $data->rekomendasi->temuan->kasus->jenis_php->jenis_php,
             'temuan'            => $data->rekomendasi->temuan->temuan,
             'penyebab'          => $data->rekomendasi->temuan->penyebab,
             'rekomendasi'       => $data->rekomendasi->rekomendasi,
-            'tgl_tindak_lanjut' => $data->tindakLanjut->tgl_tindak_lanjut,
+            'tgl_tindak_lanjut' => Carbon::parse($data->tindakLanjut->tgl_tindak_lanjut ?? '-')->translatedFormat('d F Y'),
             'tindak_lanjut'     => $data->tindakLanjut->tindak_lanjut,
             'keterangan'        => $data->tindakLanjut->keterangan
         ]);
