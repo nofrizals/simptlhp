@@ -235,7 +235,7 @@
                         </div>
                     </div>
                     <div id="tableLoadingFile"
-                        class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                        class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
                         <div class="flex flex-col items-center gap-2">
                             <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
                             </div>
@@ -464,7 +464,14 @@
                 lengthChange: false,
                 ajax: {
                     type: 'POST',
-                    url: `{{ url('verifikasi-ssr') }}/${id_tindak_lanjut}/ajaxRiwayatPembayaran`
+                    url: `{{ url('verifikasi-ssr') }}/${id_tindak_lanjut}/ajaxRiwayatPembayaran`,
+                    beforeSend: function() {
+                        $('#tableLoadingRiwayat').removeClass('hidden');
+                    },
+
+                    complete: function() {
+                        $('#tableLoadingRiwayat').addClass('hidden');
+                    }
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -525,7 +532,14 @@
                 lengthChange: false,
                 ajax: {
                     type: 'POST',
-                    url: `{{ url('verifikasi-ssr') }}/${id_tindak_lanjut}/ajaxBuktiPembayaran`
+                    url: `{{ url('verifikasi-ssr') }}/${id_tindak_lanjut}/ajaxBuktiPembayaran`,
+                    beforeSend: function() {
+                        $('#tableLoadingFile').removeClass('hidden');
+                    },
+
+                    complete: function() {
+                        $('#tableLoadingFile').addClass('hidden');
+                    }
                 },
                 columns: [{
                         data: 'DT_RowIndex',
