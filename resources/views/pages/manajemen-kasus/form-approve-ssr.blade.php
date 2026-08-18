@@ -464,7 +464,7 @@
                 lengthChange: false,
                 ajax: {
                     type: 'POST',
-                    url: `{{ url('verifikasi-ssr') }}/${id_tindak_lanjut}/ajax`
+                    url: `{{ url('verifikasi-ssr') }}/${id_tindak_lanjut}/ajaxRiwayatPembayaran`
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -511,6 +511,52 @@
                 initComplete: function() {
                     $('#dtRiwayatPembayaran_info').appendTo('#tableInfoRiwayat');
                     $('#dtRiwayatPembayaran_paginate').appendTo('#tablePaginationRiwayat');
+                }
+            });
+
+            dtBuktiPembayaranTable = $('#dtBuktiPembayaran').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: false,
+                scrollX: true,
+                dom: 'rtip',
+                searching: true,
+                ordering: false,
+                lengthChange: false,
+                ajax: {
+                    type: 'POST',
+                    url: `{{ url('verifikasi-ssr') }}/${id_tindak_lanjut}/ajaxBuktiPembayaran`
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-left'
+                    },
+                    {
+                        data: 'file',
+                        name: 'file',
+                        className: 'text-left'
+                    },
+                    {
+                        data: 'log',
+                        name: 'log',
+                        className: 'text-left'
+                    }
+                ],
+                language: {
+                    processing: "",
+                    zeroRecords: "Data tidak ditemukan",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                    paginate: {
+                        previous: "←",
+                        next: "→"
+                    }
+                },
+                initComplete: function() {
+                    $('#dtBuktiPembayaran_info').appendTo('#tableInfoFile');
+                    $('#dtBuktiPembayaran_paginate').appendTo('#tablePaginationFile');
                 }
             });
         });
