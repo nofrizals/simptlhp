@@ -187,48 +187,10 @@
                     </li>
                     <!-- Manajemen Kasus -->
                     <li>
-                        {{-- <a href="#"
-                            @click.prevent="selected = (selected === 'Manajemen-kasus' ? '':'Manajemen-kasus')"
-                            class="menu-item group"
-                            :class="(selected === 'Manajemen-kasus') || (page === 'lineChart' || page === 'barChart' ||
-                                page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'">
-                            <svg :class="(selected === 'Manajemen-kasus') || (page === 'lineChart' || page === 'barChart' ||
-                                page === 'pieChart') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
-                                    fill="none" stroke="#737070" stroke-width="1.5" stroke-linejoin="round" />
-
-                                <path d="M14 3V7H18" fill="none" stroke="#737070" stroke-width="1.5"
-                                    stroke-linejoin="round" />
-
-                                <circle cx="10.5" cy="12.5" r="2.5" fill="none" stroke="#737070"
-                                    stroke-width="1.5" />
-
-                                <path d="M12.5 14.5L14.5 16.5" fill="none" stroke="#737070" stroke-width="1.5"
-                                    stroke-linecap="round" />
-                            </svg>
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Manajemen Kasus
-                            </span>
-
-                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                                :class="[(selected === 'Manajemen-kasus') ? 'menu-item-arrow-active' :
-                                    'menu-item-arrow-inactive',
-                                    sidebarToggle ? 'lg:hidden' : ''
-                                ]"
-                                width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </a> --}}
-
                         <a href="#"
                             @click.prevent="selected = (selected === 'Manajemen-kasus' ? '':'Manajemen-kasus')"
-                            class="menu-item group {{ request()->is('daftar-kasus', 'verifikasi-ssr') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg class="{{ request()->is('daftar-kasus', 'verifikasi-ssr') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                            class="menu-item group {{ request()->is('daftar-kasus', 'verifikasi-ssr*') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('daftar-kasus', 'verifikasi-ssr*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -273,7 +235,7 @@
                                 </li>
                                 <li>
                                     <a href="{{ url('verifikasi-ssr') }}"
-                                        class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('verifikasi-ssr') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                        class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('verifikasi-ssr*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                                         <span>Verifikasi SSR</span>
                                         @if ($countApprove > 0)
                                             <span
@@ -312,26 +274,6 @@
                             </span>
                         </a>
                     </li>
-                    <!-- Verifikasi SSR -->
-                    {{-- <li>
-                        <a href="{{ url('verifikasi-ssr') }}"
-                            class="menu-item group {{ request()->is('verifikasi-ssr') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg class="{{ request()->is('verifikasi-ssr') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
-                                    stroke="#737070" fill="none" stroke-width="1.5" stroke-linejoin="round" />
-                                <path d="M14 3V7H18" stroke="#737070" fill="none" stroke-width="1.5"
-                                    stroke-linejoin="round" />
-                                <path d="M9 13.5L11 15.5L15 11.5" stroke="#737070" fill="none" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Verifikasi SSR
-                            </span>
-                        </a>
-                    </li> --}}
                     <!-- Rekap Laporan -->
                     <li>
                         <a href="{{ url('rekap-laporan') }}"
