@@ -8,8 +8,9 @@ use App\Models\Tindaklanjut;
 use Illuminate\Http\Request;
 use App\Models\VerifikasiSsr;
 use App\Models\FileTindakLanjut;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class VerifikasiSsrController extends Controller
 {
@@ -60,16 +61,32 @@ class VerifikasiSsrController extends Controller
                 return $log;
             })
             ->addColumn('action', function ($value) {
-                return '
-                    <div class="flex items-center justify-center gap-3 px-4 py-2">
-                        <a href="' . url('verifikasi-ssr/approve/' . $value->label) . '"
-                            class="btn-approve text-blue-800 hover:text-blue-500 transition duration-200"
-                            title="Approve">
-                            <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16.5 2.625H4.5C3.464 2.625 2.625 3.464 2.625 4.5V16.5C2.625 17.536 3.464 18.375 4.5 18.375H16.5C17.536 18.375 18.375 17.536 18.375 16.5V4.5C18.375 3.464 17.536 2.625 16.5 2.625ZM8.25 15.375L4.875 12L6.375 10.5L8.25 12.375L14.625 6L16.125 7.5L8.25 15.375Z" fill="currentColor"/>
-                            </svg>
+                if ($value->reject_at) {
+                    return '<div class="flex items-center justify-center gap-3 px-4 py-2">
+                        <a href="' . url('verifikasi-ssr/open/' . $value->label) . '"
+                            class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 hover:bg-red-200 transition duration-200"
+                            title="Tindak lanjut ditolak">
+                            Ditolak
                         </a>
                     </div>';
+                } else if ($value->approve_at) {
+                    return '<div class="flex items-center justify-center gap-3 px-4 py-2">
+                        <a href="' . url('verifikasi-ssr/open/' . $value->label) . '"
+                            class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 hover:bg-green-200 transition duration-200"
+                            title="Tindak lanjut disetujui">
+                            Disetujui
+                        </a>
+                    </div>';
+                }
+                return '<div class="flex items-center justify-center gap-3 px-4 py-2">
+                    <a href="' . url('verifikasi-ssr/approve/' . $value->label) . '"
+                        class="btn-approve text-blue-800 hover:text-blue-500 transition duration-200"
+                        title="Approve">
+                        <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.5 2.625H4.5C3.464 2.625 2.625 3.464 2.625 4.5V16.5C2.625 17.536 3.464 18.375 4.5 18.375H16.5C17.536 18.375 18.375 17.536 18.375 16.5V4.5C18.375 3.464 17.536 2.625 16.5 2.625ZM8.25 15.375L4.875 12L6.375 10.5L8.25 12.375L14.625 6L16.125 7.5L8.25 15.375Z" fill="currentColor"/>
+                        </svg>
+                    </a>
+                </div>';
             })
             ->filterColumn('tindak_lanjut', function (Builder $query, string $keyword) {
                 $query->where(function (Builder $q) use ($keyword) {
@@ -87,8 +104,12 @@ class VerifikasiSsrController extends Controller
     {
         $temuan = VerifikasiSsr::where('label', $label)->first();
         return view('pages.manajemen-kasus.form-approve-ssr', [
-            'label' => $label,
-            'tindak_lanjut' => $temuan->id_tindak_lanjut
+            'label'         => $label,
+            'tindak_lanjut' => $temuan->id_tindak_lanjut,
+            'reject'        => $temuan->reject_by,
+            'catatan'       => $temuan->reject_note,
+            'reject_at'     => $temuan->reject_at,
+            'approve_at'    => $temuan->approve_at
         ]);
     }
 
@@ -130,6 +151,81 @@ class VerifikasiSsrController extends Controller
             'id_nilai_kerugian4'  => $tindak_lanjut->rekomendasi->temuan->id_nilai_kerugian4,
             'besaran_kerugian4'   => $tindak_lanjut->rekomendasi->temuan->besaran_kerugian4,
             'rincian_keuangan4'   => $tindak_lanjut->rincian_keuangan4,
+        ]);
+    }
+
+    public function tolak(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'catatan' => 'required|string',
+        ], [
+            'catatan.required' => 'Catatan wajib diisi.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors(),
+            ], 422);
+        }
+
+        try {
+            $verifikasiSsr = VerifikasiSsr::where('id_tindak_lanjut', $id)->first();
+            if (!$verifikasiSsr) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tindak lanjut tidak ditemukan.',
+                ], 404);
+            }
+
+            $verifikasiSsr->reject_at = now();
+            $verifikasiSsr->reject_by = session('id_pegawai');
+            $verifikasiSsr->reject_note = $request->catatan;
+            $verifikasiSsr->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Tindak lanjut berhasil ditolak.',
+            ]);
+        } catch (\Throwable $e) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan server.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function setujui(Request $request, $id)
+    {
+        $verifikasi = VerifikasiSsr::where('id_tindak_lanjut', $id)->firstOrFail();
+
+        // Pastikan belum pernah disetujui
+        if ($verifikasi->approve_at) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tindak lanjut ini sudah disetujui sebelumnya.'
+            ], 422);
+        }
+
+        // Pastikan belum ditolak
+        if ($verifikasi->reject_at) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tindak lanjut ini sudah ditolak sehingga tidak dapat disetujui.'
+            ], 422);
+        }
+
+        $verifikasi->update([
+            'approve_at' => now(),
+            'approve_by' => session('id_pegawai'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tindak lanjut berhasil disetujui.',
+            'redirect' => url('verifikasi-ssr'),
         ]);
     }
 

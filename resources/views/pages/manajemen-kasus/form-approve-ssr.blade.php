@@ -4,6 +4,9 @@
 @section('page-data', "'verifikasi-ssr'")
 
 @section('content')
+    @php
+        use Carbon\Carbon;
+    @endphp
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
         <div class="space-y-6">
             <div
@@ -208,16 +211,64 @@
                             </div>
                         </div>
                         <!-- Tombol -->
-                        <div class="pt-5 flex items-center justify-between gap-3">
-                            <button type="button" id="btn-cancel-tindak-lanjut"
-                                class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
-                                Tolak tindak lanjut dan beri catatan
-                            </button>
-                            <button type="submit" id="btn-save-tindak-lanjut"
-                                class="flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white hover:bg-brand-600">
-                                Setujui tindak lanjut sudah sesuai rekomendasi
-                            </button>
-                        </div>
+                        @if (Route::is('verifikasi-ssr.approve'))
+                            <div class="pt-5 flex items-center justify-between gap-3">
+                                <button type="button" id="btn-modal-tolak"
+                                    class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                                    Tolak tindak lanjut dan beri catatan
+                                </button>
+                                <button type="button" id="btn-setujui"
+                                    class="flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white hover:bg-brand-600">
+                                    Setujui tindak lanjut sudah sesuai rekomendasi
+                                </button>
+                            </div>
+                        @else
+                            @if ($reject)
+                                <div
+                                    class="rounded-xl border border-error-500 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/15">
+                                    <div class="flex items-start gap-3">
+                                        <div class="-mt-0.5 text-error-500">
+                                            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M20.3499 12.0004C20.3499 16.612 16.6115 20.3504 11.9999 20.3504C7.38832 20.3504 3.6499 16.612 3.6499 12.0004C3.6499 7.38881 7.38833 3.65039 11.9999 3.65039C16.6115 3.65039 20.3499 7.38881 20.3499 12.0004ZM11.9999 22.1504C17.6056 22.1504 22.1499 17.6061 22.1499 12.0004C22.1499 6.3947 17.6056 1.85039 11.9999 1.85039C6.39421 1.85039 1.8499 6.3947 1.8499 12.0004C1.8499 17.6061 6.39421 22.1504 11.9999 22.1504ZM13.0008 16.4753C13.0008 15.923 12.5531 15.4753 12.0008 15.4753L11.9998 15.4753C11.4475 15.4753 10.9998 15.923 10.9998 16.4753C10.9998 17.0276 11.4475 17.4753 11.9998 17.4753L12.0008 17.4753C12.5531 17.4753 13.0008 17.0276 13.0008 16.4753ZM11.9998 6.62898C12.414 6.62898 12.7498 6.96476 12.7498 7.37898L12.7498 13.0555C12.7498 13.4697 12.414 13.8055 11.9998 13.8055C11.5856 13.8055 11.2498 13.4697 11.2498 13.0555L11.2498 7.37898C11.2498 6.96476 11.5856 6.62898 11.9998 6.62898Z"
+                                                    fill="#F04438" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90">
+                                                Ditolak pada
+                                                {{ Carbon::parse($reject_at ?? '-')->translatedFormat('d F Y') }}
+                                            </h4>
+                                            <p class="catatan text-sm text-gray-500 dark:text-gray-400"><b>Catatan:
+                                                </b>{{ $catatan }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div
+                                    class="rounded-xl border border-success-500 bg-success-50 p-4 dark:border-success-500/30 dark:bg-success-500/15">
+                                    <div class="flex items-start gap-3">
+                                        <div class="-mt-0.5 text-success-500">
+                                            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24"
+                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M3.70186 12.0001C3.70186 7.41711 7.41711 3.70186 12.0001 3.70186C16.5831 3.70186 20.2984 7.41711 20.2984 12.0001C20.2984 16.5831 16.5831 20.2984 12.0001 20.2984C7.41711 20.2984 3.70186 16.5831 3.70186 12.0001ZM12.0001 1.90186C6.423 1.90186 1.90186 6.423 1.90186 12.0001C1.90186 17.5772 6.423 22.0984 12.0001 22.0984C17.5772 22.0984 22.0984 17.5772 22.0984 12.0001C22.0984 6.423 17.5772 1.90186 12.0001 1.90186ZM15.6197 10.7395C15.9712 10.388 15.9712 9.81819 15.6197 9.46672C15.2683 9.11525 14.6984 9.11525 14.347 9.46672L11.1894 12.6243L9.6533 11.0883C9.30183 10.7368 8.73198 10.7368 8.38051 11.0883C8.02904 11.4397 8.02904 12.0096 8.38051 12.3611L10.553 14.5335C10.7217 14.7023 10.9507 14.7971 11.1894 14.7971C11.428 14.7971 11.657 14.7023 11.8257 14.5335L15.6197 10.7395Z"
+                                                    fill="" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90">
+                                                Disetujui pada
+                                                {{ Carbon::parse($approve_at ?? '-')->translatedFormat('d F Y') }}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                        @endif
                     </div>
                 </div>
             </div>
@@ -328,6 +379,52 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div id="modal"
+            class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-5 opacity-0 pointer-events-none transition-opacity duration-300">
+            <!-- Overlay -->
+            <div class="fixed inset-0 h-full w-full bg-black/30 backdrop-blur-sm"></div>
+            <!-- Modal -->
+            <div id="modalContent"
+                class="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl transform scale-95 transition-transform duration-300 dark:bg-gray-900 sm:p-8">
+                <!-- Close -->
+                <button id="closeModalBtn"
+                    class="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
+                            fill="" />
+                    </svg>
+                </button>
+                <!-- Header -->
+                <div class="border-b border-gray-200 pb-4 dark:border-gray-800">
+                    <h3 class="modal-header text-lg font-semibold text-gray-800 dark:text-white/90"></h3>
+                </div>
+                <!-- Body -->
+                <div class="pt-6">
+                    <form id="formTolak">
+                        <div>
+                            <label for="catatan" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Catatan
+                                <span class="text-red-400">*</span>
+                            </label>
+                            <textarea
+                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                name="catatan" id="catatan" rows="6" placeholder="Berikan catatan"></textarea>
+                            <p class="err text-theme-xs text-error-500" id="catatan_error"></p>
+                        </div>
+                        <!-- Footer -->
+                        <div class="mt-6 flex items-center justify-end gap-3">
+                            <button type="submit" id="btn-tolak"
+                                class="bg-red-500 hover:bg-red-600 flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white">
+                                Tolak
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -435,7 +532,6 @@
             }
 
             function setKerugian(label, input, hidden, idNilai, besaran, rincian, pesan) {
-                // console.log(input);
                 if (idNilai === null || idNilai == 0) {
 
                     $(label).text(pesan);
@@ -573,6 +669,158 @@
                     $('#dtBuktiPembayaran_paginate').appendTo('#tablePaginationFile');
                 }
             });
+
+            function openModal() {
+                reset();
+                $('#modal')
+                    .removeClass('pointer-events-none opacity-0');
+
+                $('#modalContent')
+                    .removeClass('scale-95')
+                    .addClass('scale-100');
+            }
+
+            $('#btn-modal-tolak').click(function() {
+                $('.modal-header').html('Tolak Tindak Lanjut SSR');
+                openModal();
+            });
+
+            $('#formTolak').submit(function(e) {
+                e.preventDefault();
+                const id = $('#id_tindak_lanjut').val();
+                if (!id) {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: 'Tindak lanjut tidak ditemukan',
+                        icon: 'error'
+                    });
+                    return;
+                }
+
+                const formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('verifikasi-ssr') }}/${id}/tolak-ssr`,
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('.err').html('');
+                        $('#btn-tolak')
+                            .prop('disabled', true)
+                            .html('Loading...');
+                        $('#closeModalBtn')
+                            .prop('disabled', true);
+                    },
+
+                    success: function(response) {
+                        if (!response) {
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Response server tidak valid',
+                                icon: 'error'
+                            });
+                            return;
+                        }
+                        if (response.status === false) {
+                            $.each(response.error, function(key, val) {
+                                $('#' + key + '_error').html(val[0]);
+                            });
+                        } else {
+                            closeModal();
+                            Swal.fire({
+                                title: 'Sukses',
+                                text: response.message,
+                                icon: 'success'
+                            }).then(() => {
+                                window.location.href = "{{ url('verifikasi-ssr') }}";
+                            });
+                            reset();
+                        }
+                    },
+
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan server',
+                            icon: 'error'
+                        });
+                    },
+
+                    complete: function() {
+                        $('#btn-tolak')
+                            .prop('disabled', false)
+                            .html('Tolak');
+                        $('#closeModalBtn')
+                            .prop('disabled', false);
+                    }
+                });
+            });
+
+            $("#closeModalBtn").click(function() {
+                reset();
+                closeModal();
+            });
+
+            $('#btn-setujui').click(function() {
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    confirmButtonColor: '#28A745',
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Yakin',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const id = $('#id_tindak_lanjut').val();
+                        $.ajax({
+                            type: "POST",
+                            url: `{{ url('verifikasi-ssr') }}/${id}/setujui`,
+                            dataType: "json",
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: "Sukses",
+                                        text: response.message,
+                                        icon: "success"
+                                    }).then(() => {
+                                        window.location.href = response
+                                            .redirect;
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Gagal",
+                                        text: "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
+                                        icon: "error"
+                                    });
+                                }
+                            },
+                            error: function(xhr) {
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: xhr.responseJSON?.message ??
+                                        "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
+                                    icon: "error"
+                                });
+
+                            }
+                        });
+                    }
+                })
+            });
+
+            function closeModal() {
+                $('#modal').addClass('opacity-0 pointer-events-none');
+                $('#modalContent').removeClass('scale-100').addClass('scale-95');
+            }
+
+            function reset() {
+                $('#formTolak')[0].reset();
+                $('#formTolak .err').empty();
+            }
         });
     </script>
 @endpush

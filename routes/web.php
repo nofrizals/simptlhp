@@ -79,18 +79,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('obrik-tim/{obrik_tim}', [ObrikDitanganiController::class, 'destroy']);
     Route::post('ajax-obrik-tim', [ObrikDitanganiController::class, 'ajaxObrikTim']);
 
-
-
-
-    // Manajemen Kasus -> Kasus
-    // Route::get('daftar-kasus', [KasusController::class, 'index']);
-    // Route::get('daftar-kasus/{id}/edit', [KasusController::class, 'edit']);
-    // Route::post('daftar-kasus', [KasusController::class, 'store']);
-    // Route::delete('daftar-kasus/{kasus}', [KasusController::class, 'destroy']);
-    // Route::post('ajax-data-daftar-kasus', [KasusController::class, 'ajaxDataDaftarKasus']);
-
-
-
     // routes/web.php
 
     Route::get('daftar-kasus', [KasusController::class, 'index']);
@@ -128,11 +116,14 @@ Route::middleware('auth')->group(function () {
     // Manajemen Kasus -> Verifikasi SSR
     Route::get('verifikasi-ssr', [VerifikasiSsrController::class, 'index']);
     Route::post('ajax-data-verifikasi-ssr', [VerifikasiSsrController::class, 'ajaxDataVerifikasiSsr']);
-    Route::get('verifikasi-ssr/approve/{label}', [VerifikasiSsrController::class, 'approve']);
+    Route::get('verifikasi-ssr/approve/{label}', [VerifikasiSsrController::class, 'approve'])->name('verifikasi-ssr.approve');
+    Route::get('verifikasi-ssr/open/{label}', [VerifikasiSsrController::class, 'approve'])->name('verifikasi-ssr.open');
     Route::get('verifikasi-ssr/approve/{label}/info', [VerifikasiSsrController::class, 'info']);
     Route::post('verifikasi-ssr/kerugian', [VerifikasiSsrController::class, 'getTindakLanjutKerugian'])->name('verifikasi-ssr.kerugian');
     Route::post('verifikasi-ssr/{id_tindak_lanjut}/ajaxRiwayatPembayaran', [VerifikasiSsrController::class, 'ajaxRiwayatPembayaran']);
     Route::post('verifikasi-ssr/{id_tindak_lanjut}/ajaxBuktiPembayaran', [VerifikasiSsrController::class, 'ajaxBuktiPembayaran']);
+    Route::post('verifikasi-ssr/{id}/tolak-ssr', [VerifikasiSsrController::class, 'tolak']);
+    Route::post('verifikasi-ssr/{id}/setujui', [VerifikasiSsrController::class, 'setujui']);
 
     //Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
