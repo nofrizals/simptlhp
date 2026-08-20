@@ -250,7 +250,7 @@
                         <!-- Dropdown Menu End -->
                     </li>
                     <!-- Kasus -->
-                    <li>
+                    {{-- <li>
                         <a href="{{ url('kasus') }}"
                             class="menu-item group {{ request()->is('kasus') ? 'menu-item-active' : 'menu-item-inactive' }}">
                             <svg class="{{ request()->is('kasus') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
@@ -273,9 +273,9 @@
                                 Kasus
                             </span>
                         </a>
-                    </li>
+                    </li> --}}
                     <!-- Rekap Laporan -->
-                    <li>
+                    {{-- <li>
                         <a href="{{ url('rekap-laporan') }}"
                             class="menu-item group {{ request()->is('rekap-laporan') ? 'menu-item-active' : 'menu-item-inactive' }}">
                             <svg class="{{ request()->is('rekap-laporan') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
@@ -298,7 +298,7 @@
                                 Rekap Laporan
                             </span>
                         </a>
-                    </li>
+                    </li> --}}
                     <!-- Rekap Laporan -->
                     <li>
                         <a href="#"
@@ -455,7 +455,7 @@
                 </ul>
             </div>
             <!-- Data Log -->
-            <div>
+            {{-- <div>
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
                     <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
                         Data Log
@@ -497,7 +497,7 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
         </nav>
     </div>
 </aside>
