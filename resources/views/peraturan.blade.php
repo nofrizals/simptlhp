@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Tim Obrik | SIMPTLHP')
-@section('page-data', "'obrik-ditangani'")
+@section('title', 'Peraturan | SIMPTLHP')
+@section('page-data', "'basicTables'")
 
 @section('content')
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
@@ -11,12 +11,16 @@
                 <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                            Manajemen Tim Obrik
+                            Data Peraturan
                         </h3>
                         <p class="text-sm text-gray-500">
-                            Kelola seluruh obrik ditangani
+                            Kelola seluruh Peraturan
                         </p>
                     </div>
+                    <button id="openModalBtn"
+                        class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        + Tambah Peraturan
+                    </button>
                 </div>
 
                 {{-- TOOLBAR --}}
@@ -36,7 +40,7 @@
 
                     {{-- SEARCH --}}
                     <div class="relative">
-                        <input id="customSearch" type="text" placeholder="Cari obrik..."
+                        <input id="customSearch" type="text" placeholder="Cari tim..."
                             class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
@@ -56,11 +60,11 @@
                     <table id="dataTable" class="min-w-full text-sm dt-table">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Obrik
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">No</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Judul</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Keterangan
                                 </th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Tim Yang
-                                    Menangani</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Status</th>
                                 <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
                             </tr>
                         </thead>
@@ -78,7 +82,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <div id="modalObrikDitangani"
+    <div id="modalPeraturan"
         class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
         <div id="modalContent"
@@ -98,33 +102,35 @@
                     <h3 class="modal-header text-base font-medium text-gray-800 dark:text-white/90"></h3>
                 </div>
                 <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
-                    <form id="formObrikTim">
+                    <form id="formPeraturan">
                         <div class="-mx-2.5 flex flex-wrap gap-y-5">
-                            <input type="hidden"
-                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                                id="id" name="id">
-                            <div class="w-full px-2.5">
+                            <input type="hidden" id="id" name="id">
+                            <div class="w-full">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama Obrik
+                                    Judul
                                 </label>
-                                <textarea name="nama_instansi" id="nama_instansi" placeholder="Enter a description..." type="text" rows="2"
-                                    disabled
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"></textarea>
-                                <p class="err text-theme-xs text-error-500" id="nama_instansi_error"></p>
+                                <input type="text" name="judul" id="judul" placeholder="Judul"
+                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                <p class="err text-theme-xs text-error-500" id="judul_error"></p>
                             </div>
-                            <div class="w-full px-2.5">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Nama
-                                    Tim Yang Menangani</label>
-                                <select name="id_tim" id="id_tim"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                    <option value="" disabled selected
-                                        class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">Pilih Tim</option>
-                                    @foreach ($tims as $tim)
-                                        <option value="{{ $tim->id }}">
-                                            {{ $tim->name }} - {{ $tim->nip_ketua }}</option>
-                                    @endforeach
-                                </select>
-                                <p class="err text-theme-xs text-error-500" id="id_tim_error"></p>
+                            <div class="w-full">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Keterangan
+                                </label>
+                                <textarea name="keterangan" id="keterangan" placeholder="Keterangan..." type="text" rows="6"
+                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"></textarea>
+                                <p class="err text-theme-xs text-error-500" id="keterangan_error"></p>
+                            </div>
+                            <div class="w-full">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Upload file
+                                </label>
+                                <small id="file-info" class="text-red-500 hidden">
+                                    File lama sudah tersimpan. Jika Anda upload file baru, file lama akan ditimpa.
+                                </small>
+                                <input type="file" name="file" id="file"
+                                    class="focus:border-ring-brand-300 shadow-theme-xs focus:file:ring-brand-300 h-11 w-full overflow-hidden rounded-lg border border-gray-300 bg-transparent text-sm text-gray-500 transition-colors file:mr-5 file:border-collapse file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-solid file:border-gray-200 file:bg-gray-50 file:py-3 file:pr-3 file:pl-3.5 file:text-sm file:text-gray-700 placeholder:text-gray-400 hover:file:bg-gray-100 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:text-white/90 dark:file:border-gray-800 dark:file:bg-white/[0.03] dark:file:text-gray-400 dark:placeholder:text-gray-400" />
+                                <p class="err text-theme-xs text-error-500" id="file_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
@@ -155,8 +161,8 @@
 
                 // ─── URL ───────────────────────────────────────────────
                 const URL = {
-                    ajaxObrikTim: "{{ url('ajax-obrik-tim') }}",
-                    storeObrikTim: "{{ url('obrik-tim') }}",
+                    ajaxPeraturan: "{{ url('ajax-peraturan') }}",
+                    storePeraturan: "{{ url('peraturan') }}",
                 };
 
                 // ─── Spinner HTML ────────────────────────────────────────────────
@@ -184,23 +190,29 @@
                     lengthChange: false,
                     ajax: {
                         type: 'POST',
-                        url: URL.ajaxObrikTim
+                        url: URL.ajaxPeraturan
                     },
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex',
                             orderable: false,
-                            searchable: false
+                            searchable: false,
+                            className: 'text-center'
                         },
                         {
-                            data: 'nama_instansi',
-                            name: 'nama_instansi',
-                            className: 'text-left'
+                            data: 'judul',
+                            name: 'judul',
+                            className: 'text-center'
                         },
                         {
-                            data: 'id_tim',
-                            name: 'id_tim',
-                            className: 'text-left'
+                            data: 'keterangan',
+                            name: 'keterangan',
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status',
+                            className: 'text-center'
                         },
                         {
                             data: 'action',
@@ -238,7 +250,7 @@
                 dataTable.on('draw.dt', moveDataTableFooter);
 
                 function openModal() {
-                    $('#modalObrikDitangani')
+                    $('#modalPeraturan')
                         .removeClass('pointer-events-none opacity-0');
 
                     $('#modalContent')
@@ -247,7 +259,7 @@
                 }
 
                 function closeModal() {
-                    $('#modalObrikDitangani')
+                    $('#modalPeraturan')
                         .addClass('opacity-0 pointer-events-none');
 
                     $('#modalContent')
@@ -255,17 +267,29 @@
                         .addClass('scale-95');
                 }
 
+                $("#openModalBtn").click(function() {
+                    reset();
+                    $('.modal-header').html('Form Tambah Tim');
+                    if (!$('.opd').hasClass("select2-hidden-accessible")) {
+                        $('.opd').select2({
+                            dropdownParent: $('#modalPeraturan'),
+                            width: '100%'
+                        });
+                    }
+                    openModal();
+                });
+
                 $("#closeModalBtn").click(function() {
                     reset();
                     closeModal();
                 });
 
-                $('#formObrikTim').submit(function(e) {
+                $('#formPeraturan').submit(function(e) {
                     e.preventDefault();
-                    let formData = new FormData($('#formObrikTim')[0]);
+                    let formData = new FormData($('#formPeraturan')[0]);
                     $.ajax({
                         type: 'POST',
-                        url: URL.storeObrikTim,
+                        url: URL.storePeraturan,
                         data: formData,
                         dataType: 'json',
                         contentType: false,
@@ -307,7 +331,6 @@
                                     icon: "success"
                                 });
                                 reset();
-                                $('.pick-tim').addClass('hidden');
                             }
                         },
                         error: function(xhr) {
@@ -325,9 +348,51 @@
                     });
                 });
 
-                $(document).on('click', '.btn-deleteObrikTim', function() {
+                // $(document).on('click', '.btn-deletePeraturan', function() {
+                //     Swal.fire({
+                //         title: 'Apakah anda yakin?',
+                //         icon: 'warning',
+                //         showCancelButton: true,
+                //         cancelButtonColor: '#DC3545',
+                //         confirmButtonColor: '#28A745',
+                //         cancelButtonText: 'Batal',
+                //         confirmButtonText: 'Yakin',
+                //         reverseButtons: true,
+                //     }).then((result) => {
+                //         if (result.isConfirmed) {
+                //             let id = $(this).data('id');
+                //             $.ajax({
+                //                 type: "delete",
+                //                 url: `${URL.storePeraturan}/${id}`,
+                //                 dataType: "json",
+                //                 success: function(response) {
+                //                     if (response.status) {
+                //                         $('#dataTable').DataTable().ajax.reload(
+                //                             function() {
+                //                                 Swal.fire({
+                //                                     title: "Sukses",
+                //                                     text: response.message,
+                //                                     icon: "success"
+                //                                 });
+                //                             }, false);
+                //                     } else {
+                //                         Swal.fire({
+                //                             title: "Gagal",
+                //                             text: "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
+                //                             icon: "error"
+                //                         });
+                //                     }
+                //                 }
+                //             });
+                //         }
+                //     })
+                // });
+
+                $(document).on('click', '.btn-deletePeraturan', function() {
+                    let id = $(this).data('id');
                     Swal.fire({
                         title: 'Apakah anda yakin?',
+                        text: 'Data dan file yang tersimpan akan dihapus.',
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonColor: '#DC3545',
@@ -337,10 +402,9 @@
                         reverseButtons: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            let id = $(this).data('id');
                             $.ajax({
-                                type: "delete",
-                                url: `${URL.storeTim}/${id}`,
+                                type: "DELETE",
+                                url: `${URL.storePeraturan}/${id}`,
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
@@ -351,28 +415,51 @@
                                                     text: response.message,
                                                     icon: "success"
                                                 });
-                                            }, false);
+                                            }, false
+                                        );
                                     } else {
                                         Swal.fire({
                                             title: "Gagal",
-                                            text: "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
+                                            text: response.message ??
+                                                "Data gagal dihapus.",
                                             icon: "error"
                                         });
                                     }
+                                },
+                                error: function(xhr) {
+                                    let message =
+                                        "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.";
+                                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                                        message = xhr.responseJSON.message;
+                                    }
+                                    Swal.fire({
+                                        title: "Gagal",
+                                        text: message,
+                                        icon: "error"
+                                    });
                                 }
                             });
                         }
-                    })
+                    });
                 });
 
-                $(document).on('click', '.btn-editObrikTim', function() {
+                $(document).on('click', '.btn-editPeraturan', function() {
                     let data = $(this).data();
                     openModal();
                     $('.modal-header').html(
-                        'Form Edit Obrik Yang Ditangani');
+                        'Form Edit Peraturan');
                     $('#id').val(data.id);
-                    $('#nama_instansi').val(data.instansi);
-                    $('#id_tim').val(data.tim);
+                    $('#judul').val(data.judul);
+                    $('#keterangan').val(data.keterangan);
+                    if (data.file) {
+                        $('#file-info')
+                            .removeClass('hidden')
+                            .html(
+                                'File lama sudah tersimpan. Jika Anda upload file baru, file lama akan ditimpa.'
+                            );
+                    } else {
+                        $('#file-info').addClass('hidden').html('');
+                    }
                 });
 
                 $('.cancel').click(function(e) {
@@ -383,8 +470,9 @@
 
                 function reset() {
                     $('#id').val('');
-                    $('#formObrikTim')[0].reset();
+                    $('#formPeraturan')[0].reset();
                     $('.err').empty();
+                    $('#file-info').addClass('hidden').html('');
                 }
             });
         </script>

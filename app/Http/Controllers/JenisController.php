@@ -76,12 +76,12 @@ class JenisController extends Controller
                     'message' => 'Data tidak ditemukan'
                 ]);
             }
-            $data['edited_by']  = Auth::id();
+            $data['edited_by']  = session('id_pegawai');
             $data['edited_at'] = now();
             $jenisPhp->update($data);
             $message = 'Data berhasil diupdate';
         } else {
-            $data['created_by']  = Auth::id();
+            $data['created_by']  = session('id_pegawai');
             $data['created_at'] = now();
             $jenisPhp = JenisPhp::create($data);
             $message = 'Data berhasil ditambahkan';

@@ -10,6 +10,7 @@ use App\Http\Controllers\NilaiKerugianController;
 use App\Http\Controllers\ObrikController;
 use App\Http\Controllers\ObrikDitanganiController;
 use App\Http\Controllers\ObrikTurunanController;
+use App\Http\Controllers\PeraturanController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\StatusTlController;
 use App\Http\Controllers\TemuanController;
@@ -124,6 +125,12 @@ Route::middleware('auth')->group(function () {
     Route::post('verifikasi-ssr/{id_tindak_lanjut}/ajaxBuktiPembayaran', [VerifikasiSsrController::class, 'ajaxBuktiPembayaran']);
     Route::post('verifikasi-ssr/{id}/tolak-ssr', [VerifikasiSsrController::class, 'tolak']);
     Route::post('verifikasi-ssr/{id}/setujui', [VerifikasiSsrController::class, 'setujui']);
+
+    // Peraturan
+    Route::get('peraturan', [PeraturanController::class, 'index']);
+    Route::post('ajax-peraturan', [PeraturanController::class, 'ajaxPeraturan']);
+    Route::post('peraturan', [PeraturanController::class, 'store']);
+    Route::delete('peraturan/{id}', [PeraturanController::class, 'destroy']);
 
     //Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
