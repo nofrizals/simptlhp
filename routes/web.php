@@ -6,6 +6,7 @@ use App\Http\Controllers\FileTindakLanjutController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KasusController;
+use App\Http\Controllers\KontakController;
 use App\Http\Controllers\NilaiKerugianController;
 use App\Http\Controllers\ObrikController;
 use App\Http\Controllers\ObrikDitanganiController;
@@ -131,6 +132,12 @@ Route::middleware('auth')->group(function () {
     Route::post('ajax-peraturan', [PeraturanController::class, 'ajaxPeraturan']);
     Route::post('peraturan', [PeraturanController::class, 'store']);
     Route::delete('peraturan/{id}', [PeraturanController::class, 'destroy']);
+
+    // Kontak
+    Route::get('kontak', [KontakController::class, 'index']);
+    Route::post('ajax-kontak', [KontakController::class, 'ajaxKontak']);
+    Route::post('kontak', [KontakController::class, 'store']);
+    Route::delete('kontak/{id}', [KontakController::class, 'destroy']);
 
     //Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

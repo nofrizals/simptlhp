@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Peraturan | SIMPTLHP')
+@section('title', 'Kontak | SIMPTLHP')
 @section('page-data', "'basicTables'")
 
 @section('content')
@@ -11,15 +11,15 @@
                 <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                            Data Peraturan
+                            Data Kontak
                         </h3>
                         <p class="text-sm text-gray-500">
-                            Kelola seluruh Peraturan
+                            Kelola seluruh kontak
                         </p>
                     </div>
                     <button id="openModalBtn"
                         class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
-                        + Tambah Peraturan
+                        + Tambah Kontak
                     </button>
                 </div>
 
@@ -40,7 +40,7 @@
 
                     {{-- SEARCH --}}
                     <div class="relative">
-                        <input id="customSearch" type="text" placeholder="Cari judul..."
+                        <input id="customSearch" type="text" placeholder="Cari nama..."
                             class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
@@ -61,9 +61,9 @@
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
                                 <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">No</th>
-                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Judul</th>
-                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Keterangan
-                                </th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Nama</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Detail
+                                    Kontak</th>
                                 <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Status</th>
                                 <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
                             </tr>
@@ -82,7 +82,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <div id="modalPeraturan"
+    <div id="modalKontak"
         class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
         <div id="modalContent"
@@ -102,35 +102,24 @@
                     <h3 class="modal-header text-base font-medium text-gray-800 dark:text-white/90"></h3>
                 </div>
                 <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
-                    <form id="formPeraturan">
+                    <form id="formKontak">
                         <div class="-mx-2.5 flex flex-wrap gap-y-5">
                             <input type="hidden" id="id" name="id">
                             <div class="w-full">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Judul
+                                    Nama
                                 </label>
-                                <input type="text" name="judul" id="judul" placeholder="Judul"
+                                <input type="text" name="nama" id="nama" placeholder="Nama"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                <p class="err text-theme-xs text-error-500" id="judul_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="nama_error"></p>
                             </div>
                             <div class="w-full">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Keterangan
+                                    Kontak
                                 </label>
-                                <textarea name="keterangan" id="keterangan" placeholder="Keterangan..." type="text" rows="6"
+                                <textarea name="kontak" id="kontak" placeholder="Kontak..." type="text" rows="6"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"></textarea>
-                                <p class="err text-theme-xs text-error-500" id="keterangan_error"></p>
-                            </div>
-                            <div class="w-full">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Upload file
-                                </label>
-                                <small id="file-info" class="text-red-500 hidden">
-                                    File lama sudah tersimpan. Jika Anda upload file baru, file lama akan ditimpa.
-                                </small>
-                                <input type="file" name="file" id="file"
-                                    class="focus:border-ring-brand-300 shadow-theme-xs focus:file:ring-brand-300 h-11 w-full overflow-hidden rounded-lg border border-gray-300 bg-transparent text-sm text-gray-500 transition-colors file:mr-5 file:border-collapse file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-solid file:border-gray-200 file:bg-gray-50 file:py-3 file:pr-3 file:pl-3.5 file:text-sm file:text-gray-700 placeholder:text-gray-400 hover:file:bg-gray-100 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:text-white/90 dark:file:border-gray-800 dark:file:bg-white/[0.03] dark:file:text-gray-400 dark:placeholder:text-gray-400" />
-                                <p class="err text-theme-xs text-error-500" id="file_error"></p>
+                                <p class="err text-theme-xs text-error-500" id="kontak_error"></p>
                             </div>
                             <div class="w-full px-2.5">
                                 <div class="mt-1 flex items-center gap-3">
@@ -161,8 +150,8 @@
 
                 // ─── URL ───────────────────────────────────────────────
                 const URL = {
-                    ajaxPeraturan: "{{ url('ajax-peraturan') }}",
-                    storePeraturan: "{{ url('peraturan') }}",
+                    ajaxKontak: "{{ url('ajax-kontak') }}",
+                    storeKontak: "{{ url('kontak') }}",
                 };
 
                 // ─── Spinner HTML ────────────────────────────────────────────────
@@ -190,7 +179,7 @@
                     lengthChange: false,
                     ajax: {
                         type: 'POST',
-                        url: URL.ajaxPeraturan
+                        url: URL.ajaxKontak
                     },
                     columns: [{
                             data: 'DT_RowIndex',
@@ -200,13 +189,13 @@
                             className: 'text-center'
                         },
                         {
-                            data: 'judul',
-                            name: 'judul',
+                            data: 'nama',
+                            name: 'nama',
                             className: 'text-center'
                         },
                         {
-                            data: 'keterangan',
-                            name: 'keterangan',
+                            data: 'kontak',
+                            name: 'kontak',
                             className: 'text-center'
                         },
                         {
@@ -250,7 +239,7 @@
                 dataTable.on('draw.dt', moveDataTableFooter);
 
                 function openModal() {
-                    $('#modalPeraturan')
+                    $('#modalKontak')
                         .removeClass('pointer-events-none opacity-0');
 
                     $('#modalContent')
@@ -259,7 +248,7 @@
                 }
 
                 function closeModal() {
-                    $('#modalPeraturan')
+                    $('#modalKontak')
                         .addClass('opacity-0 pointer-events-none');
 
                     $('#modalContent')
@@ -269,7 +258,7 @@
 
                 $("#openModalBtn").click(function() {
                     reset();
-                    $('.modal-header').html('Form Tambah Peraturan');
+                    $('.modal-header').html('Form Tambah Kontak');
                     openModal();
                 });
 
@@ -278,12 +267,12 @@
                     closeModal();
                 });
 
-                $('#formPeraturan').submit(function(e) {
+                $('#formKontak').submit(function(e) {
                     e.preventDefault();
-                    let formData = new FormData($('#formPeraturan')[0]);
+                    let formData = new FormData($('#formKontak')[0]);
                     $.ajax({
                         type: 'POST',
-                        url: URL.storePeraturan,
+                        url: URL.storeKontak,
                         data: formData,
                         dataType: 'json',
                         contentType: false,
@@ -342,11 +331,11 @@
                     });
                 });
 
-                $(document).on('click', '.btn-deletePeraturan', function() {
+                $(document).on('click', '.btn-deleteKontak', function() {
                     let id = $(this).data('id');
                     Swal.fire({
                         title: 'Apakah anda yakin?',
-                        text: 'Data dan file yang tersimpan akan dihapus.',
+                        text: 'Data yang tersimpan akan dihapus.',
                         icon: 'warning',
                         showCancelButton: true,
                         cancelButtonColor: '#DC3545',
@@ -358,7 +347,7 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 type: "DELETE",
-                                url: `${URL.storePeraturan}/${id}`,
+                                url: `${URL.storeKontak}/${id}`,
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status) {
@@ -397,23 +386,14 @@
                     });
                 });
 
-                $(document).on('click', '.btn-editPeraturan', function() {
+                $(document).on('click', '.btn-editKontak', function() {
                     let data = $(this).data();
                     openModal();
                     $('.modal-header').html(
-                        'Form Edit Peraturan');
+                        'Form Edit Kontak');
                     $('#id').val(data.id);
-                    $('#judul').val(data.judul);
-                    $('#keterangan').val(data.keterangan);
-                    if (data.file) {
-                        $('#file-info')
-                            .removeClass('hidden')
-                            .html(
-                                'File lama sudah tersimpan. Jika Anda upload file baru, file lama akan ditimpa.'
-                            );
-                    } else {
-                        $('#file-info').addClass('hidden').html('');
-                    }
+                    $('#nama').val(data.nama);
+                    $('#kontak').val(data.kontak);
                 });
 
                 $('.cancel').click(function(e) {
@@ -424,9 +404,8 @@
 
                 function reset() {
                     $('#id').val('');
-                    $('#formPeraturan')[0].reset();
+                    $('#formKontak')[0].reset();
                     $('.err').empty();
-                    $('#file-info').addClass('hidden').html('');
                 }
             });
         </script>
