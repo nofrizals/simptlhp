@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccessLogController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FileTindakLanjutController;
@@ -138,6 +139,10 @@ Route::middleware('auth')->group(function () {
     Route::post('ajax-kontak', [KontakController::class, 'ajaxKontak']);
     Route::post('kontak', [KontakController::class, 'store']);
     Route::delete('kontak/{id}', [KontakController::class, 'destroy']);
+
+    //Access Log
+    Route::get('access-log', [AccessLogController::class, 'index'])->name('access-log.index');
+    Route::post('ajax-access-log', [AccessLogController::class, 'ajax'])->name('access-log.ajax');
 
     //Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

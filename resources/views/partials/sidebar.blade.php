@@ -455,7 +455,7 @@
                 </ul>
             </div>
             <!-- Data Log -->
-            {{-- <div>
+            <div>
                 <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
                     <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
                         Data Log
@@ -471,8 +471,8 @@
                 <ul class="flex flex-col gap-4 mb-6">
                     <!-- Riwayat Login -->
                     <li>
-                        <a href="{{ url('riwayat-login') }}"
-                            class="menu-item group {{ request()->is('riwayat-login') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                        <a href="{{ url('access-log') }}"
+                            class="menu-item group {{ request()->is('access-log') ? 'menu-item-active' : 'menu-item-inactive' }}">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
 
                                 <!-- User -->
@@ -497,7 +497,7 @@
                         </a>
                     </li>
                 </ul>
-            </div> --}}
+            </div>
         </nav>
     </div>
 </aside>

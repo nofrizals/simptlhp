@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Clients\EgovClient;
+use App\Models\AccessLog;
 use App\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -113,11 +114,16 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $sessionId = $request->session()->get('session_id');
+        if ($sessionId) {
+            AccessLog::where('id_session', $sessionId)->update([
+                'valid_thru' => now(),
+                'logout_at' => now(),
+            ]);
+        }
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }
