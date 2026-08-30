@@ -13,6 +13,7 @@ use App\Http\Controllers\ObrikController;
 use App\Http\Controllers\ObrikDitanganiController;
 use App\Http\Controllers\ObrikTurunanController;
 use App\Http\Controllers\PeraturanController;
+use App\Http\Controllers\RekapController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\StatusTlController;
 use App\Http\Controllers\TemuanController;
@@ -33,7 +34,6 @@ Route::middleware('auth')->group(function () {
     // --> Menu Admin
     Route::get('admin', [AdminController::class, 'index']);
     Route::post('admin', [AdminController::class, 'store']);
-    // Route::get('admin/{admin}/edit', [AdminController::class, 'edit']);
     Route::delete('admin/{admin}', [AdminController::class, 'destroy']);
     Route::post('ajax-data-admin', [AdminController::class, 'ajaxDataAdmin']);
     Route::post('ajax-data-simak', [AdminController::class, 'ajaxDataSimak']);
@@ -127,6 +127,18 @@ Route::middleware('auth')->group(function () {
     Route::post('verifikasi-ssr/{id_tindak_lanjut}/ajaxBuktiPembayaran', [VerifikasiSsrController::class, 'ajaxBuktiPembayaran']);
     Route::post('verifikasi-ssr/{id}/tolak-ssr', [VerifikasiSsrController::class, 'tolak']);
     Route::post('verifikasi-ssr/{id}/setujui', [VerifikasiSsrController::class, 'setujui']);
+
+    // Rekap Laporan
+    Route::prefix('rekap')->name('rekap.')->middleware(['web'])->group(function () {
+        Route::get('php-tnk', [RekapController::class, 'phpTnk'])->name('php-tnk');
+        Route::post('php-tnk/data', [RekapController::class, 'data'])->name('php-tnk.data');
+        Route::get('php-tnk/{kasus}/cetak-php', [RekapController::class, 'cetakPhp'])->name('php-tnk.cetak-php');
+        Route::get('php-tnk/{kasus}/cetak-tnk', [RekapController::class, 'cetakTnk'])->name('php-tnk.cetak-tnk');
+        Route::get('php-tnk/{kasus}/export-php', [RekapController::class, 'exportPhp'])->name('php-tnk.export-php');
+        Route::get('php-tnk/{kasus}/export-tnk', [RekapController::class, 'exportTnk'])->name('php-tnk.export-tnk');
+        Route::get('php-tnk/cetak-tnk-kolektif', [RekapController::class, 'cetakTnkKolektif'])->name('php-tnk.cetak-tnk-kolektif');
+        Route::get('php-tnk/export-tnk-kolektif', [RekapController::class, 'exportTnkKolektif'])->name('php-tnk.export-tnk-kolektif');
+    });
 
     // Peraturan
     Route::get('peraturan', [PeraturanController::class, 'index']);

@@ -274,59 +274,31 @@
                             </span>
                         </a>
                     </li> --}}
-                    <!-- Rekap Laporan -->
-                    {{-- <li>
-                        <a href="{{ url('rekap-laporan') }}"
-                            class="menu-item group {{ request()->is('rekap-laporan') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg class="{{ request()->is('rekap-laporan') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
-                                    fill="none" stroke="#737070" />
 
-                                <!-- Lipatan -->
-                                <path d="M14 3V7H18" stroke="#737070" stroke-width="1.5" />
-
-                                <!-- Bar chart -->
-                                <path d="M9 17V14" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
-                                <path d="M12 17V12" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
-                                <path d="M15 17V10" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
-                            </svg>
-
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Rekap Laporan
-                            </span>
-                        </a>
-                    </li> --}}
-                    <!-- Rekap Laporan -->
                     <li>
                         <a href="#"
                             @click.prevent="selected = (selected === 'Rekap-laporan' ? '':'Rekap-laporan')"
-                            class="menu-item group"
-                            :class="(selected === 'Rekap-laporan') || (page === 'lineChart' || page === 'barChart' ||
-                                page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'">
-                            <svg :class="(selected === 'Rekap-laporan') || (page === 'lineChart' || page === 'barChart' ||
-                                page === 'pieChart') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                            class="menu-item group {{ request()->is('rekap/php-tnk', 'rekap/apbkam') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                            <svg class="{{ request()->is('rekap/php-tnk', 'rekap/apbkam') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
                                 width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
-                                    fill="none" stroke="#737070" />
+                                    fill="none" stroke="#737070" stroke-width="1.5" stroke-linejoin="round" />
 
-                                <!-- Lipatan -->
-                                <path d="M14 3V7H18" stroke="#737070" stroke-width="1.5" />
+                                <path d="M14 3V7H18" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linejoin="round" />
 
-                                <!-- Bar chart -->
-                                <path d="M9 17V14" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
-                                <path d="M12 17V12" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
-                                <path d="M15 17V10" stroke="#737070" stroke-width="1.5" stroke-linecap="round" />
+                                <circle cx="10.5" cy="12.5" r="2.5" fill="none" stroke="#737070"
+                                    stroke-width="1.5" />
+
+                                <path d="M12.5 14.5L14.5 16.5" fill="none" stroke="#737070" stroke-width="1.5"
+                                    stroke-linecap="round" />
                             </svg>
 
                             <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
                                 Rekap Laporan
                             </span>
-
                             <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
                                 :class="[(selected === 'Rekap-laporan') ? 'menu-item-arrow-active' :
                                     'menu-item-arrow-inactive',
@@ -345,30 +317,29 @@
                             <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                 class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                                 <li>
-                                    <a href="{{ url('php-tnk') }}" class="menu-dropdown-item group"
-                                        :class="page === 'lineChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        PHP/TNK
+                                    <a href="{{ url('rekap/php-tnk') }}"
+                                        class="menu-dropdown-item group {{ request()->is('rekap/php-tnk') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                        PHP / TNK
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('apbkam') }}" class="menu-dropdown-item group"
-                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        APBKAM
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('pertahun') }}" class="menu-dropdown-item group"
-                                        :class="page === 'barChart' ? 'menu-dropdown-item-active' :
-                                            'menu-dropdown-item-inactive'">
-                                        Pertahun
+                                    <a href="{{ url('rekap/apbkam') }}"
+                                        class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('rekap/apbkam') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                        <span>APBKAM</span>
+                                        @if ($countApprove > 0)
+                                            <span
+                                                class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+                                                {{ $countApprove }}
+                                            </span>
+                                        @endif
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <!-- Dropdown Menu End -->
                     </li>
+
+
                 </ul>
             </div>
             <!-- Lainnya -->
