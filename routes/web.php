@@ -141,6 +141,10 @@ Route::middleware('auth')->group(function () {
         Route::get('apbkam', [RekapController::class, 'apbkam'])->name('apbkam.index');
         Route::get('apbkam/cetak', [RekapController::class, 'cetakApbkam'])->name('apbkam.cetak');
         Route::get('apbkam/export', [RekapController::class, 'exportApbkam'])->name('apbkam.export');
+
+        Route::get('pertahun', [RekapController::class, 'pertahun'])->name('pertahun.index');
+        Route::get('pertahun/cetak', [RekapController::class, 'cetakPertahun'])->name('pertahun.cetak');
+        Route::get('pertahun/export', [RekapController::class, 'exportPertahun'])->name('pertahun.export');
     });
 
     // Peraturan

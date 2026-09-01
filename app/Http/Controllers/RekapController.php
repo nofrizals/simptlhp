@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Exports\RekapApbkamExport;
+use App\Exports\RekapPertahunExport;
 use App\Exports\RekapPhpExport;
 use App\Exports\RekapTnkExport;
 use App\Exports\RekapTnkKolektifExport;
 use App\Http\Requests\Rekap\FilterRekapApbkamRequest;
 use App\Http\Requests\Rekap\FilterRekapKolektifRequest;
+use App\Http\Requests\Rekap\FilterRekapPertahunRequest;
 use App\Http\Requests\Rekap\FilterRekapRequest;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
 use App\Models\Kasus;
 use App\Services\Rekap\RekapApbkamReportBuilder;
+use App\Services\Rekap\RekapPertahunReportBuilder;
 use App\Services\Rekap\RekapPhpReportBuilder;
 use App\Services\Rekap\RekapTnkKolektifReportBuilder;
 use App\Services\Rekap\RekapTnkReportBuilder;
@@ -33,6 +36,7 @@ final class RekapController extends Controller
         private readonly RekapTnkReportBuilder $tnkReportBuilder,
         private readonly RekapTnkKolektifReportBuilder $tnkKolektifReportBuilder,
         private readonly RekapApbkamReportBuilder $apbkamReportBuilder,
+        private readonly RekapPertahunReportBuilder $pertahunReportBuilder,
     ) {}
 
     /**
@@ -289,6 +293,57 @@ final class RekapController extends Controller
         return Excel::download(
             new RekapApbkamExport($filters['tahun_pemeriksaan'], $filters['kode_unor'], $this->apbkamReportBuilder),
             $filename . '.xlsx'
+        );
+    }
+
+    /**
+     * Tampilkan halaman filter Rekap Pertahun.
+     */
+    public function pertahun(): View
+    {
+        return view('rekap.pertahun', [
+            'jenisPhpList' => JenisPhp::whereNull('deleted_by')->orderBy('jenis_php')->get(),
+        ]);
+    }
+
+    /**
+     * Tampilkan hasil rekap pertahun (partial, di-load via AJAX ke #lembarRekap).
+     */
+    public function cetakPertahun(FilterRekapPertahunRequest $request): View
+    {
+        $filters = $request->validated();
+        $report = $this->pertahunReportBuilder->build((int) $filters['id_jenis_php']);
+
+        return view('rekap.partials.cetak-pertahun', [
+            'isTgr'      => $report['isTgr'],
+            'judulJenis' => $report['judulJenis'],
+            'subJudul'   => $report['subJudul'],
+            'rows'       => $report['rows'],
+            'totals'     => $report['totals'],
+            'ttd'        => $report['ttd'],
+            'filters'    => $filters,
+        ]);
+    }
+
+    /**
+     * Export Rekap Pertahun ke Excel.
+     */
+    public function exportPertahun(FilterRekapPertahunRequest $request): BinaryFileResponse
+    {
+        $filters = $request->validated();
+        $idJenisPhp = (int) $filters['id_jenis_php'];
+
+        $judulJenis = match ($idJenisPhp) {
+            1 => ' (REGULER)',
+            2 => ' (ADD)',
+            default => '',
+        };
+
+        $filename = 'REKAPITULASI TEMUAN HASIL PEMERIKSAAN INSPEKTORAT KABUPATEN SIAK' . $judulJenis . '.xlsx';
+
+        return Excel::download(
+            new RekapPertahunExport($idJenisPhp, $this->pertahunReportBuilder),
+            $filename
         );
     }
 }

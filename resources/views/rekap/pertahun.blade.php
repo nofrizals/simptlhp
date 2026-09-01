@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Rekap APBKAM | SIMPTLHP')
-@section('page-data', "'rekapApbkam'")
+@section('title', 'Rekap Pertahun | SIMPTLHP')
+@section('page-data', "'rekapPertahun'")
 
 @section('content')
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
@@ -9,37 +9,22 @@
             <div
                 class="relative rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Rekap APBKAM</h3>
-                    <p class="text-sm text-gray-500">Temuan hasil pemeriksaan APBKAM per kecamatan</p>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Rekap Pertahun</h3>
+                    <p class="text-sm text-gray-500">Rekapitulasi temuan hasil pemeriksaan per tahun</p>
                 </div>
 
-                <form id="formFilterApbkam"
-                    class="grid grid-cols-1 gap-4 border-b border-gray-200 px-6 py-5 md:grid-cols-4 dark:border-gray-800">
+                <form id="formFilterPertahun"
+                    class="grid grid-cols-1 gap-4 border-b border-gray-200 px-6 py-5 md:grid-cols-3 dark:border-gray-800">
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Tahun
-                            Pemeriksaan</label>
-                        <select name="tahun_pemeriksaan" id="tahun_pemeriksaan"
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Jenis PHP</label>
+                        <select name="id_jenis_php" id="id_jenis_php"
                             class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                            <option value="" disabled selected>Tahun</option>
-                            <option value="semua">Semua Tahun</option>
-                            @foreach ($tahunPemeriksaan as $tahun)
-                                <option value="{{ $tahun }}">{{ $tahun }}</option>
+                            <option value="" disabled selected>-- Jenis PHP --</option>
+                            @foreach ($jenisPhpList as $jenisPhp)
+                                <option value="{{ $jenisPhp->id_jenis_php }}">{{ $jenisPhp->jenis_php }}</option>
                             @endforeach
                         </select>
-                        <p class="err text-theme-xs text-error-500" id="tahun_pemeriksaan_error"></p>
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Nama
-                            Kecamatan</label>
-                        <select name="kode_unor" id="kode_unor"
-                            class="select2 dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                            <option value="" disabled selected>-- Nama Kecamatan --</option>
-                            @foreach ($kecamatanList as $kecamatan)
-                                <option value="{{ $kecamatan->kode_unor }}">{{ strtoupper($kecamatan->nama_unor) }}</option>
-                            @endforeach
-                        </select>
-                        <p class="err text-theme-xs text-error-500" id="kode_unor_error"></p>
+                        <p class="err text-theme-xs text-error-500" id="id_jenis_php_error"></p>
                     </div>
 
                     <div class="flex items-end">
@@ -50,6 +35,7 @@
                     </div>
                 </form>
             </div>
+
             <div id="lembarRekap"></div>
         </div>
     </div>
@@ -65,14 +51,9 @@
             });
 
             const URL = {
-                cetak: @json(route('rekap.apbkam.cetak')),
-                export: @json(route('rekap.apbkam.export')),
+                cetak: @json(route('rekap.pertahun.cetak')),
+                export: @json(route('rekap.pertahun.export')),
             };
-
-            $('#kode_unor').select2({
-                width: '100%',
-                dropdownParent: $('#formFilterApbkam')
-            });
 
             function clearFieldErrors() {
                 $('.err').html('');
@@ -85,13 +66,12 @@
                 });
             }
 
-            $('#formFilterApbkam').on('submit', function(e) {
+            $('#formFilterPertahun').on('submit', function(e) {
                 e.preventDefault();
                 clearFieldErrors();
 
                 const payload = {
-                    tahun_pemeriksaan: $('#tahun_pemeriksaan').val(),
-                    kode_unor: $('#kode_unor').val(),
+                    id_jenis_php: $('#id_jenis_php').val(),
                 };
 
                 $('#filterBtn').prop('disabled', true).html(
@@ -107,9 +87,6 @@
                     data: payload,
                     success: function(res) {
                         $('#lembarRekap').html(res);
-                        $('html, body').animate({
-                            scrollTop: $('#lembarRekap').offset().top - 80
-                        }, 300);
                     },
                     error: function(xhr) {
                         if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
@@ -129,7 +106,7 @@
                 });
             });
 
-            $(document).on('click', '#rekapapbkam-xlsx', function() {
+            $(document).on('click', '#rekapPertahun-xlsx', function() {
                 var $btn = $(this);
                 var originalHtml = $btn.html();
                 $btn.prop('disabled', true).html(
@@ -140,15 +117,13 @@
                     $btn.prop('disabled', false).html(originalHtml);
                 }, 5000);
 
+                // Lanjutkan dengan redirect
                 const params = new URLSearchParams({
-                    tahun_pemeriksaan: $(this).data('tahun-pemeriksaan'),
-                    kode_unor: $(this).data('kode-unor'),
+                    id_jenis_php: $btn.data('id-jenis-php'),
                 });
-
                 window.location.href = URL.export+'?' + params.toString();
             });
 
-            // Print — CSS eksplisit (bukan Tailwind), landscape karena tabel APBKAM sangat lebar (35 kolom).
             $(document).on('click', '#print', function() {
                 const printContents = document.getElementById('printMe').innerHTML;
                 const printWindow = window.open('', '_blank');
@@ -163,7 +138,7 @@
                                 body { font-family: Arial, sans-serif; color: #111827; font-size: 9px; }
                                 table { border-collapse: collapse; width: 100%; margin-bottom: 8px; }
                                 table.border-0 td { border: none; }
-                                td, th { padding: 2px 4px; vertical-align: middle; }
+                                td, th { padding: 3px 5px; vertical-align: middle; }
                                 table:not(.border-0) td, table:not(.border-0) th { border: 1px solid #9ca3af; }
                                 .text-center { text-align: center; }
                                 .text-right { text-align: right; }
@@ -176,7 +151,6 @@
                                 .mb-1, .mb-4 { margin-bottom: 8px; }
                                 .py-8 { padding: 24px 0; }
                                 .pr-2 { padding-right: 8px; }
-                                .bg-gray-100 { background-color: #f3f4f6; }
                             </style>
                         </head>
                         <body>${printContents}</body>

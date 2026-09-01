@@ -249,32 +249,7 @@
                         </div>
                         <!-- Dropdown Menu End -->
                     </li>
-                    <!-- Kasus -->
-                    {{-- <li>
-                        <a href="{{ url('kasus') }}"
-                            class="menu-item group {{ request()->is('kasus') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg class="{{ request()->is('kasus') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
-                                    fill="none" stroke="#737070" stroke-width="1.5" stroke-linejoin="round" />
-                                <path d="M14 3V7H18" fill="none" stroke="#737070" stroke-width="1.5"
-                                    stroke-linejoin="round" />
-                                <path d="M9 11H15" fill="none" stroke="#737070" stroke-width="1.5"
-                                    stroke-linecap="round" />
-                                <path d="M9 14H15" fill="none" stroke="#737070" stroke-width="1.5"
-                                    stroke-linecap="round" />
-                                <path d="M9 17H13" fill="none" stroke="#737070" stroke-width="1.5"
-                                    stroke-linecap="round" />
-                            </svg>
-
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Kasus
-                            </span>
-                        </a>
-                    </li> --}}
-
+                    <!-- Rekap Laporan -->
                     <li>
                         <a href="#"
                             @click.prevent="selected = (selected === 'Rekap-laporan' ? '':'Rekap-laporan')"
@@ -334,12 +309,22 @@
                                         @endif
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ url('rekap/pertahun') }}"
+                                        class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('rekap/pertahun') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                        <span>Pertahun</span>
+                                        @if ($countApprove > 0)
+                                            <span
+                                                class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+                                                {{ $countApprove }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <!-- Dropdown Menu End -->
                     </li>
-
-
                 </ul>
             </div>
             <!-- Lainnya -->
