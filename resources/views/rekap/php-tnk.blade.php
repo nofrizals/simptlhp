@@ -7,7 +7,7 @@
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
         <div class="space-y-6">
             <div
-                class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                class="relative rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800">
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
                         Rekap PHP / TNK
@@ -185,7 +185,12 @@
                 };
             }
 
-            $('.select2').select2();
+            // $('.select2').select2();
+
+            $('#kode_unor').select2({
+                width: '100%',
+                dropdownParent: $('#formFilterRekap')
+            });
 
             // LOADING
             $('#dtRekap').on('processing.dt', function(e, settings, processing) {

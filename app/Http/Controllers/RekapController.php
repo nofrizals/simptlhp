@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Exports\RekapApbkamExport;
 use App\Exports\RekapPhpExport;
 use App\Exports\RekapTnkExport;
 use App\Exports\RekapTnkKolektifExport;
+use App\Http\Requests\Rekap\FilterRekapApbkamRequest;
 use App\Http\Requests\Rekap\FilterRekapKolektifRequest;
 use App\Http\Requests\Rekap\FilterRekapRequest;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
 use App\Models\Kasus;
+use App\Services\Rekap\RekapApbkamReportBuilder;
 use App\Services\Rekap\RekapPhpReportBuilder;
 use App\Services\Rekap\RekapTnkKolektifReportBuilder;
 use App\Services\Rekap\RekapTnkReportBuilder;
+use App\Services\Rekap\SimakUnorService;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +31,8 @@ final class RekapController extends Controller
     public function __construct(
         private readonly RekapPhpReportBuilder $phpReportBuilder,
         private readonly RekapTnkReportBuilder $tnkReportBuilder,
-        private readonly RekapTnkKolektifReportBuilder $tnkKolektifReportBuilder
+        private readonly RekapTnkKolektifReportBuilder $tnkKolektifReportBuilder,
+        private readonly RekapApbkamReportBuilder $apbkamReportBuilder,
     ) {}
 
     /**
@@ -228,6 +233,62 @@ final class RekapController extends Controller
                 $this->tnkKolektifReportBuilder,
             ),
             $filename
+        );
+    }
+
+    /**
+     * Tampilkan halaman filter APBKAM.
+     */
+    public function apbkam(SimakUnorService $simakUnorService): View
+    {
+        return view('rekap.apbkam', [
+            'kecamatanList'    => $simakUnorService->listKecamatan(),
+            'tahunPemeriksaan' => $this->getDistinctTahunPemeriksaan(),
+        ]);
+    }
+
+    /**
+     * Tampilkan hasil rekap APBKAM (partial, di-load via AJAX ke #lembarRekap).
+     */
+    public function cetakApbkam(FilterRekapApbkamRequest $request): View
+    {
+        $filters = $request->validated();
+
+        $report = $this->apbkamReportBuilder->build(
+            $filters['tahun_pemeriksaan'],
+            $filters['kode_unor'],
+        );
+
+        return view('rekap.partials.cetak-apbkam', [
+            'kecamatanLabel'   => $report['kecamatanLabel'],
+            'tahunPemeriksaan' => $report['tahunPemeriksaan'],
+            'kampungRows'      => $report['kampungRows'],
+            'grandTotal'       => $report['grandTotal'],
+            'ttd'              => $report['ttd'],
+            'filters'          => $filters,
+        ]);
+    }
+
+    /**
+     * Export APBKAM ke Excel.
+     */
+    public function exportApbkam(FilterRekapApbkamRequest $request): BinaryFileResponse
+    {
+        $filters = $request->validated();
+
+        $kecamatanLabel = $this->apbkamReportBuilder->build(
+            $filters['tahun_pemeriksaan'],
+            $filters['kode_unor'],
+        )['kecamatanLabel'];
+
+        $filename = 'APBKAM INSPEKTORAT KABUPATEN SIAK ' . $kecamatanLabel;
+        if ($filters['tahun_pemeriksaan'] !== 'semua') {
+            $filename .= ' TAHUN ' . $filters['tahun_pemeriksaan'];
+        }
+
+        return Excel::download(
+            new RekapApbkamExport($filters['tahun_pemeriksaan'], $filters['kode_unor'], $this->apbkamReportBuilder),
+            $filename . '.xlsx'
         );
     }
 }

@@ -138,6 +138,9 @@ Route::middleware('auth')->group(function () {
         Route::get('php-tnk/{kasus}/export-tnk', [RekapController::class, 'exportTnk'])->name('php-tnk.export-tnk');
         Route::get('php-tnk/cetak-tnk-kolektif', [RekapController::class, 'cetakTnkKolektif'])->name('php-tnk.cetak-tnk-kolektif');
         Route::get('php-tnk/export-tnk-kolektif', [RekapController::class, 'exportTnkKolektif'])->name('php-tnk.export-tnk-kolektif');
+        Route::get('apbkam', [RekapController::class, 'apbkam'])->name('apbkam.index');
+        Route::get('apbkam/cetak', [RekapController::class, 'cetakApbkam'])->name('apbkam.cetak');
+        Route::get('apbkam/export', [RekapController::class, 'exportApbkam'])->name('apbkam.export');
     });
 
     // Peraturan
