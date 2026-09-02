@@ -18,7 +18,7 @@ class JenisController extends Controller
 
     public function ajaxDataJenisPHP()
     {
-        $data = JenisPhp::orderBy('id_jenis_php', 'desc');
+        $data = JenisPhp::whereNull('deleted_by');
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('jenis_php', function ($value) {
