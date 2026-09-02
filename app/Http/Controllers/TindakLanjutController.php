@@ -216,6 +216,12 @@ class TindakLanjutController extends Controller
                 'message' => 'Data tidak dapat dihapus karena masih memiliki data pembayaran.'
             ], 422);
         }
+        if ($tindaklanjut->ssr()->exists()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak dapat dihapus karena masih memiliki data di tindak lanjut.'
+            ], 422);
+        }
         $tindaklanjut->delete();
         return response()->json([
             'status' => true,

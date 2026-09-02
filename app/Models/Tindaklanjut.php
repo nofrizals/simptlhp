@@ -36,4 +36,9 @@ class Tindaklanjut extends Model
     {
         return $this->hasMany(Pembayaran::class, 'id_tindak_lanjut', 'id_tindak_lanjut')->whereNull('deleted_by');
     }
+
+    public function ssr()
+    {
+        return $this->belongsTo(VerifikasiSsr::class, 'id_rekomendasi', 'id_rekomendasi');
+    }
 }
