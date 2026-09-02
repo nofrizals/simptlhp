@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Models\FileTindakLanjut;
 use App\Models\Pembayaran;
 use App\Models\Tindaklanjut;
-use Illuminate\Http\Request;
 use App\Models\VerifikasiSsr;
-use App\Models\FileTindakLanjut;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -200,8 +201,6 @@ class VerifikasiSsrController extends Controller
     public function setujui(Request $request, $id)
     {
         $verifikasi = VerifikasiSsr::where('id_tindak_lanjut', $id)->firstOrFail();
-
-        // Pastikan belum pernah disetujui
         if ($verifikasi->approve_at) {
             return response()->json([
                 'success' => false,
@@ -209,7 +208,6 @@ class VerifikasiSsrController extends Controller
             ], 422);
         }
 
-        // Pastikan belum ditolak
         if ($verifikasi->reject_at) {
             return response()->json([
                 'success' => false,
@@ -217,10 +215,19 @@ class VerifikasiSsrController extends Controller
             ], 422);
         }
 
-        $verifikasi->update([
-            'approve_at' => now(),
-            'approve_by' => session('id_pegawai'),
-        ]);
+        DB::transaction(function () use ($verifikasi, $id) {
+            $verifikasi->update([
+                'approve_at' => now(),
+                'approve_by' => session('id_pegawai'),
+            ]);
+
+            // Ubah status tindak lanjut
+            $tindak_lanjut = Tindaklanjut::where('id_tindak_lanjut', $id)->firstOrFail();
+
+            $tindak_lanjut->update([
+                'id_status' => $verifikasi->id_status
+            ]);
+        });
 
         return response()->json([
             'success' => true,
