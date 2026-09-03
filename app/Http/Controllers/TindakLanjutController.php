@@ -61,7 +61,16 @@ class TindakLanjutController extends Controller
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('status_tindak_lanjut', function (Tindaklanjut $value): string {
-                return e($value->status?->status_tl) ?: '-';
+                if ($value->status?->status_tl) {
+                    if ($value->id_status == 2) {
+                        $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '</b><br> Keterangan: <code>' . e($value->keterangan) . '</code>';
+                    } else {
+                        $status_tindak_lanjut = $value->status?->status_tl;
+                    }
+                } else {
+                    $status_tindak_lanjut = '-';
+                }
+                return $status_tindak_lanjut;
             })
             ->addColumn('keterangan', function (Tindaklanjut $value): string {
                 return e($value->keterangan) ?: '-';
@@ -120,6 +129,7 @@ class TindakLanjutController extends Controller
                 return $action;
             })
             ->rawColumns([
+                'status_tindak_lanjut',
                 'rincian_temuan_keuangan_pajak',
                 'rincian_temuan_keuangan_daerah',
                 'rincian_temuan_keuangan_desa',
