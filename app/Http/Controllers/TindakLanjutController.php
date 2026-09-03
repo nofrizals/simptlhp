@@ -63,7 +63,7 @@ class TindakLanjutController extends Controller
             ->addColumn('status_tindak_lanjut', function (Tindaklanjut $value): string {
                 if ($value->status?->status_tl) {
                     if ($value->id_status == 2) {
-                        $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '</b><br> Keterangan: <code>' . e($value->keterangan) . '</code>';
+                        $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '</b><br> Note: <code>' . e($value->ssr?->reject_note ?: '-') . '</code>';
                     } else {
                         $status_tindak_lanjut = $value->status?->status_tl;
                     }
