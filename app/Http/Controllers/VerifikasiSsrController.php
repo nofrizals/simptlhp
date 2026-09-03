@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FileTindakLanjut;
+use Carbon\Carbon;
 use App\Models\Pembayaran;
+use Illuminate\Http\Request;
 use App\Models\Tindaklanjut;
 use App\Models\VerifikasiSsr;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
+use App\Models\FileTindakLanjut;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -54,6 +54,9 @@ class VerifikasiSsrController extends Controller
                 } else if ($value->reject_by) {
                     $log = 'Ditolak oleh <strong>' . e($value->rejectBy->nama_pegawai) . '</strong><br>'
                         . optional(Carbon::parse($value->reject_at ?? '-'))->translatedFormat('d F Y');
+                } else if ($value->edited_by) {
+                    $log = 'Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
                 } else {
                     $log = 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
                         . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y');

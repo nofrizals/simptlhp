@@ -35,6 +35,11 @@ class VerifikasiSsr extends Model
         return $this->belongsTo(PegawaiSimak::class, 'created_by', 'id_pegawai');
     }
 
+    public function editedBy()
+    {
+        return $this->belongsTo(PegawaiSimak::class, 'edited_by', 'id_pegawai');
+    }
+
     public function tindakLanjut()
     {
         return $this->belongsTo(Tindaklanjut::class, 'id_tindak_lanjut', 'id_tindak_lanjut');

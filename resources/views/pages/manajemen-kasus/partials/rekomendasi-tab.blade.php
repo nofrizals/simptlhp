@@ -564,6 +564,50 @@
                 });
             });
 
+            $(document).on('click', '.btn-ajukanUlangTindakLanjut', function() {
+                const id = $(this).data('id');
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Yakin',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'GET',
+                            url: `{{ url('tindak_lanjut') }}/${id}`,
+                            dataType: 'json',
+                            success: function(response) {
+                                $('#dtTindakLanjut').DataTable().ajax
+                                    .reload(
+                                        null,
+                                        false);
+                                Swal.fire({
+                                    title: 'Sukses',
+                                    text: response.message,
+                                    icon: 'success'
+                                });
+                            },
+                            error: function(xhr) {
+                                let message =
+                                    "Terjadi kesalahan pada server.";
+                                if (xhr.responseJSON && xhr.responseJSON
+                                    .message) {
+                                    message = xhr.responseJSON.message;
+                                }
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: message,
+                                    icon: "error"
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
             let tindak_lanjut = '';
 
             $(document).on('click', '.pembayaran', function() {

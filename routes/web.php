@@ -106,6 +106,7 @@ Route::middleware('auth')->group(function () {
     Route::post('daftar-kasus/{rekomendasi}/tindak_lanjut', [TindakLanjutController::class, 'store'])->name('tindak_lanjut.store');
     Route::get('tindak_lanjut/{tindaklanjut}/edit', [TindakLanjutController::class, 'edit'])->name('tindak_lanjut.edit');
     Route::delete('tindak_lanjut/{tindaklanjut}', [TindakLanjutController::class, 'destroy'])->name('tindak_lanjut.destroy');
+    Route::get('tindak_lanjut/{tindaklanjut}', [TindakLanjutController::class, 'ajukanUlang'])->name('tindak_lanjut.tindak_lanjut');
 
     Route::post('tindak_lanjut/cek', [TindakLanjutController::class, 'cekTindakLanjut']);
     Route::post('tindak_lanjut/ajaxSummary', [TindakLanjutController::class, 'ajaxSummary']);
