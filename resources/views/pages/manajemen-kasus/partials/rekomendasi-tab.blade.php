@@ -1047,7 +1047,10 @@
                     success: function(response) {
                         if (response.status) {
                             myDropzone.removeAllFiles(true);
-
+                            $('#dtUploadFile').DataTable().ajax
+                                .reload(
+                                    null,
+                                    false);
                             Swal.fire({
                                 title: 'Sukses',
                                 text: response.message,
