@@ -167,34 +167,139 @@ class TindakLanjutController extends Controller
             ->make(true);
     }
 
+    // public function store(Request $request, Rekomendasi $rekomendasi): JsonResponse
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'tindak_lanjut'      => 'nullable|string',
+    //         'rincian_keuangan'   => 'nullable|numeric|lte:besaran_kerugian',
+    //         'setor'              => 'nullable|numeric|lte:rincian_keuangan',
+    //         'rincian_keuangan2'  => 'nullable|numeric|lte:besaran_kerugian2',
+    //         'setor2'             => 'nullable|numeric|lte:rincian_keuangan2',
+    //         'rincian_keuangan3'  => 'nullable|numeric|lte:besaran_kerugian3',
+    //         'setor3'             => 'nullable|numeric|lte:rincian_keuangan3',
+    //         'rincian_keuangan4'  => 'nullable|numeric|lte:besaran_kerugian4',
+    //         'setor4'             => 'nullable|numeric|lte:rincian_keuangan4',
+    //         'id_status'          => 'required',
+    //         'keterangan'         => 'nullable|string',
+    //         'tgl_tindak_lanjut'  => 'required|date',
+    //     ], [
+    //         'rincian_keuangan.lte'       => 'Rincian melebihi nilai kerugian.',
+    //         'setor.lte'                  => 'Setoran melebihi nominal rincian.',
+    //         'rincian_keuangan2.lte'      => 'Rincian melebihi nilai kerugian.',
+    //         'setor2.lte'                 => 'Setoran melebihi nominal rincian.',
+    //         'rincian_keuangan3.lte'      => 'Rincian melebihi nilai kerugian.',
+    //         'setor3.lte'                 => 'Setoran melebihi nominal rincian.',
+    //         'rincian_keuangan4.lte'      => 'Rincian melebihi nilai kerugian.',
+    //         'setor4.lte'                 => 'Setoran melebihi nominal rincian.',
+    //         'id_status.required'         => 'Status tindak lanjut wajib diisi.',
+    //         'tgl_tindak_lanjut.required' => 'Tanggal tindak lanjut wajib diisi.',
+    //         'tgl_tindak_lanjut.date'     => 'Tanggal tindak lanjut tidak valid.',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'error'  => $validator->errors(),
+    //         ]);
+    //     }
+
+    //     $validated = $validator->safe()->except('id');
+    //     $validated['id_rekomendasi'] = $rekomendasi->id_rekomendasi;
+
+    //     if ($request->filled('id')) {
+    //         $temuan = Tindaklanjut::where('id_rekomendasi', $rekomendasi->id_rekomendasi)
+    //             ->findOrFail($request->integer('id'));
+    //         $validated['edited_by'] = (string) session('id_pegawai');
+    //         $validated['edited_at'] = now();
+    //         $temuan->update($validated);
+    //         $message = 'Data berhasil diupdate';
+    //     } else {
+    //         DB::transaction(function () use ($validated, &$temuan) {
+    //             $idStatus = $validated['id_status'];
+    //             if ((int) $validated['id_status'] === 1) {
+    //                 $validated['id_status'] = NULL;
+    //             }
+    //             $validated['created_by'] = (string) session('id_pegawai');
+    //             $validated['created_at'] = now();
+    //             $temuan = Tindaklanjut::create($validated);
+    //             $validated['label'] = Str::uuid();
+    //             $validated['id_status'] = $idStatus;
+    //             $validated['id_tindak_lanjut'] = $temuan->id_tindak_lanjut;
+    //             $temuan = VerifikasiSsr::create($validated);
+    //         });
+    //         $message = 'Data berhasil ditambahkan';
+    //     }
+
+    //     return response()->json([
+    //         'status'  => (bool) $temuan,
+    //         'message' => $temuan ? $message : 'Gagal menyimpan data',
+    //     ]);
+    // }
+
     public function store(Request $request, Rekomendasi $rekomendasi): JsonResponse
     {
+        $rekomendasi->loadMissing('temuan');
+        $temuan = $rekomendasi->temuan;
+
+        $currentId = $request->filled('id') ? $request->integer('id') : null;
+
         $validator = Validator::make($request->all(), [
             'tindak_lanjut'      => 'nullable|string',
-            'rincian_keuangan'   => 'nullable|numeric|lte:besaran_kerugian',
+            'rincian_keuangan'   => 'nullable|numeric|min:0',
             'setor'              => 'nullable|numeric|lte:rincian_keuangan',
-            'rincian_keuangan2'  => 'nullable|numeric|lte:besaran_kerugian2',
+            'rincian_keuangan2'  => 'nullable|numeric|min:0',
             'setor2'             => 'nullable|numeric|lte:rincian_keuangan2',
-            'rincian_keuangan3'  => 'nullable|numeric|lte:besaran_kerugian3',
+            'rincian_keuangan3'  => 'nullable|numeric|min:0',
             'setor3'             => 'nullable|numeric|lte:rincian_keuangan3',
-            'rincian_keuangan4'  => 'nullable|numeric|lte:besaran_kerugian4',
+            'rincian_keuangan4'  => 'nullable|numeric|min:0',
             'setor4'             => 'nullable|numeric|lte:rincian_keuangan4',
             'id_status'          => 'required',
             'keterangan'         => 'nullable|string',
             'tgl_tindak_lanjut'  => 'required|date',
         ], [
-            'rincian_keuangan.lte'       => 'Rincian melebihi nilai kerugian.',
             'setor.lte'                  => 'Setoran melebihi nominal rincian.',
-            'rincian_keuangan2.lte'      => 'Rincian melebihi nilai kerugian.',
             'setor2.lte'                 => 'Setoran melebihi nominal rincian.',
-            'rincian_keuangan3.lte'      => 'Rincian melebihi nilai kerugian.',
             'setor3.lte'                 => 'Setoran melebihi nominal rincian.',
-            'rincian_keuangan4.lte'      => 'Rincian melebihi nilai kerugian.',
             'setor4.lte'                 => 'Setoran melebihi nominal rincian.',
             'id_status.required'         => 'Status tindak lanjut wajib diisi.',
             'tgl_tindak_lanjut.required' => 'Tanggal tindak lanjut wajib diisi.',
             'tgl_tindak_lanjut.date'     => 'Tanggal tindak lanjut tidak valid.',
         ]);
+
+        $validator->after(function ($validator) use ($request, $temuan, $currentId) {
+            $categories = [
+                'rincian_keuangan'  => 'besaran_kerugian',
+                'rincian_keuangan2' => 'besaran_kerugian2',
+                'rincian_keuangan3' => 'besaran_kerugian3',
+                'rincian_keuangan4' => 'besaran_kerugian4',
+            ];
+
+            // Semua rekomendasi di bawah temuan yang sama, karena TindakLanjut
+            // tidak punya FK langsung ke Temuan.
+            $idRekomendasiList = Rekomendasi::where('id_temuan', $temuan->id_temuan)
+                ->pluck('id_rekomendasi');
+
+            foreach ($categories as $field => $besaranField) {
+                $nilaiBaru = (float) $request->input($field, 0);
+                if ($nilaiBaru <= 0) {
+                    continue;
+                }
+
+                $besaran = (float) ($temuan->{$besaranField} ?? 0);
+
+                $totalTerpakai = (float) Tindaklanjut::whereIn('id_rekomendasi', $idRekomendasiList)
+                    ->when($currentId, fn($q) => $q->where('id_tindak_lanjut', '!=', $currentId))
+                    ->sum($field);
+
+                if (($totalTerpakai + $nilaiBaru) > $besaran) {
+                    $sisa = max($besaran - $totalTerpakai, 0);
+                    $validator->errors()->add(
+                        $field,
+                        'Total rincian melebihi besaran kerugian. Sisa yang tersedia: Rp ' . number_format($sisa, 0, ',', '.')
+                    );
+                }
+            }
+        });
 
         if ($validator->fails()) {
             return response()->json([
@@ -207,32 +312,32 @@ class TindakLanjutController extends Controller
         $validated['id_rekomendasi'] = $rekomendasi->id_rekomendasi;
 
         if ($request->filled('id')) {
-            $temuan = Tindaklanjut::where('id_rekomendasi', $rekomendasi->id_rekomendasi)
-                ->findOrFail($request->integer('id'));
+            $temuanRow = Tindaklanjut::where('id_rekomendasi', $rekomendasi->id_rekomendasi)
+                ->findOrFail($currentId);
             $validated['edited_by'] = (string) session('id_pegawai');
             $validated['edited_at'] = now();
-            $temuan->update($validated);
+            $temuanRow->update($validated);
             $message = 'Data berhasil diupdate';
         } else {
-            DB::transaction(function () use ($validated, &$temuan) {
+            DB::transaction(function () use ($validated, &$temuanRow) {
                 $idStatus = $validated['id_status'];
                 if ((int) $validated['id_status'] === 1) {
-                    $validated['id_status'] = NULL;
+                    $validated['id_status'] = null;
                 }
                 $validated['created_by'] = (string) session('id_pegawai');
                 $validated['created_at'] = now();
-                $temuan = Tindaklanjut::create($validated);
+                $temuanRow = Tindaklanjut::create($validated);
                 $validated['label'] = Str::uuid();
                 $validated['id_status'] = $idStatus;
-                $validated['id_tindak_lanjut'] = $temuan->id_tindak_lanjut;
-                $temuan = VerifikasiSsr::create($validated);
+                $validated['id_tindak_lanjut'] = $temuanRow->id_tindak_lanjut;
+                $temuanRow = VerifikasiSsr::create($validated);
             });
             $message = 'Data berhasil ditambahkan';
         }
 
         return response()->json([
-            'status'  => (bool) $temuan,
-            'message' => $temuan ? $message : 'Gagal menyimpan data',
+            'status'  => (bool) $temuanRow,
+            'message' => $temuanRow ? $message : 'Gagal menyimpan data',
         ]);
     }
 

@@ -452,6 +452,7 @@
                 e.preventDefault();
                 const idRekomendasi = $('#idRekomendasi').val();
                 const formData = new FormData(this);
+                $('#formTindakLanjut .err').text('');
                 $.ajax({
                     type: 'POST',
                     url: `{{ url('daftar-kasus') }}/${idRekomendasi}/tindak_lanjut`,
