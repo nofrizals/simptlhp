@@ -218,6 +218,23 @@ class VerifikasiSsrController extends Controller
             ], 422);
         }
 
+        // Validasi kelengkapan file & bukti pembayaran sebelum disetujui
+        $adaFile = FileTindakLanjut::where('id_tindak_lanjut', $id)->exists();
+        if (!$adaFile) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File tindak lanjut belum diunggah. Tidak dapat disetujui.'
+            ], 422);
+        }
+
+        $adaBuktiPembayaran = Pembayaran::where('id_tindak_lanjut', $id)->exists();
+        if (!$adaBuktiPembayaran) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bukti pembayaran belum tersedia. Tidak dapat disetujui.'
+            ], 422);
+        }
+
         DB::transaction(function () use ($verifikasi, $id) {
             $verifikasi->update([
                 'approve_at' => now(),
