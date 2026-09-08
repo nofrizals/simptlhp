@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tindaklanjut extends Model
 {
@@ -37,8 +38,8 @@ class Tindaklanjut extends Model
         return $this->hasMany(Pembayaran::class, 'id_tindak_lanjut', 'id_tindak_lanjut')->whereNull('deleted_by');
     }
 
-    public function ssr()
+    public function verifikasiSsr(): HasMany
     {
-        return $this->belongsTo(VerifikasiSsr::class, 'id_rekomendasi', 'id_rekomendasi');
+        return $this->hasMany(VerifikasiSsr::class, 'id_tindak_lanjut', 'id_tindak_lanjut');
     }
 }

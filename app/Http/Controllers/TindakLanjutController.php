@@ -167,75 +167,6 @@ class TindakLanjutController extends Controller
             ->make(true);
     }
 
-    // public function store(Request $request, Rekomendasi $rekomendasi): JsonResponse
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'tindak_lanjut'      => 'nullable|string',
-    //         'rincian_keuangan'   => 'nullable|numeric|lte:besaran_kerugian',
-    //         'setor'              => 'nullable|numeric|lte:rincian_keuangan',
-    //         'rincian_keuangan2'  => 'nullable|numeric|lte:besaran_kerugian2',
-    //         'setor2'             => 'nullable|numeric|lte:rincian_keuangan2',
-    //         'rincian_keuangan3'  => 'nullable|numeric|lte:besaran_kerugian3',
-    //         'setor3'             => 'nullable|numeric|lte:rincian_keuangan3',
-    //         'rincian_keuangan4'  => 'nullable|numeric|lte:besaran_kerugian4',
-    //         'setor4'             => 'nullable|numeric|lte:rincian_keuangan4',
-    //         'id_status'          => 'required',
-    //         'keterangan'         => 'nullable|string',
-    //         'tgl_tindak_lanjut'  => 'required|date',
-    //     ], [
-    //         'rincian_keuangan.lte'       => 'Rincian melebihi nilai kerugian.',
-    //         'setor.lte'                  => 'Setoran melebihi nominal rincian.',
-    //         'rincian_keuangan2.lte'      => 'Rincian melebihi nilai kerugian.',
-    //         'setor2.lte'                 => 'Setoran melebihi nominal rincian.',
-    //         'rincian_keuangan3.lte'      => 'Rincian melebihi nilai kerugian.',
-    //         'setor3.lte'                 => 'Setoran melebihi nominal rincian.',
-    //         'rincian_keuangan4.lte'      => 'Rincian melebihi nilai kerugian.',
-    //         'setor4.lte'                 => 'Setoran melebihi nominal rincian.',
-    //         'id_status.required'         => 'Status tindak lanjut wajib diisi.',
-    //         'tgl_tindak_lanjut.required' => 'Tanggal tindak lanjut wajib diisi.',
-    //         'tgl_tindak_lanjut.date'     => 'Tanggal tindak lanjut tidak valid.',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'error'  => $validator->errors(),
-    //         ]);
-    //     }
-
-    //     $validated = $validator->safe()->except('id');
-    //     $validated['id_rekomendasi'] = $rekomendasi->id_rekomendasi;
-
-    //     if ($request->filled('id')) {
-    //         $temuan = Tindaklanjut::where('id_rekomendasi', $rekomendasi->id_rekomendasi)
-    //             ->findOrFail($request->integer('id'));
-    //         $validated['edited_by'] = (string) session('id_pegawai');
-    //         $validated['edited_at'] = now();
-    //         $temuan->update($validated);
-    //         $message = 'Data berhasil diupdate';
-    //     } else {
-    //         DB::transaction(function () use ($validated, &$temuan) {
-    //             $idStatus = $validated['id_status'];
-    //             if ((int) $validated['id_status'] === 1) {
-    //                 $validated['id_status'] = NULL;
-    //             }
-    //             $validated['created_by'] = (string) session('id_pegawai');
-    //             $validated['created_at'] = now();
-    //             $temuan = Tindaklanjut::create($validated);
-    //             $validated['label'] = Str::uuid();
-    //             $validated['id_status'] = $idStatus;
-    //             $validated['id_tindak_lanjut'] = $temuan->id_tindak_lanjut;
-    //             $temuan = VerifikasiSsr::create($validated);
-    //         });
-    //         $message = 'Data berhasil ditambahkan';
-    //     }
-
-    //     return response()->json([
-    //         'status'  => (bool) $temuan,
-    //         'message' => $temuan ? $message : 'Gagal menyimpan data',
-    //     ]);
-    // }
-
     public function store(Request $request, Rekomendasi $rekomendasi): JsonResponse
     {
         $rekomendasi->loadMissing('temuan');
@@ -364,13 +295,15 @@ class TindakLanjutController extends Controller
                 'message' => 'Data tidak dapat dihapus karena masih memiliki data pembayaran.'
             ], 422);
         }
-        if ($tindaklanjut->ssr()->exists()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Data tidak dapat dihapus karena masih memiliki data di tindak lanjut.'
-            ], 422);
-        }
-        $tindaklanjut->delete();
+
+        DB::transaction(function () use ($tindaklanjut) {
+            // Hapus VerifikasiSsr yang memiliki id_tindak_lanjut yang sama
+            $tindaklanjut->verifikasiSsr()->delete();
+
+            // Baru hapus Tindaklanjut
+            $tindaklanjut->delete();
+        });
+
         return response()->json([
             'status' => true,
             'message' => 'Data berhasil dihapus.'
