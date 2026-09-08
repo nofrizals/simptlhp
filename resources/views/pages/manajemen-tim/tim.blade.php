@@ -363,8 +363,6 @@
                         title: 'Apakah anda yakin?',
                         icon: 'warning',
                         showCancelButton: true,
-                        cancelButtonColor: '#DC3545',
-                        confirmButtonColor: '#28A745',
                         cancelButtonText: 'Batal',
                         confirmButtonText: 'Yakin',
                         reverseButtons: true,
