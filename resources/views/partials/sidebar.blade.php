@@ -322,24 +322,12 @@
                                     <a href="{{ url('rekap/apbkam') }}"
                                         class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('rekap/apbkam') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                                         <span>APBKAM</span>
-                                        @if ($countApprove > 0)
-                                            <span
-                                                class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
-                                                {{ $countApprove }}
-                                            </span>
-                                        @endif
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ url('rekap/pertahun') }}"
                                         class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('rekap/pertahun') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
                                         <span>Pertahun</span>
-                                        @if ($countApprove > 0)
-                                            <span
-                                                class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
-                                                {{ $countApprove }}
-                                            </span>
-                                        @endif
                                     </a>
                                 </li>
                             </ul>

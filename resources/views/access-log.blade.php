@@ -87,20 +87,20 @@
                         </button>
                     </div>
                 </div>
-                <div id="tableLoading"
-                    class="hidden absolute inset-0 z-50 flex items-center
+                <div class="relative overflow-x-auto">
+                    <div id="tableLoading"
+                        class="hidden absolute inset-0 z-50 flex items-center
                     justify-center bg-white/70 dark:bg-gray-900/70">
-                    <div class="flex flex-col items-center gap-2">
-                        <div
-                            class="h-10 w-10 animate-spin rounded-full
+                        <div class="flex flex-col items-center gap-2">
+                            <div
+                                class="h-10 w-10 animate-spin rounded-full
                             border-4 border-blue-500 border-t-transparent">
+                            </div>
+                            <span class="text-sm text-gray-600 dark:text-gray-300">
+                                Loading...
+                            </span>
                         </div>
-                        <span class="text-sm text-gray-600 dark:text-gray-300">
-                            Loading...
-                        </span>
                     </div>
-                </div>
-                <div class="overflow-x-auto">
                     <table id="dataTable" class="min-w-full text-sm dt-table">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>

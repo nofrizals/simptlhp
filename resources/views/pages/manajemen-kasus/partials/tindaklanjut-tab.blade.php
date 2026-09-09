@@ -99,18 +99,17 @@
                         </div>
                     </div>
 
-                    {{-- Loading --}}
-                    <div id="tableLoadingTindakLanjut"
-                        class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
-                        <div class="flex flex-col items-center gap-2">
-                            <div
-                                class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                    <div class="relative overflow-x-auto">
+                        {{-- Loading --}}
+                        <div id="tableLoadingTindakLanjut"
+                            class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                            <div class="flex flex-col items-center gap-2">
+                                <div
+                                    class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                                </div>
+                                <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
                             </div>
-                            <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
                         </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
                         <table id="dtTindakLanjut" class="min-w-full text-sm dt-table">
                             <thead class="bg-gray-50 dark:bg-gray-800">
                                 <tr>
@@ -598,17 +597,18 @@
                         </form>
                         <div id="dinamisFormPembayaran"
                             class="mt-8 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 hidden">
-                            {{-- Loading --}}
-                            <div id="tableLoadingPembayaran"
-                                class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
-                                <div class="flex flex-col items-center gap-2">
-                                    <div
-                                        class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+
+                            <div class="relative overflow-x-auto">
+                                {{-- Loading --}}
+                                <div id="tableLoadingPembayaran"
+                                    class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <div
+                                            class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                                        </div>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
                                     </div>
-                                    <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
                                 </div>
-                            </div>
-                            <div class="overflow-x-auto">
                                 <table id="dtBuktiPembayaran" class="min-w-full text-sm dt-table">
                                     <thead class="bg-gray-50 dark:bg-gray-800">
                                         <tr>
@@ -717,17 +717,18 @@
                             </form>
                             <div id="tableUploadFile"
                                 class="mt-8 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 hidden">
-                                {{-- Loading --}}
-                                <div id="tableLoadingUploadFile"
-                                    class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
-                                    <div class="flex flex-col items-center gap-2">
-                                        <div
-                                            class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+
+                                <div class="relative overflow-x-auto">
+                                    {{-- Loading --}}
+                                    <div id="tableLoadingUploadFile"
+                                        class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div
+                                                class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin">
+                                            </div>
+                                            <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
                                         </div>
-                                        <span class="text-sm text-gray-600 dark:text-gray-300">Loading...</span>
                                     </div>
-                                </div>
-                                <div class="overflow-x-auto">
                                     <table id="dtUploadFile" class="min-w-full text-sm dt-table">
                                         <thead class="bg-gray-50 dark:bg-gray-800">
                                             <tr>
