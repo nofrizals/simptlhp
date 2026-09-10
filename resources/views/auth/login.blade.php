@@ -76,6 +76,11 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                                         </div>
                                         <small class="err text-theme-xs text-error-500" id="password_error"></small>
                                     </div>
+                                    <div>
+                                        <div class="cf-turnstile"
+                                            data-sitekey="{{ config('services.turnstile.site_key') }}">
+                                        </div>
+                                    </div>
                                     <!-- Button -->
                                     <div>
                                         <button type="submit" id="loginBtn"
@@ -125,6 +130,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             </div>
         </div>
     </div>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script>
         $(document).ready(function() {
             $.ajaxSetup({
@@ -135,6 +141,15 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             $('#formLogin').submit(function(e) {
                 e.preventDefault();
                 let formData = new FormData($('#formLogin')[0]);
+                let turnstileToken = formData.get('cf-turnstile-response');
+                if (!turnstileToken) {
+                    Swal.fire({
+                        title: "Verifikasi diperlukan",
+                        text: "Silakan selesaikan verifikasi keamanan terlebih dahulu.",
+                        icon: "warning"
+                    });
+                    return;
+                }
                 $.ajax({
                     type: 'POST',
                     url: "{{ url('login') }}",
@@ -206,6 +221,9 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                         });
                     },
                     complete: function() {
+                        if (typeof turnstile !== 'undefined') {
+                            turnstile.reset();
+                        }
                         $('#loginBtn')
                             .prop('disabled', false)
                             .removeClass(

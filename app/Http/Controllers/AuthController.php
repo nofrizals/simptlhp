@@ -10,6 +10,7 @@ use App\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -39,10 +40,12 @@ class AuthController extends Controller
             [
                 'nip'      => 'required',
                 'password' => 'required',
+                'cf-turnstile-response' => 'required',
             ],
             [
                 'nip.required'      => 'NIP/NIK wajib diisi.',
                 'password.required' => 'Password wajib diisi.',
+                'cf-turnstile-response.required' => 'Silakan selesaikan verifikasi keamanan.',
             ]
         );
 
@@ -54,6 +57,31 @@ class AuthController extends Controller
         }
 
         try {
+            $turnstileResponse = Http::asForm()->post(
+                'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+                [
+                    'secret' => config('services.turnstile.secret_key'),
+                    'response' => $request->input('cf-turnstile-response'),
+                    'remoteip' => $request->ip(),
+                ]
+            );
+
+            if (!$turnstileResponse->successful()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Gagal melakukan verifikasi keamanan.',
+                ], 503);
+            }
+
+            $turnstile = $turnstileResponse->json();
+
+            if (!($turnstile['success'] ?? false)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Verifikasi keamanan gagal. Silakan coba lagi.',
+                ], 422);
+            }
+
             $result = $this->authService->login(
                 $request->string('nip')->toString(),
                 $request->string('password')->toString(),
