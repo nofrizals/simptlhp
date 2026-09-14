@@ -158,7 +158,7 @@ final class RekapPertahunReportBuilder
             ->pluck('tahun_pemeriksaan');
     }
 
-    private function applyKasusScope($query, string $kasusAlias, int $idJenisPhp, bool $isTgr): void
+    private function applyKasusScope(\Illuminate\Database\Eloquent\Builder $query, string $kasusAlias, int $idJenisPhp, bool $isTgr): void
     {
         // TGR dibedakan lewat besaran_kerugian2 pada temuan, bukan id_jenis_php kasus —
         // konsisten dipakai di semua sub-query (fix dari bug non-deterministik di CI).

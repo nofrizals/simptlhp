@@ -10,8 +10,7 @@ final class FilterRekapRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // TODO: sesuaikan dengan gate/policy setelah modul auth & level user tersedia.
-        return true;
+        return $this->user() !== null;
     }
 
     /**

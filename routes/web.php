@@ -130,7 +130,7 @@ Route::middleware('auth')->group(function () {
     Route::post('verifikasi-ssr/{id}/setujui', [VerifikasiSsrController::class, 'setujui']);
 
     // Rekap Laporan
-    Route::prefix('rekap')->name('rekap.')->middleware(['web'])->group(function () {
+    Route::prefix('rekap')->name('rekap.')->group(function () {
         Route::get('php-tnk', [RekapController::class, 'phpTnk'])->name('php-tnk');
         Route::post('php-tnk/data', [RekapController::class, 'data'])->name('php-tnk.data');
         Route::get('php-tnk/{kasus}/cetak-php', [RekapController::class, 'cetakPhp'])->name('php-tnk.cetak-php');
@@ -145,7 +145,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('pertahun', [RekapController::class, 'pertahun'])->name('pertahun.index');
         Route::get('pertahun/cetak', [RekapController::class, 'cetakPertahun'])->name('pertahun.cetak');
-        Route::get('pertahun/export', [RekapController::class, 'exportPertahun'])->name('pertahun.export');
+        Route::get('pertahun/export', [RekapController::class, 'exportPertahun'])->name('pertahun.export')->middleware('throttle:10,1');
     });
 
     // Peraturan
