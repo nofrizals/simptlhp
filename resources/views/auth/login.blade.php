@@ -76,9 +76,10 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                                         </div>
                                         <small class="err text-theme-xs text-error-500" id="password_error"></small>
                                     </div>
-                                    <div>
+                                    <div class="flex justify-center">
                                         <div class="cf-turnstile"
-                                            data-sitekey="{{ config('services.turnstile.site_key') }}">
+                                            data-sitekey="{{ config('services.turnstile.site_key') }}"
+                                            data-theme="light">
                                         </div>
                                     </div>
                                     <!-- Button -->
