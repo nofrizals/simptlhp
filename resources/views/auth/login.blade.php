@@ -177,6 +177,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
 
                     success: function(response) {
                         if (!response) {
+                            resetLoginButton();
                             Swal.fire({
                                 title: "Gagal",
                                 text: "Response server tidak valid",
@@ -204,35 +205,33 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                                 $('#' + key + '_error').html(value[0]);
                             });
                             return;
-                        }
-                        // Handle 503 (SSO down)
-                        if (xhr.status === 503) {
+                        } else if (xhr.status === 503) {
                             Swal.fire({
                                 title: "Gagal",
                                 text: xhr.responseJSON.message,
                                 icon: "warning"
                             });
-                            return;
+                        } else {
+                            Swal.fire({
+                                title: "Gagal",
+                                text: "Terjadi kesalahan server",
+                                icon: "error"
+                            });
                         }
-
-                        Swal.fire({
-                            title: "Gagal",
-                            text: "Terjadi kesalahan server",
-                            icon: "error"
-                        });
-                    },
-                    complete: function() {
-                        if (typeof turnstile !== 'undefined') {
-                            turnstile.reset();
-                        }
-                        $('#loginBtn')
-                            .prop('disabled', false)
-                            .removeClass(
-                                'disabled:bg-gray-400 disabled:cursor-not-allowed')
-                            .html('Masuk');
+                        resetLoginButton();
                     }
                 });
             });
+
+            function resetLoginButton() {
+                if (typeof turnstile !== 'undefined') {
+                    turnstile.reset();
+                }
+                $('#loginBtn')
+                    .prop('disabled', false)
+                    .removeClass('disabled:bg-gray-400 disabled:cursor-not-allowed')
+                    .html('Masuk');
+            }
         });
     </script>
 </body>

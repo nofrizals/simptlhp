@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Exceptions\SsoUnavailableException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -60,7 +62,7 @@ class AuthController extends Controller
             $turnstileResponse = Http::asForm()->post(
                 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
                 [
-                    'secret' => config('services.turnstile.secret_key'),
+                    'secret'   => config('services.turnstile.secret_key'),
                     'response' => $request->input('cf-turnstile-response'),
                     'remoteip' => $request->ip(),
                 ]
@@ -68,7 +70,7 @@ class AuthController extends Controller
 
             if (!$turnstileResponse->successful()) {
                 return response()->json([
-                    'status' => false,
+                    'status'  => false,
                     'message' => 'Gagal melakukan verifikasi keamanan.',
                 ], 503);
             }
@@ -77,7 +79,7 @@ class AuthController extends Controller
 
             if (!($turnstile['success'] ?? false)) {
                 return response()->json([
-                    'status' => false,
+                    'status'  => false,
                     'message' => 'Verifikasi keamanan gagal. Silakan coba lagi.',
                 ], 422);
             }
@@ -92,18 +94,25 @@ class AuthController extends Controller
                 'message'  => 'Login berhasil',
                 'redirect' => $result['redirect'],
             ]);
+        } catch (ConnectionException $e) {
+            // request ke Turnstile sendiri gagal terkoneksi
+            report($e);
+            return response()->json([
+                'status'  => false,
+                'message' => 'Gagal melakukan verifikasi keamanan. Silakan coba lagi.',
+            ], 503);
         } catch (ValidationException $e) {
             return response()->json([
                 'status' => false,
                 'errors' => $e->errors(),
             ], 422);
-        } catch (\RuntimeException $e) {
-            // SSO / eGov tidak bisa dihubungi
+        } catch (SsoUnavailableException $e) {
+            // pesan sudah sengaja ditulis aman untuk user, boleh ditampilkan langsung
             return response()->json([
                 'status'  => false,
                 'message' => $e->getMessage(),
             ], 503);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             report($e);
             return response()->json([
                 'status'  => false,

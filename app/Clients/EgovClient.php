@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Clients;
 
+use App\Exceptions\SsoUnavailableException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
@@ -25,7 +26,7 @@ class EgovClient
             ];
         } catch (ConnectionException $e) {
             report($e);
-            throw new \RuntimeException('Server eGov sedang tidak dapat dihubungi.');
+            throw new SsoUnavailableException('Server eGov sedang tidak dapat dihubungi.');
         }
     }
 }
