@@ -141,7 +141,7 @@ Route::middleware('auth')->group(function () {
         Route::get('php-tnk/export-tnk-kolektif', [RekapController::class, 'exportTnkKolektif'])->name('php-tnk.export-tnk-kolektif');
         Route::get('apbkam', [RekapController::class, 'apbkam'])->name('apbkam.index');
         Route::get('apbkam/cetak', [RekapController::class, 'cetakApbkam'])->name('apbkam.cetak');
-        Route::get('apbkam/export', [RekapController::class, 'exportApbkam'])->name('apbkam.export');
+        Route::get('apbkam/export', [RekapController::class, 'exportApbkam'])->name('apbkam.export')->middleware('throttle:10,1');
 
         Route::get('pertahun', [RekapController::class, 'pertahun'])->name('pertahun.index');
         Route::get('pertahun/cetak', [RekapController::class, 'cetakPertahun'])->name('pertahun.cetak');

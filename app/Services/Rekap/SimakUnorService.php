@@ -7,6 +7,7 @@ namespace App\Services\Rekap;
 use App\Models\Instansi;
 use App\Models\Unor;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 final class SimakUnorService
 {
@@ -35,13 +36,26 @@ final class SimakUnorService
      *
      * @return Collection<int, Unor>
      */
+    // public function listKecamatan(): Collection
+    // {
+    //     return Unor::query()
+    //         ->whereRaw('CHAR_LENGTH(kode_unor) = 5')
+    //         ->whereRaw('RIGHT(kode_unor, 2) >= 32')
+    //         ->whereRaw('RIGHT(kode_unor, 2) <= 45')
+    //         ->orderBy('nama_unor')
+    //         ->get();
+    // }
+
+
     public function listKecamatan(): Collection
     {
-        return Unor::query()
-            ->whereRaw('CHAR_LENGTH(kode_unor) = 5')
-            ->whereRaw('RIGHT(kode_unor, 2) >= 32')
-            ->whereRaw('RIGHT(kode_unor, 2) <= 45')
-            ->orderBy('nama_unor')
-            ->get();
+        return Cache::remember('rekap.kecamatan-list', now()->addHours(6), function () {
+            return Unor::query()
+                ->whereRaw('CHAR_LENGTH(kode_unor) = 5')
+                ->whereRaw('RIGHT(kode_unor, 2) >= 32')
+                ->whereRaw('RIGHT(kode_unor, 2) <= 45')
+                ->orderBy('nama_unor')
+                ->get();
+        });
     }
 }

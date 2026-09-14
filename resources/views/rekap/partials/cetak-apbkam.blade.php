@@ -5,7 +5,7 @@
 
 <div class="relative rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
     <div class="p-6">
-        <div id="printMe" class="overflow-auto pb-4 text-xs max-h-[80vh]">
+        <div id="printMe" class="pb-4 text-xs">
             <div class="mb-4 text-center">
                 <h6 class="font-semibold text-gray-800 dark:text-white">TEMUAN HASIL PEMERIKSAAN APBKAM INSPEKTORAT
                     KABUPATEN SIAK</h6>
@@ -78,7 +78,7 @@
                         {{-- Baris header kecamatan --}}
                         <tr>
                             <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">1.</td>
-                            <td class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="28">
+                            <td class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="35">
                                 {{ $kecamatanLabel }}</td>
                         </tr>
 
@@ -88,7 +88,7 @@
                                 <td class="border border-gray-300 px-1 py-1 dark:border-gray-700"></td>
                                 <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
                                     {{ $kampung['no'] }}.</td>
-                                <td class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="27">
+                                <td class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="35">
                                     {{ $kampung['namaKampung'] }}</td>
                             </tr>
 
