@@ -22,9 +22,12 @@ use App\Http\Controllers\TindakLanjutController;
 use App\Http\Controllers\VerifikasiSsrController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [AuthController::class, 'showLogin'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-Route::post('egov-checking', [AuthController::class, 'egovChecking']);
+Route::middleware('guest')->group(function () {
+    Route::get('/', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login']);
+    Route::get('login', fn() => redirect()->route('login'));
+    Route::post('egov-checking', [AuthController::class, 'egovChecking']);
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
