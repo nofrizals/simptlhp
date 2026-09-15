@@ -274,10 +274,9 @@
 $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))" :class="{ 'dark bg-gray-900': darkMode === true }">
 
     @include('partials.preloader')
-    <div class="flex min-h-screen">
+    <div class="flex h-screen overflow-hidden">
         @include('partials.sidebar')
-
-        <div class="relative flex min-w-0 flex-1 flex-col overflow-x-hidden">
+        <div class="relative flex min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden">
             @include('partials.overlay')
             @include('partials.header')
             <div id="alert-container" class="mb-4"></div>
