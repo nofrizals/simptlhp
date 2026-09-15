@@ -204,6 +204,7 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                             $.each(errors, function(key, value) {
                                 $('#' + key + '_error').html(value[0]);
                             });
+                            resetLoginButton();
                             return;
                         } else if (xhr.status === 503) {
                             Swal.fire({
