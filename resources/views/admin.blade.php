@@ -60,27 +60,15 @@
                     <table id="dataTable" class="min-w-full text-sm dt-table">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
-                                    No</th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
-                                    ID Pegawai
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">ID Pegawai
                                 </th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
-                                    Nama Lengkap
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Lengkap
                                 </th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
-                                    Nama Obrik
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Obrik
                                 </th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
-                                    Level</th>
-                                <th
-                                    class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
-                                    Aksi</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Level</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
@@ -389,7 +377,7 @@
                             {{-- FOOTER --}}
                             <div id="footerSimak"
                                 class="hidden flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                                <div id="simakTableInfo" class="text-sm text-gray-500"></div>
+                                <div id="simakTableInfo" class="text-sm text-gray-500 dark:text-white/90"></div>
                                 <div id="simakTablePagination"></div>
                             </div>
                         </div>
