@@ -31,7 +31,7 @@
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-gray-500">Tampilkan</span>
                         <select id="pageLength"
-                            class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            class="h-10 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -42,12 +42,12 @@
                     {{-- SEARCH --}}
                     <div class="relative">
                         <input id="customSearch" type="text" placeholder="Cari admin..."
-                            class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            class="h-10 w-72 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
 
                 {{-- TABLE --}}
-                <div class="relative overflow-x-auto">
+                <div class="relative">
                     {{-- Loading --}}
                     <div id="tableLoading"
                         class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
@@ -60,15 +60,27 @@
                     <table id="dataTable" class="min-w-full text-sm dt-table">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">ID Pegawai
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
+                                    No</th>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
+                                    ID Pegawai
                                 </th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Lengkap
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
+                                    Nama Lengkap
                                 </th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Obrik
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
+                                    Nama Obrik
                                 </th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Level</th>
-                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
+                                    Level</th>
+                                <th
+                                    class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500 dark:text-white/90">
+                                    Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
@@ -78,7 +90,7 @@
                 {{-- FOOTER --}}
                 <div
                     class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                    <div id="tableInfo" class="text-sm text-gray-500"></div>
+                    <div id="tableInfo" class="text-sm text-gray-500 dark:text-white/90"></div>
                     <div id="tablePagination"></div>
                 </div>
             </div>
@@ -290,12 +302,10 @@
         <div
             class="relative flex max-h-[calc(100vh-2.5rem)] w-full max-w-[900px] overflow-y-auto rounded-3xl bg-white dark:bg-gray-900">
             <div id="modalSimakContent" class="relative w-full p-6 lg:p-10">
-
                 <button id="closeModalSimakBtn"
                     class="absolute right-3 top-3 z-50 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11">
                     @include('partials.icons.close')
                 </button>
-
                 <div class="rounded-2xl bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                     <div class="px-5 py-4 sm:px-6 sm:py-5">
                         <h3 class="modal-header-simak text-base font-medium text-gray-800 dark:text-white/90"></h3>

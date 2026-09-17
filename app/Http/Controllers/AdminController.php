@@ -94,35 +94,39 @@ class AdminController extends Controller
             ->addIndexColumn()
             ->editColumn('id_pegawai', function (User $user) {
                 $badge = is_null($user->dihapus_oleh)
-                    ? '<span class="px-2 py-0.5 text-xs font-medium text-green-600 bg-green-50 rounded-md">Aktif</span>'
-                    : '<span class="px-2 py-0.5 text-xs font-medium text-red-600 bg-red-50 rounded-md">Tidak Aktif</span>';
+                    ? '<span class="px-2 py-0.5 text-xs font-medium text-green-600 bg-green-50 rounded-md dark:bg-black dark:text-green-400">Aktif</span>'
+                    : '<span class="px-2 py-0.5 text-xs font-medium text-red-600 bg-red-50 rounded-md dark:bg-black dark:text-red-400 whitespace-nowrap">Tidak Aktif</span>';
 
-                return '<div class="flex items-center gap-2"><span class="font-medium">'
+                return '<div class="flex items-center gap-2 dark:text-white/90"><span class="font-medium">'
                     . e($user->id_pegawai) . '</span>' . $badge . '</div>';
             })
             ->editColumn('nama_pegawai', function (User $user) {
-                $simakIcon = $user->simak
-                    ? '<img src="' . asset('images/icons/SIMAK72r.png') . '" class="h-4 w-auto opacity-80 hover:opacity-100" title="Terdaftar di SIMAK"/>'
-                    : '';
+                $simakIcon = $user->simak ? '<img src="' . asset('images/icons/SIMAK72r.png') . '"class="h-4 w-auto opacity-80 hover:opacity-100" title="Terdaftar di SIMAK"/>' : '';
                 $parts = explode(',', $user->nama_pegawai);
                 $nama_pegawai = ucwords(strtolower(trim($parts[0])));
                 if (count($parts) > 1) {
                     $gelar = implode(',', array_slice($parts, 1));
-                    return e($nama_pegawai . ',' . $gelar);
+                    return '<div class="flex items-center gap-2 dark:text-white/90"><span>' . e($nama_pegawai . ',' . $gelar) . '</span>' . $simakIcon . '</div>';
                 }
-                return '<div class="flex items-center gap-2"><span>'
-                    . e($nama_pegawai) . '</span>' . $simakIcon . '</div>';
+                return '<div class="flex items-center gap-2 dark:text-white/90"><span>' . e($nama_pegawai) . '</span>' . $simakIcon . '</div>';
             })
-            ->addColumn('nama_obrik', fn(User $user) => e($user->instansi?->nama_instansi ? ucwords(strtolower($user->instansi->nama_instansi)) : '-'))
+            ->addColumn('nama_obrik', function (User $user) {
+                $nama = $user->instansi?->nama_instansi
+                    ? ucwords(strtolower($user->instansi->nama_instansi))
+                    : '-';
 
-            ->addColumn('level', fn(User $user) => e($user->nama_level ?? '-'))
+                return '<span class="dark:text-white/90">' . e($nama) . '</span>';
+            })
+            ->addColumn('level', function (User $user) {
+                return '<span class="dark:text-white/90">' . e($user->nama_level ?? '-') . '</span>';
+            })
             ->addColumn('action', function (User $user) {
                 $timId   = TimAnggota::where('id_user', $user->id_user)->value('id_tim') ?? '';
                 $isObrik = strlen((string) $user->kode_unor) === 8;
 
                 return $this->renderActionButtons($user, $timId, $isObrik);
             })
-            ->rawColumns(['id_pegawai', 'nama_pegawai', 'action'])
+            ->rawColumns(['id_pegawai', 'nama_pegawai', 'nama_obrik', 'level', 'action'])
             ->make(true);
     }
 
@@ -351,7 +355,7 @@ class AdminController extends Controller
                 <a href="javascript:void(0)"
                     data-id="' . $user->id_user . '"
                     title="Hapus"
-                    class="btn-deleteAdmin text-gray-500 hover:text-red-500 transition duration-200">
+                    class="btn-deleteAdmin text-gray-500 hover:text-red-500 transition duration-200 dark:hover:text-red-400 dark:text-white/90">
                     ' . self::SVG_DELETE . '
                 </a>
                 <a href="javascript:void(0)"
@@ -364,7 +368,7 @@ class AdminController extends Controller
                     data-nama_obrik="' . e((string) ($user->instansi?->id_instansi ?? '')) . '"
                     data-tim="' . e((string) $timId) . '"
                     title="Edit"
-                    class="btn-editAdmin text-gray-500 hover:text-blue-600 transition duration-200">
+                    class="btn-editAdmin text-gray-500 hover:text-blue-600 transition duration-200 dark:hover:text-blue-400 dark:text-white/90">
                     ' . self::SVG_EDIT . '
                 </a>
             </div>';

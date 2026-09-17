@@ -17,8 +17,7 @@
 
     <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <!-- Sidebar Menu -->
-        <nav x-data="{ selected: $persist('Dashboard') }" x-init="// Cek halaman saat ini dan set selected sesuai menu induk
-        @if (request()->is('dashboard') || request()->is('/')) selected = 'Dashboard';
+        <nav x-data="{ selected: $persist('Dashboard') }" x-init="@if (request()->is('dashboard') || request()->is('/')) selected = 'Dashboard';
         @elseif(request()->is('admin'))
             selected = 'admin';
         @elseif(request()->is('peraturan'))

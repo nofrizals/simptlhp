@@ -571,6 +571,15 @@ span.flatpickr-weekday,
 .dark .fc-button-group .fc-button.fc-next-button:before {
   content: url("data:image/svg+xml,%3Csvg width='25' height='24' viewBox='0 0 25 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.50684 19L15.7568 12.75L9.50684 6.5' stroke='%2398A2B3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
 }
+.dark table tbody td:first-child {
+    color: rgba(255, 255, 255, 0.9);
+}
+.dark .dataTables_scrollBody::-webkit-scrollbar {
+    background: #101828;
+}
+.dark #tablePagination, .dark #tablePagination a{
+    color: black !important;
+}
 .fc-button-group .fc-button .fc-icon {
   @apply hidden;
 }
