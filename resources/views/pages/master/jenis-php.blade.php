@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <div class="relative overflow-x-auto">
+                <div class="relative">
                     {{-- Loading --}}
                     <div id="tableLoading"
                         class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
