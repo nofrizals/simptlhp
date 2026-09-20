@@ -31,7 +31,7 @@
                         <div class="flex items-center gap-3">
                             <span class="text-sm text-gray-500">Tampilkan</span>
                             <select id="pageLength"
-                                class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                                class="h-10 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                                 <option value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
@@ -42,7 +42,7 @@
                         {{-- SEARCH --}}
                         <div class="relative">
                             <input id="customSearch" type="text" placeholder="Cari tahun pemeriksaan..."
-                                class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                                class="h-10 w-72 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                         </div>
                     </div>
 
@@ -85,7 +85,7 @@
                     {{-- FOOTER --}}
                     <div
                         class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                        <div id="tableInfo" class="text-sm text-gray-500"></div>
+                        <div id="tableInfo" class="text-sm text-gray-500 dark:text-white/90"></div>
                         <div id="tablePagination"></div>
                     </div>
                 </div>
@@ -343,37 +343,37 @@
                             name: 'DT_RowIndex',
                             orderable: false,
                             searchable: false,
-                            className: 'text-center'
+                            className: 'text-left'
                         },
                         {
                             data: 'id_jenis_php',
                             name: 'id_jenis_php',
-                            className: 'text-center'
+                            className: 'text-left'
                         },
                         {
                             data: 'tahun_pemeriksaan',
                             name: 'tahun_pemeriksaan',
-                            className: 'text-center'
+                            className: 'text-left'
                         },
                         {
                             data: 'spt',
                             name: 'spt',
-                            className: 'text-center'
+                            className: 'text-left'
                         },
                         {
                             data: 'nomor_lhp',
                             name: 'nomor_lhp',
-                            className: 'text-center'
+                            className: 'text-left'
                         },
                         {
                             data: 'tanggal_lhp',
                             name: 'tanggal_lhp',
-                            className: 'text-center'
+                            className: 'text-left'
                         },
                         {
                             data: 'kode_unor',
                             name: 'kode_unor',
-                            className: 'text-center'
+                            className: 'text-left'
                         },
                         {
                             data: 'action',

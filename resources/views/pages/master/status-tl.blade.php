@@ -61,6 +61,7 @@
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Status Tindak
                                     Lanjut</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Status</th>
                                 <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
                             </tr>
                         </thead>
@@ -180,6 +181,11 @@
                         {
                             data: 'status_tl',
                             name: 'status_tl',
+                            className: 'text-left'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status',
                             className: 'text-left'
                         },
                         {

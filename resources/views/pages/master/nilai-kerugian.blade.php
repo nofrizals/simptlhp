@@ -30,7 +30,7 @@
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-gray-500">Tampilkan</span>
                         <select id="pageLength"
-                            class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            class="h-10 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -41,11 +41,11 @@
                     {{-- SEARCH --}}
                     <div class="relative">
                         <input id="customSearch" type="text" placeholder="Cari nilai kerugian..."
-                            class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            class="h-10 w-72 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
 
-                <div class="relative overflow-x-auto">
+                <div class="relative">
                     {{-- Loading --}}
                     <div id="tableLoading"
                         class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
@@ -61,6 +61,8 @@
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
                                 <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nilai Kerugian
                                 </th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Status
+                                </th>
                                 <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Aksi</th>
                             </tr>
                         </thead>
@@ -71,7 +73,7 @@
                 {{-- FOOTER --}}
                 <div
                     class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                    <div id="tableInfo" class="text-sm text-gray-500"></div>
+                    <div id="tableInfo" class="text-sm text-gray-500 dark:text-white/90"></div>
                     <div id="tablePagination"></div>
                 </div>
             </div>
@@ -107,7 +109,7 @@
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     Nilai Kerugian
                                 </label>
-                                <input type="number" name="nilai_kerugian" id="nilai_kerugian" placeholder="Nilai Kerugian"
+                                <input type="text" name="nilai_kerugian" id="nilai_kerugian" placeholder="Nilai Kerugian"
                                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                                 <p class="err text-theme-xs text-error-500" id="nilai_kerugian_error"></p>
                             </div>
@@ -180,6 +182,11 @@
                         {
                             data: 'nilai_kerugian',
                             name: 'nilai_kerugian',
+                            className: 'text-left'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status',
                             className: 'text-left'
                         },
                         {

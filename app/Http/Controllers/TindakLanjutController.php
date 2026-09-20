@@ -27,37 +27,37 @@ class TindakLanjutController extends Controller
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('tgl_tindak_lanjut', function (Tindaklanjut $value): string {
-                return Carbon::parse($value->tgl_tindak_lanjut ?? '-')->translatedFormat('d F Y');
+                return '<span class="dark:text-white/90">' . Carbon::parse($value->tgl_tindak_lanjut ?? '-')->translatedFormat('d F Y') . '</span>';
             })
             ->addColumn('tindak_lanjut', function (Tindaklanjut $value): string {
-                return e($value->tindak_lanjut) ?: '-';
+                return '<span class="dark:text-white/90">' . e($value->tindak_lanjut) ?: '-' . '</span>';
             })
             ->addColumn('rincian_temuan_keuangan_pajak', function (Tindaklanjut $value): string {
                 $rincian = 'Rp ' . number_format((float) $value->rincian_keuangan, 2, ',', '.');
                 $setor = 'Rp ' . number_format((float) $value->setor, 2, ',', '.');
 
-                return $rincian .
+                return '<span class="dark:text-white/90">' . $rincian . '</span>' .
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('rincian_temuan_keuangan_daerah', function (Tindaklanjut $value): string {
                 $rincian = 'Rp ' . number_format((float) $value->rincian_keuangan2, 2, ',', '.');
                 $setor = 'Rp ' . number_format((float) $value->setor2, 2, ',', '.');
 
-                return $rincian .
+                return '<span class="dark:text-white/90">' . $rincian . '</span>' .
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('rincian_temuan_keuangan_desa', function (Tindaklanjut $value): string {
                 $rincian = 'Rp ' . number_format((float) $value->rincian_keuangan3, 2, ',', '.');
                 $setor = 'Rp ' . number_format((float) $value->setor3, 2, ',', '.');
 
-                return $rincian .
+                return '<span class="dark:text-white/90">' . $rincian . '</span>' .
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('rincian_temuan_keuangan_blud', function (Tindaklanjut $value): string {
                 $rincian = 'Rp ' . number_format((float) $value->rincian_keuangan4, 2, ',', '.');
                 $setor = 'Rp ' . number_format((float) $value->setor4, 2, ',', '.');
 
-                return $rincian .
+                return '<span class="dark:text-white/90">' . $rincian . '</span>' .
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('status_tindak_lanjut', function (Tindaklanjut $value): string {
@@ -70,23 +70,23 @@ class TindakLanjutController extends Controller
                 } else {
                     $status_tindak_lanjut = '-';
                 }
-                return $status_tindak_lanjut;
+                return '<span class="dark:text-white/90">' . $status_tindak_lanjut . '</span>';
             })
             ->addColumn('keterangan', function (Tindaklanjut $value): string {
-                return e($value->keterangan) ?: '-';
+                return '<span class="dark:text-white/90">' . e($value->keterangan) ?: '-' . '</span>';
             })
             ->addColumn('log', function (Tindaklanjut $value): string {
 
                 $status = $value->deleted_by === null
-                    ? '<span class="inline-flex items-center rounded-full border border-green-200 bg-green-100 px-3 py-1 text-xs font-medium text-green-700">Aktif</span>'
-                    : '<span class="inline-flex items-center rounded-full border border-red-200 bg-red-100 px-3 py-1 text-xs font-medium text-red-700">Tidak Aktif</span>';
+                    ? '<span class="inline-flex items-center rounded-full border border-green-200 bg-green-100 dark:bg-green-500 px-3 py-1 text-xs font-medium text-green-700 dark:text-white/90">Aktif</span>'
+                    : '<span class="inline-flex items-center rounded-full border border-red-200 bg-red-100 dark:bg-red-500 px-3 py-1 text-xs font-medium text-red-700 dark:text-white/90">Tidak Aktif</span>';
 
                 if ($value->edited_by) {
-                    $log = 'Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
-                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
+                    $log = '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 } else {
-                    $log = 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
-                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y');
+                    $log = '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 }
 
                 return $status . '<br>' . $log;
@@ -98,7 +98,9 @@ class TindakLanjutController extends Controller
                             data-id="' . $value->id_tindak_lanjut . '"
                             class="tablinks fileTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
                                 bg-blue-50 text-blue-600 border border-blue-200
+                                dark:bg-blue-800 dark:text-white/90
                                 hover:bg-blue-600 hover:text-white
+                                dark:hover:bg-blue-200
                                 transition duration-200 text-sm font-medium"
                             title="File"
                             data-open="tabFileTindakLanjut">
@@ -109,7 +111,9 @@ class TindakLanjutController extends Controller
                             data-id="' . $value->id_tindak_lanjut . '"
                             class="tablinks pembayaran flex items-center justify-center px-3 py-1.5 rounded-md
                                 bg-amber-50 text-amber-600 border border-amber-200
+                                dark:bg-amber-800 dark:text-white/90
                                 hover:bg-amber-500 hover:text-white
+                                dark:hover:bg-amber-200
                                 transition duration-200 text-sm font-medium"
                             title="Pembayaran"
                             data-open="tabPembayaran">
@@ -122,8 +126,10 @@ class TindakLanjutController extends Controller
                                 data-id="' . $value->id_tindak_lanjut . '"
                                 title="Hapus"
                                 class="btn-deleteTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
-                                    bg-red-50 text-red-600 border border-red-200
+                                    bg-red-50 text-red-600 border border-red-200                                    
+                                    dark:bg-red-800 dark:text-white/90
                                     hover:bg-red-600 hover:text-white
+                                    dark:hover:bg-amber-200
                                     transition duration-200 text-sm font-medium">
                                 Hapus
                             </a>
@@ -132,8 +138,10 @@ class TindakLanjutController extends Controller
                                 data-id="' . $value->id_tindak_lanjut . '"
                                 class="btn-editTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
                                     bg-emerald-50 text-emerald-600 border border-emerald-200
+                                    dark:bg-emerald-800 dark:text-white/90
                                     hover:bg-emerald-600 hover:text-white
-                                    transition duration-200 text-sm font-medium"
+                                    dark:hover:bg-emerald-200
+                                    transition duration-200 dark:hover:text-emerald-400 dark:text-white/90 text-sm font-medium"
                                 title="Edit">
                                 Edit
                             </a>';
@@ -145,7 +153,9 @@ class TindakLanjutController extends Controller
                                 data-id="' . $value->id_tindak_lanjut . '"
                                 class="btn-ajukanUlangTindakLanjut col-span-2 flex items-center justify-center px-3 py-1.5 rounded-md
                                     bg-violet-50 text-violet-600 border border-violet-200
+                                    dark:bg-violet-800 dark:text-white/90
                                     hover:bg-violet-600 hover:text-white
+                                    dark:hover:bg-violet-200
                                     transition duration-200 text-sm font-medium"
                                 title="Ajukan Ulang">
                                 Ajukan Ulang
@@ -156,11 +166,14 @@ class TindakLanjutController extends Controller
                 return $action;
             })
             ->rawColumns([
+                'tgl_tindak_lanjut',
+                'tindak_lanjut',
                 'status_tindak_lanjut',
                 'rincian_temuan_keuangan_pajak',
                 'rincian_temuan_keuangan_daerah',
                 'rincian_temuan_keuangan_desa',
                 'rincian_temuan_keuangan_blud',
+                'keterangan',
                 'log',
                 'action'
             ])
@@ -297,10 +310,7 @@ class TindakLanjutController extends Controller
         }
 
         DB::transaction(function () use ($tindaklanjut) {
-            // Hapus VerifikasiSsr yang memiliki id_tindak_lanjut yang sama
             $tindaklanjut->verifikasiSsr()->delete();
-
-            // Baru hapus Tindaklanjut
             $tindaklanjut->delete();
         });
 
@@ -468,10 +478,10 @@ class TindakLanjutController extends Controller
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('jenis', function (Pembayaran $value): string {
-                return e(ucwords($value->jenis)) ?: '-';
+                return '<span class="dark:text-white/90">' . e(ucwords($value->jenis)) ?: '-' . '</span>';
             })
             ->addColumn('tanggal', function (Pembayaran $value): string {
-                return Carbon::parse($value->created_at ?? '-')->translatedFormat('d F Y');
+                return '<span class="dark:text-white/90">' . Carbon::parse($value->created_at ?? '-')->translatedFormat('d F Y') . '</span>';
             })
             ->addColumn('bukti', function (Pembayaran $value): string {
                 if (!$value->file_bukti) {
@@ -479,24 +489,26 @@ class TindakLanjutController extends Controller
                 }
                 $url = asset('storage/' . $value->file_bukti);
                 return '<a href="' . e($url) . '" target="_blank">
-                <img src="' . asset('images/pdf.png') . '" alt="PDF" width="40">
+                <img src="' . asset('images/pdf.png') . '" alt="PDF" width="40" class="dark:brightness-0 dark:invert dark:opacity-90">
             </a>';
             })
             ->addColumn('nominal', function (Pembayaran $value): string {
-                return 'Rp ' . number_format((float) $value->nominal, 2, ',', '.');
+                return '<span class="dark:text-white/90">Rp ' . number_format((float) $value->nominal, 2, ',', '.') . '</span>';
+            })
+            ->addColumn('keterangan', function (Pembayaran $value): string {
+                return '<span class="dark:text-white/90">Rp ' . $value->keterangan . '</span>';
             })
             ->addColumn('date', function (Pembayaran $value): string {
-
                 $status = $value->deleted_by === null
-                    ? '<span class="inline-flex items-center rounded-full border border-green-200 bg-green-100 px-3 py-1 text-xs font-medium text-green-700">Aktif</span>'
-                    : '<span class="inline-flex items-center rounded-full border border-red-200 bg-red-100 px-3 py-1 text-xs font-medium text-red-700">Tidak Aktif</span>';
+                    ? '<span class="inline-flex items-center rounded-full border border-green-200 bg-green-100 dark:bg-green-500 px-3 py-1 text-xs font-medium text-green-700 dark:text-white/90">Aktif</span>'
+                    : '<span class="inline-flex items-center rounded-full border border-red-200 bg-red-100 dark:bg-red-500 px-3 py-1 text-xs font-medium text-red-700 dark:text-white/90">Tidak Aktif</span>';
 
                 if ($value->edited_by) {
-                    $log = 'Diedit oleh <strong>' . e($value->edited_by) . '</strong><br>'
-                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
+                    $log = '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e($value->edited_by) . '</strong><br>'
+                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 } else {
-                    $log = 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
-                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y');
+                    $log = '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 }
 
                 return $status . '<br>' . $log;
@@ -504,14 +516,14 @@ class TindakLanjutController extends Controller
             ->addColumn('action', function (Pembayaran $value): string {
                 return '
                     <div class="flex items-center justify-center gap-3 px-4 py-2">
-                        <a href="javascript:void(0)" data-id="' . $value->id . '" title="Hapus" class="btn-deletePembayaran text-gray-500 hover:text-red-500 transition duration-200">
+                        <a href="javascript:void(0)" data-id="' . $value->id . '" title="Hapus" class="btn-deletePembayaran text-gray-500 hover:text-red-500 transition duration-200 dark:hover:text-red-400 dark:text-white/90">
                             <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.04142 4.29199C7.04142 3.04935 8.04878 2.04199 9.29142 2.04199H11.7081C12.9507 2.04199 13.9581 3.04935 13.9581 4.29199V4.54199H16.1252H17.166C17.5802 4.54199 17.916 4.87778 17.916 5.29199C17.916 5.70621 17.5802 6.04199 17.166 6.04199H16.8752V8.74687V13.7469V16.7087C16.8752 17.9513 15.8678 18.9587 14.6252 18.9587H6.37516C5.13252 18.9587 4.12516 17.9513 4.12516 16.7087V13.7469V8.74687V6.04199H3.8335C3.41928 6.04199 3.0835 5.70621 3.0835 5.29199C3.0835 4.87778 3.41928 4.54199 3.8335 4.54199H4.87516H7.04142V4.29199ZM15.3752 13.7469V8.74687V6.04199H13.9581H13.2081H7.79142H7.04142H5.62516V8.74687V13.7469V16.7087C5.62516 17.1229 5.96095 17.4587 6.37516 17.4587H14.6252C15.0394 17.4587 15.3752 17.1229 15.3752 16.7087V13.7469ZM8.54142 4.54199H12.4581V4.29199C12.4581 3.87778 12.1223 3.54199 11.7081 3.54199H9.29142C8.87721 3.54199 8.54142 3.87778 8.54142 4.29199V4.54199ZM8.8335 8.50033C9.24771 8.50033 9.5835 8.83611 9.5835 9.25033V14.2503C9.5835 14.6645 9.24771 15.0003 8.8335 15.0003C8.41928 15.0003 8.0835 14.6645 8.0835 14.2503V9.25033C8.0835 8.83611 8.41928 8.50033 8.8335 8.50033ZM12.9168 9.25033C12.9168 8.83611 12.581 8.50033 12.1668 8.50033C11.7526 8.50033 11.4168 8.83611 11.4168 9.25033V14.2503C11.4168 14.6645 11.7526 15.0003 12.1668 15.0003C12.581 15.0003 12.9168 14.6645 12.9168 14.2503V9.25033Z" fill=""/>
                             </svg>
                         </a>
                     </div>';
             })
-            ->rawColumns(['tanggal', 'bukti', 'nominal', 'date', 'action'])
+            ->rawColumns(['jenis', 'tanggal', 'bukti', 'nominal', 'keterangan', 'date', 'action'])
             ->make(true);
     }
 

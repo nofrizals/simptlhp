@@ -26,40 +26,40 @@ class VerifikasiSsrController extends Controller
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('tgl_tindak_lanjut', function ($value) {
-                return Carbon::parse($value->tgl_tindak_lanjut ?? '-')->translatedFormat('d F Y');
+                return '<span class="dark:text-white/90">' . Carbon::parse($value->tgl_tindak_lanjut ?? '-')->translatedFormat('d F Y') . '</span>';
             })
             ->addColumn('tindak_lanjut', function ($value) {
-                return $value->tindak_lanjut ?? '-';
+                return '<span class="dark:text-white/90">' . $value->tindak_lanjut ?? '-' . '</span>';
             })
             ->addColumn('rincian_keuangan', function ($value) {
-                return $value->rincian_keuangan !== null ? 'Rp ' . number_format($value->rincian_keuangan, 0, ',', '.') : '-';
+                return $value->rincian_keuangan !== null ? '<span class="dark:text-white/90"> Rp ' . number_format($value->rincian_keuangan, 0, ',', '.') . '</span>' : '-';
             })->addColumn('rincian_keuangan2', function ($value) {
-                return $value->rincian_keuangan2 !== null ? 'Rp ' . number_format($value->rincian_keuangan2, 0, ',', '.') : '-';
+                return $value->rincian_keuangan2 !== null ? '<span class="dark:text-white/90"> Rp ' . number_format($value->rincian_keuangan2, 0, ',', '.') . '</span>' : '-';
             })->addColumn('rincian_keuangan3', function ($value) {
-                return $value->rincian_keuangan3 !== null ? 'Rp ' . number_format($value->rincian_keuangan3, 0, ',', '.') : '-';
+                return $value->rincian_keuangan3 !== null ? '<span class="dark:text-white/90"> Rp ' . number_format($value->rincian_keuangan3, 0, ',', '.') . '</span>' : '-';
             })->addColumn('rincian_keuangan4', function ($value) {
-                return $value->rincian_keuangan4 !== null ? 'Rp ' . number_format($value->rincian_keuangan4, 0, ',', '.') : '-';
+                return $value->rincian_keuangan4 !== null ? '<span class="dark:text-white/90"> Rp ' . number_format($value->rincian_keuangan4, 0, ',', '.') . '</span>' : '-';
             })
             ->addColumn('id_status', function ($value) {
-                return $value->status->status_tl ?? '-';
+                return '<span class="dark:text-white/90">' . $value->status->status_tl ?? '-' . '</span>';
             })
             ->addColumn('keterangan', function ($value) {
-                return $value->keterangan ?? '-';
+                return '<span class="dark:text-white/90">' . $value->keterangan ?? '-' . '</span>';
             })
             ->addColumn('log', function ($value) {
 
                 if ($value->approve_by) {
-                    $log = 'Disetujui oleh <strong>' . e($value->approveBy->nama_pegawai) . '</strong><br>'
-                        . optional(Carbon::parse($value->approve_at ?? '-'))->translatedFormat('d F Y');
+                    $log = '<span class="text-gray-600 dark:text-white/90">Disetujui oleh <strong>' . e($value->approveBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->approve_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 } else if ($value->reject_by) {
-                    $log = 'Ditolak oleh <strong>' . e($value->rejectBy->nama_pegawai) . '</strong><br>'
-                        . optional(Carbon::parse($value->reject_at ?? '-'))->translatedFormat('d F Y');
+                    $log = '<span class="text-gray-600 dark:text-white/90">Ditolak oleh <strong>' . e($value->rejectBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->reject_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 } else if ($value->edited_by) {
-                    $log = 'Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
-                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
+                    $log = '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 } else {
-                    $log = 'Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
-                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y');
+                    $log = '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
+                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 }
 
                 return $log;
@@ -68,7 +68,7 @@ class VerifikasiSsrController extends Controller
                 if ($value->reject_at) {
                     return '<div class="flex items-center justify-center gap-3 px-4 py-2">
                         <a href="' . url('verifikasi-ssr/open/' . $value->label) . '"
-                            class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 hover:bg-red-200 transition duration-200"
+                            class="inline-flex items-center rounded-full bg-red-100 dark:bg-red-800 px-3 py-1 text-xs font-medium text-red-700 dark:text-white/90 hover:bg-red-200 dark:hover:bg-red-200 transition duration-200"
                             title="Tindak lanjut ditolak">
                             Ditolak
                         </a>
@@ -76,7 +76,7 @@ class VerifikasiSsrController extends Controller
                 } else if ($value->approve_at) {
                     return '<div class="flex items-center justify-center gap-3 px-4 py-2">
                         <a href="' . url('verifikasi-ssr/open/' . $value->label) . '"
-                            class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 hover:bg-green-200 transition duration-200"
+                            class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-800 px-3 py-1 text-xs font-medium text-green-700 dark:text-white/90 hover:bg-green-200 dark:hover:bg-green-200 transition duration-200"
                             title="Tindak lanjut disetujui">
                             Disetujui
                         </a>
@@ -84,7 +84,7 @@ class VerifikasiSsrController extends Controller
                 }
                 return '<div class="flex items-center justify-center gap-3 px-4 py-2">
                     <a href="' . url('verifikasi-ssr/approve/' . $value->label) . '"
-                        class="btn-approve text-blue-800 hover:text-blue-500 transition duration-200"
+                        class="btn-approve text-blue-800 hover:text-blue-500 transition duration-200 dark:hover:text-blue-400 dark:text-white/90"
                         title="Approve">
                         <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.5 2.625H4.5C3.464 2.625 2.625 3.464 2.625 4.5V16.5C2.625 17.536 3.464 18.375 4.5 18.375H16.5C17.536 18.375 18.375 17.536 18.375 16.5V4.5C18.375 3.464 17.536 2.625 16.5 2.625ZM8.25 15.375L4.875 12L6.375 10.5L8.25 12.375L14.625 6L16.125 7.5L8.25 15.375Z" fill="currentColor"/>
@@ -100,7 +100,7 @@ class VerifikasiSsrController extends Controller
                     }
                 });
             })
-            ->rawColumns(['tgl_tindak_lanjut', 'tindak_lanjut', 'rincian_keuangan', 'rincian_keuangan2', 'rincian_keuangan3', 'rincian_keuangan4', 'id_status', 'log', 'action'])
+            ->rawColumns(['tgl_tindak_lanjut', 'tindak_lanjut', 'keterangan', 'rincian_keuangan', 'rincian_keuangan2', 'rincian_keuangan3', 'rincian_keuangan4', 'id_status', 'log', 'action'])
             ->make(true);
     }
 

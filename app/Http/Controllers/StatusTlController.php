@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\StatusTl;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 
 class StatusTlController extends Controller
 {
@@ -24,6 +24,15 @@ class StatusTlController extends Controller
             ->addColumn('status_tl', function ($value) {
                 $status_tl = ucwords($value->status_tl ?? '-');
                 return '<span class="dark:text-white/90">' . e($status_tl) . '</span>';
+            })
+            ->addColumn('status', function ($value): string {
+                if ($value->edited_by) {
+                    return '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e($value->editedBy->nama_pegawai ?? 'Admin Infokom') . '</strong><br>'
+                        . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y');
+                } else {
+                    return '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai ?? 'Admin Infokom') . '</strong><br>'
+                        . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y');
+                }
             })
             ->addColumn('action', function ($value) {
                 return '
@@ -77,12 +86,12 @@ class StatusTlController extends Controller
                     'message' => 'Data tidak ditemukan'
                 ]);
             }
-            $data['edited_by']  = Auth::id();
+            $data['edited_by']  = session('id_pegawai');
             $data['edited_at'] = now();
             $statusTl->update($data);
             $message = 'Data berhasil diupdate';
         } else {
-            $data['created_by']  = Auth::id();
+            $data['created_by']  = session('id_pegawai');
             $data['created_at'] = now();
             $statusTl = StatusTl::create($data);
             $message = 'Data berhasil ditambahkan';

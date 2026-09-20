@@ -15,4 +15,13 @@ class StatusTl extends Model
     public const SEARCHABLE_COLUMNS = [
         'status_tl'
     ];
+
+    public function createdBy()
+    {
+        return $this->belongsTo(PegawaiSimak::class, 'created_by', 'id_pegawai');
+    }
+    public function editedBy()
+    {
+        return $this->belongsTo(PegawaiSimak::class, 'edited_by', 'id_pegawai');
+    }
 }

@@ -14,7 +14,6 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -281,13 +280,13 @@ class AdminController extends Controller
         if ($isUpdate) {
             $user = User::findOrFail($request->id); // Fix: find() → findOrFail()
             $user->update(array_merge($payload, [
-                'diedit_oleh'  => Auth::id(),
+                'diedit_oleh'  => session('id_pegawai'),
                 'diedit_waktu' => now(),
             ]));
             $message = 'User berhasil diperbarui'; // Fix: pesan berbeda untuk update
         } else {
             $user = User::create(array_merge($payload, [
-                'diinput_oleh'  => Auth::id(),
+                'diinput_oleh'  => session('id_pegawai'),
                 'diinput_waktu' => now(),
             ]));
             $message = 'User berhasil ditambahkan';

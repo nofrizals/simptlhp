@@ -86,7 +86,7 @@
                         <div class="flex items-center gap-3">
                             <span class="text-sm text-gray-500">Tampilkan</span>
                             <select id="pageLengthTindakLanjut"
-                                class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                                class="h-10 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                                 <option value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
@@ -95,7 +95,7 @@
                         </div>
                         <div class="relative">
                             <input id="customSearchTindakLanjut" type="text" placeholder="Cari tindak lanjut..."
-                                class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                                class="h-10 w-72 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                         </div>
                     </div>
 
@@ -151,7 +151,7 @@
                     {{-- FOOTER --}}
                     <div
                         class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                        <div id="tableInfoTindakLanjut" class="text-sm text-gray-500"></div>
+                        <div id="tableInfoTindakLanjut" class="text-sm text-gray-500 dark:text-white/90"></div>
                         <div id="tablePaginationTindakLanjut"></div>
                     </div>
                 </div>
@@ -651,7 +651,7 @@
                             {{-- FOOTER --}}
                             <div
                                 class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                                <div id="tableInfoPembayaran" class="text-sm text-gray-500"></div>
+                                <div id="tableInfoPembayaran" class="text-sm text-gray-500 dark:text-white/90"></div>
                                 <div id="tablePaginationPembayaran"></div>
                             </div>
                         </div>
@@ -755,7 +755,8 @@
                                 {{-- FOOTER --}}
                                 <div
                                     class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                                    <div id="tableInfoUploadFile" class="text-sm text-gray-500"></div>
+                                    <div id="tableInfoUploadFile" class="text-sm text-gray-500 dark:text-white/90">
+                                    </div>
                                     <div id="tablePaginationUploadFile"></div>
                                 </div>
                             </div>

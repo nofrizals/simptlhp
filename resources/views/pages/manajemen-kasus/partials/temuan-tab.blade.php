@@ -63,7 +63,7 @@
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-gray-500">Tampilkan</span>
                         <select id="pageLengthTemuan"
-                            class="h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            class="h-10 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -72,10 +72,9 @@
                     </div>
                     <div class="relative">
                         <input id="customSearchTemuan" type="text" placeholder="Cari temuan..."
-                            class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            class="h-10 w-72 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
-
 
                 <div class="relative overflow-x-auto">
                     {{-- Loading --}}
@@ -123,7 +122,7 @@
                 {{-- FOOTER --}}
                 <div
                     class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                    <div id="tableInfoTemuan" class="text-sm text-gray-500"></div>
+                    <div id="tableInfoTemuan" class="text-sm text-gray-500 dark:text-white/90"></div>
                     <div id="tablePaginationTemuan"></div>
                 </div>
             </div>
