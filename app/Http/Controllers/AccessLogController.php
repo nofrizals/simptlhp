@@ -38,47 +38,39 @@ class AccessLogController extends Controller
         return DataTables::of($query)
             ->addIndexColumn()
             ->editColumn('nama_pegawai', function ($row) {
-                return ucwords(strtolower($row->pegawai->nama_pegawai)) ?? '-';
+                return '<span class="dark:text-white/90">' . ucwords(strtolower($row->pegawai->nama_pegawai)) ?? '-' . '</span>';
             })
             ->editColumn('kode_unor', function ($row) {
-                return ucwords(strtolower($row->unor->nama_unor)) ?? '-';
+                return '<span class="dark:text-white/90">' . ucwords(strtolower($row->unor->nama_unor)) ?? '-' . '</span>';
             })
             ->editColumn('level', function ($row) {
-                return $row->level_user->nama_level ?? '-';
+                return '<span class="dark:text-white/90">' . $row->level_user->nama_level ?? '-' . '</span>';
             })
             ->editColumn('login_at', function ($row) {
                 if (!$row->login_at) {
                     return '-';
                 }
                 $date = Carbon::parse($row->login_at);
-                return $date->translatedFormat('d F Y')
+                return '<span class="dark:text-white/90">' . $date->translatedFormat('d F Y')
                     . '<br>'
-                    . $date->format('H:i:s');
+                    . $date->format('H:i:s') . '</span>';
             })
             ->editColumn('logout_at', function ($row) {
                 if (!$row->logout_at) {
                     return '-';
                 }
                 $date = Carbon::parse($row->logout_at);
-                return $date->translatedFormat('d F Y')
+                return '<span class="dark:text-white/90">' . $date->translatedFormat('d F Y')
                     . '<br>'
-                    . $date->format('H:i:s');
+                    . $date->format('H:i:s') . '</span>';
             })
             ->editColumn('browser', function ($row) {
-                return $row->browser ?: '-';
+                return '<span class="dark:text-white/90">' . $row->browser ?: '-' . '</span>';
             })
             ->editColumn('platform', function ($row) {
-                return $row->platform ?: '-';
+                return '<span class="dark:text-white/90">' . $row->platform ?: '-' . '</span>';
             })
             ->addColumn('status', function ($row) {
-                /*
-                 * logout_at terisi
-                 * ATAU
-                 * valid_thru sudah lewat
-                 *
-                 * = SESSION EXPIRED
-                 */
-
                 if (!empty($row->logout_at) || (!empty($row->valid_thru) && Carbon::parse($row->valid_thru)->isPast())) {
                     return '<span class="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-600 dark:bg-red-500/10 dark:text-red-400">
                                 SESSION EXPIRED
@@ -89,7 +81,7 @@ class AccessLogController extends Controller
                             ONLINE
                         </span>';
             })
-            ->rawColumns(['status', 'login_at', 'logout_at'])
+            ->rawColumns(['nama_pegawai', 'kode_unor', 'level', 'status', 'browser', 'platform', 'login_at', 'logout_at'])
             ->make(true);
     }
 }

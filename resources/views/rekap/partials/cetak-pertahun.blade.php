@@ -14,134 +14,190 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="tablexls min-w-full border border-gray-300 text-[10px] dark:border-gray-700">
+                <table class="tablexls min-w-full border border-gray-300 text-[10px] dark:border-white/90">
                     <thead>
                         <tr>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" rowspan="3">NO.</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" rowspan="3">TAHUN</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="2">JUMLAH</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="14">TINDAK
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                rowspan="3">NO.</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                rowspan="3">TAHUN</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                colspan="2">JUMLAH</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                colspan="14">TINDAK
                                 LANJUT</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="3"
-                                rowspan="2">KEWAJIBAN STOR PAJAK(PPN & PPh)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="3"
-                                rowspan="2">KEWAJIBAN SETOR KERUGIAN DAERAH</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="3"
-                                rowspan="2">KEWAJIBAN SETOR KERUGIAN DESA</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="3"
-                                rowspan="2">KEWAJIBAN SETOR KERUGIAN BLUD</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                colspan="3" rowspan="2">KEWAJIBAN STOR PAJAK(PPN & PPh)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                colspan="3" rowspan="2">KEWAJIBAN SETOR KERUGIAN DAERAH</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                colspan="3" rowspan="2">KEWAJIBAN SETOR KERUGIAN DESA</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                colspan="3" rowspan="2">KEWAJIBAN SETOR KERUGIAN BLUD</th>
                         </tr>
                         <tr>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" rowspan="2">TEMUAN</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" rowspan="2">REKOMENDASI
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                rowspan="2">TEMUAN</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                rowspan="2">REKOMENDASI
                             </th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="7">ADM</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700" colspan="7">KEUANGAN
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                colspan="7">ADM</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90"
+                                colspan="7">KEUANGAN
                             </th>
                         </tr>
                         <tr>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">SSR</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">%</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">BSR</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">%</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">BD</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">%</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">JML</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">SSR</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">%</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">BSR</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">%</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">BD</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">%</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">JML</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">NILAI (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">DISETOR (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">SISA (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">NILAI (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">DISETOR (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">SISA (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">NILAI (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">DISETOR (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">SISA (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">NILAI (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">DISETOR (Rp)</th>
-                            <th class="border border-gray-300 px-1 py-1 dark:border-gray-700">SISA (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">SSR
+                            </th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">%</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">BSR
+                            </th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">%</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">BD</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">%</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">JML
+                            </th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">SSR
+                            </th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">%</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">BSR
+                            </th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">%</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">BD</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">%</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">JML
+                            </th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">NILAI
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">DISETOR
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">SISA
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">NILAI
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">DISETOR
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">SISA
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">NILAI
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">DISETOR
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">SISA
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">NILAI
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">DISETOR
+                                (Rp)</th>
+                            <th class="border border-gray-300 px-1 py-1 dark:border-white/90 dark:text-white/90">SISA
+                                (Rp)</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($rows as $index => $data)
                             <tr>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $index + 1 }}.</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['tahun'] }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['temuanCount'] }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['rekomendasiCount'] }}</td>
 
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['admin']['ssr'] }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['adminRatios']['ssr'] }}%</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['admin']['bsr'] }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['adminRatios']['bsr'] }}%</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['admin']['bd'] }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['adminRatios']['bd'] }}%</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['admin']['jumlah'] }}</td>
 
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['keuangan']['ssr'] }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['keuanganRatios']['ssr'] }}%</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['keuangan']['bsr'] }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['keuanganRatios']['bsr'] }}%</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['keuangan']['bd'] }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['keuanganRatios']['bd'] }}%</td>
-                                <td class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $data['keuangan']['jumlah'] }}</td>
 
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['bk'][1]) }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['setoran'][1]) }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['sisa'][1]) }}</td>
 
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['bk'][2]) }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['setoran'][2]) }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['sisa'][2]) }}</td>
 
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['bk'][3]) }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['setoran'][3]) }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['sisa'][3]) }}</td>
 
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['bk'][4]) }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['setoran'][4]) }}</td>
-                                <td class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <td
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($data['sisa'][4]) }}</td>
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="26"
-                                    class="border border-gray-300 px-1 py-4 text-center italic text-gray-500 dark:border-gray-700">
+                                    class="border border-gray-300 px-1 py-4 text-center italic text-gray-500 dark:border-white/90 dark:text-white/90">
                                     Tidak ada data untuk filter yang dipilih.
                                 </td>
                             </tr>
@@ -150,69 +206,97 @@
                         @if ($rows->isNotEmpty())
                             @php $t = $totals; @endphp
                             <tr class="font-semibold">
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700"
+                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90"
                                     colspan="2">JUMLAH</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['temuan'] }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['rekomendasi'] }}</th>
 
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['admin']['ssr'] }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['adminRatios']['ssr'] }}%</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['admin']['bsr'] }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['adminRatios']['bsr'] }}%</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['admin']['bd'] }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['adminRatios']['bd'] }}%</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['admin']['jumlah'] }}</th>
 
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['keuangan']['ssr'] }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['keuanganRatios']['ssr'] }}%</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['keuangan']['bsr'] }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['keuanganRatios']['bsr'] }}%</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['keuangan']['bd'] }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['keuanganRatios']['bd'] }}%</th>
-                                <th class="border border-gray-300 px-1 py-1 text-center dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-center dark:border-white/90 dark:text-white/90">
                                     {{ $t['keuangan']['jumlah'] }}</th>
 
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['bk'][1]) }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['setoran'][1]) }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['sisa'][1]) }}</th>
 
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['bk'][2]) }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['setoran'][2]) }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['sisa'][2]) }}</th>
 
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['bk'][3]) }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['setoran'][3]) }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['sisa'][3]) }}</th>
 
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['bk'][4]) }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['setoran'][4]) }}</th>
-                                <th class="border border-gray-300 px-1 py-1 text-right dark:border-gray-700">
+                                <th
+                                    class="border border-gray-300 px-1 py-1 text-right dark:border-white/90 dark:text-white/90">
                                     {{ $fmt($t['sisa'][4]) }}</th>
                             </tr>
                         @endif
@@ -222,7 +306,7 @@
 
             <br><br>
 
-            <div class="flex flex-col gap-6 text-xs md:flex-row md:justify-between">
+            <div class="flex flex-col gap-6 text-xs md:flex-row md:justify-between dark:text-white/90">
                 <div>
                     <div class="mb-1 font-medium">Keterangan:</div>
                     <table class="border-0">
@@ -253,11 +337,11 @@
 
     <div class="flex items-center justify-end gap-2 border-t border-gray-200 px-6 py-4 dark:border-gray-800">
         <button type="button" id="rekapPertahun-xlsx" data-id-jenis-php="{{ $filters['id_jenis_php'] }}"
-            class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600">
+            class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 dark:text-white/90">
             Export Excel
         </button>
         <button type="button" id="print"
-            class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/5">
+            class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/90 dark:bg-gray-800 dark:text-white/90 dark:hover:bg-white/5">
             Print
         </button>
     </div>

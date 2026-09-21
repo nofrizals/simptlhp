@@ -6,7 +6,6 @@
 @section('content')
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
         <div class="space-y-6">
-
             <div
                 class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 {{-- HEADER --}}
@@ -15,7 +14,6 @@
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
                             Riwayat Login
                         </h3>
-
                         <p class="text-sm text-gray-500">
                             Riwayat akses login pengguna
                         </p>
@@ -37,14 +35,12 @@
                                 class="h-10 rounded-lg border border-gray-300
                                 bg-transparent px-3 py-2 text-sm text-gray-800
                                 outline-none focus:border-brand-500 focus:ring-0
-                                dark:border-gray-700 dark:bg-gray-900
+                                dark:border-white/90 dark:bg-gray-900
                                 dark:text-white">
-
                                 <option value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
                                 <option value="100">100</option>
-
                             </select>
                         </div>
                     </div>
@@ -57,7 +53,7 @@
                                 class="datepickerKasus h-10 rounded-lg border border-gray-300 bg-transparent
                                 px-3 py-2 text-sm text-gray-800 outline-none
                                 focus:border-brand-500 focus:ring-0
-                                dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                                dark:border-white/90 dark:bg-gray-900 dark:text-white">
                         </div>
                         <div>
                             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -67,7 +63,7 @@
                                 class="datepickerKasus h-10 rounded-lg border border-gray-300 bg-transparent
                                 px-3 py-2 text-sm text-gray-800 outline-none
                                 focus:border-brand-500 focus:ring-0
-                                dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                                dark:border-white/90 dark:bg-gray-900 dark:text-white">
                         </div>
 
                         <button type="button" id="btnFilter"
@@ -81,13 +77,13 @@
                             class="h-10 rounded-lg border border-gray-300
                             bg-white px-5 py-2.5 text-sm font-medium
                             text-gray-700 hover:bg-gray-50
-                            dark:border-gray-700 dark:bg-gray-800
-                            dark:text-gray-400 dark:hover:bg-white/[0.03]">
+                            dark:border-white/90 dark:bg-gray-800
+                            dark:text-white/90 dark:hover:bg-white/[0.03]">
                             Reset
                         </button>
                     </div>
                 </div>
-                <div class="relative overflow-x-auto">
+                <div class="relative">
                     <div id="tableLoading"
                         class="hidden absolute inset-0 z-50 flex items-center
                     justify-center bg-white/70 dark:bg-gray-900/70">
@@ -158,7 +154,7 @@
                     class="flex flex-col gap-4 border-t border-gray-200
                     px-6 py-5 md:flex-row md:items-center
                     md:justify-between dark:border-gray-800">
-                    <div id="tableInfo" class="text-sm text-gray-500">
+                    <div id="tableInfo" class="text-sm text-gray-500 dark:text-white/90">
                     </div>
                     <div id="tablePagination"></div>
                 </div>
