@@ -77,40 +77,40 @@ final class RekapController extends Controller
 
         return DataTables::eloquent($query)
             ->addIndexColumn()
+            ->editColumn('spt', function (Kasus $kasus): string {
+                return '<span class="dark:text-white/90">' . e($kasus->spt) . '</span>';
+            })
             ->addColumn('nomor_lhp_info', function (Kasus $kasus): string {
                 $jenisPhp = $kasus->jenis_php?->jenis_php ?? '-';
-
                 return sprintf(
                     '%s<br><code>%s - %s</code>',
-                    e($kasus->nomor_lhp),
+                    '<span class="dark:text-white/90">' . e($kasus->nomor_lhp),
                     e((string) $kasus->tahun_pemeriksaan),
-                    e($jenisPhp)
+                    e($jenisPhp) . '</span>'
                 );
             })
             ->addColumn('status_info', function (Kasus $kasus): string {
                 return (int) $kasus->selesai === 1
-                    ? '<span class="text-success">SELESAI</span>'
-                    : '<span class="text-danger">BELUM SELESAI</span>';
+                    ? '<span class="text-success dark:text-white/90">SELESAI</span>'
+                    : '<span class="text-danger dark:text-white/90">BELUM SELESAI</span>';
             })
             ->editColumn('tanggal_lhp', function (Kasus $kasus): string {
-                // Catatan: kolom `tanggal_lhp` belum di-cast ke datetime pada model Kasus,
-                // jadi parsing dilakukan manual di sini. Idealnya tambahkan cast di model.
                 return $kasus->tanggal_lhp
-                    ? Carbon::parse($kasus->tanggal_lhp)->translatedFormat('d F Y')
+                    ? '<span class="dark:text-white/90">' . Carbon::parse($kasus->tanggal_lhp)->translatedFormat('d F Y') . '</span>'
                     : '';
             })
             ->addColumn('nama_obrik', function (Kasus $kasus): string {
-                return $kasus->instansi?->nama_instansi ?? (string) $kasus->kode_unor;
+                return '<span class="dark:text-white/90">' . $kasus->instansi?->nama_instansi ?? $kasus->kode_unor . '</span>';
             })
             ->editColumn('created_at', function (Kasus $kasus): string {
                 return $kasus->created_at
-                    ? Carbon::parse($kasus->created_at)->translatedFormat('d F Y')
+                    ? '<span class="dark:text-white/90">' . Carbon::parse($kasus->created_at)->translatedFormat('d F Y') . '</span>'
                     : '';
             })
             ->addColumn('action', function (Kasus $kasus): string {
                 return view('rekap.partials._aksi-dropdown', ['kasus' => $kasus])->render();
             })
-            ->rawColumns(['nomor_lhp_info', 'status_info', 'action'])
+            ->rawColumns(['spt', 'nomor_lhp_info', 'status_info', 'tanggal_lhp', 'created_at', 'nama_obrik', 'action'])
             ->toJson();
     }
 

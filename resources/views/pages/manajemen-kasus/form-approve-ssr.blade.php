@@ -122,20 +122,21 @@
                         <!-- Pajak -->
                         <div class="grid grid-cols-3 gap-4 items-start">
                             <div class="pt-7">
-                                <p class="text-sm font-medium text-gray-700">
+                                <p class="text-sm font-medium text-gray-700 dark:text-white/90">
                                     Nilai Kerugian Pajak
                                 </p>
                             </div>
                             <div class="col-span-2">
-                                <p id="labelPajak" class="block h-6 mb-2 text-sm text-gray-600">
+                                <p id="labelPajak" class="block h-6 mb-2 text-sm text-gray-600 dark:text-white/90">
                                     Kerugian pajak tidak ditemukan
                                 </p>
                                 <div class="flex overflow-hidden rounded-lg border border-gray-300">
-                                    <span class="flex w-36 items-center justify-center bg-gray-50 border-r text-gray-500">
+                                    <span
+                                        class="flex w-36 items-center justify-center bg-gray-50 border-r text-gray-500 dark:bg-gray-900">
                                         Rincian (Rp)
                                     </span>
                                     <input id="rincianPajak" name="rincian_keuangan" type="number" value="0"
-                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500">
+                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500 dark:bg-gray-900">
                                 </div>
                                 <p id="rincian_keuangan_error" class="err mt-1 text-xs text-red-500">
                                 </p>
@@ -145,20 +146,21 @@
                         <!-- Daerah -->
                         <div class="grid grid-cols-3 gap-4 items-start">
                             <div class="pt-7">
-                                <label class="text-sm font-medium text-gray-700">
+                                <label class="text-sm font-medium text-gray-700 dark:text-white/90">
                                     Nilai Kerugian Daerah
                                 </label>
                             </div>
                             <div class="col-span-2">
-                                <p id="labelDaerah" class="block h-6 mb-2 text-sm text-gray-600">
+                                <p id="labelDaerah" class="block h-6 mb-2 text-sm text-gray-600 dark:text-white/90">
                                     Kerugian daerah tidak ditemukan
                                 </p>
                                 <div class="flex overflow-hidden rounded-lg border border-gray-300">
-                                    <span class="flex w-36 items-center justify-center bg-gray-50 border-r text-gray-500">
+                                    <span
+                                        class="flex w-36 items-center justify-center bg-gray-50 border-r text-gray-500 dark:bg-gray-900">
                                         Rincian (Rp)
                                     </span>
                                     <input id="rincianDaerah" name="rincian_keuangan2" type="number" value="0"
-                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500">
+                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500 dark:bg-gray-900">
                                 </div>
                                 <p id="rincian_keuangan2_error" class="err mt-1 text-xs text-red-500">
                                 </p>
@@ -168,20 +170,21 @@
                         <!-- Desa -->
                         <div class="grid grid-cols-3 gap-4 items-start">
                             <div class="pt-7">
-                                <label class="text-sm font-medium text-gray-700">
+                                <label class="text-sm font-medium text-gray-700 dark:text-white/90">
                                     Nilai Kerugian Desa
                                 </label>
                             </div>
                             <div class="col-span-2">
-                                <p id="labelDesa" class="block h-6 mb-2 text-sm text-gray-600">
+                                <p id="labelDesa" class="block h-6 mb-2 text-sm text-gray-600 dark:text-white/90">
                                     Kerugian desa tidak ditemukan
                                 </p>
                                 <div class="flex overflow-hidden rounded-lg border border-gray-300">
-                                    <span class="flex w-36 items-center justify-center bg-gray-50 border-r text-gray-500">
+                                    <span
+                                        class="flex w-36 items-center justify-center bg-gray-50 border-r text-gray-500 dark:bg-gray-900">
                                         Rincian (Rp)
                                     </span>
                                     <input id="rincianDesa" name="rincian_keuangan3" type="number" value="0"
-                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500">
+                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500 dark:bg-gray-900">
                                 </div>
                                 <p id="rincian_keuangan3_error" class="err mt-1 text-xs text-red-500">
                                 </p>
@@ -191,20 +194,21 @@
                         <!-- BLUD -->
                         <div class="grid grid-cols-3 gap-4 items-start">
                             <div class="pt-7">
-                                <label class="text-sm font-medium text-gray-700">
+                                <label class="text-sm font-medium text-gray-700 dark:text-white/90">
                                     Nilai Kerugian BLUD
                                 </label>
                             </div>
                             <div class="col-span-2">
-                                <p id="labelBlud" class="block h-6 mb-2 text-sm text-gray-600">
+                                <p id="labelBlud" class="block h-6 mb-2 text-sm text-gray-600 dark:text-white/90">
                                     Kerugian BLUD tidak ditemukan
                                 </p>
                                 <div class="flex overflow-hidden rounded-lg border border-gray-300">
-                                    <span class="flex w-36 items-center justify-center bg-gray-50 border-r text-gray-500">
+                                    <span
+                                        class="flex w-36 items-center justify-center bg-gray-50 border-r text-gray-500 dark:bg-gray-900">
                                         Rincian (Rp)
                                     </span>
                                     <input id="rincianBlud" name="rincian_keuangan4" type="number" value="0"
-                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500">
+                                        class="h-11 w-full border-0 focus:ring-0 focus:outline-none px-4 text-sm bg-gray-50 border-r text-gray-500 dark:bg-gray-900">
                                 </div>
                                 <p id="rincian_keuangan4_error" class="err mt-1 text-xs text-red-500">
                                 </p>
@@ -214,7 +218,7 @@
                         @if (Route::is('verifikasi-ssr.approve'))
                             <div class="pt-5 flex items-center justify-between gap-3">
                                 <button type="button" id="btn-modal-tolak"
-                                    class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                                    class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 dark:text-white/90 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                                     Tolak tindak lanjut dan beri catatan
                                 </button>
                                 <button type="button" id="btn-setujui"
@@ -280,12 +284,12 @@
                     class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900 p-6 lg:col-span-2">
                     <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
                         <div>
-                            <p class="text-sm text-gray-500">
+                            <p class="text-sm text-gray-500 dark:text-white/90">
                                 <u>File</u>
                             </p>
                         </div>
                     </div>
-                    <div class="relative overflow-x-auto">
+                    <div class="relative">
                         <div id="tableLoadingFile"
                             class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
                             <div class="flex flex-col items-center gap-2">
@@ -298,7 +302,6 @@
                             </div>
                         </div>
                         <table id="dtBuktiPembayaran" class="min-w-full text-sm dt-table">
-
                             <thead class="bg-gray-50 dark:bg-gray-800">
                                 <tr>
                                     <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">
@@ -312,14 +315,12 @@
                                     </th>
                                 </tr>
                             </thead>
-
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
-
                         </table>
                     </div>
                     <div
                         class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                        <div id="tableInfoFile" class="text-sm text-gray-500">
+                        <div id="tableInfoFile" class="text-sm text-gray-500 dark:text-white/90">
                         </div>
                         <div id="tablePaginationFile"></div>
                     </div>
@@ -329,12 +330,12 @@
                     class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900 p-6 lg:col-span-3">
                     <div class="flex items-center justify-between border-b border-gray-200 px-6 py-5 dark:border-gray-800">
                         <div>
-                            <p class="text-sm text-gray-500">
+                            <p class="text-sm text-gray-500 dark:text-white/90">
                                 <u>Riwayat Pembayaran</u>
                             </p>
                         </div>
                     </div>
-                    <div class="relative overflow-x-auto">
+                    <div class="relative">
                         <div id="tableLoadingRiwayat"
                             class="hidden absolute inset-0 bg-white/70 dark:bg-gray-900/70 flex items-center justify-center z-50">
                             <div class="flex flex-col items-center gap-2">
@@ -374,7 +375,7 @@
                     </div>
                     <div
                         class="flex flex-col gap-4 border-t border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
-                        <div id="tableInfoRiwayat" class="text-sm text-gray-500">
+                        <div id="tableInfoRiwayat" class="text-sm text-gray-500 dark:text-white/90">
                         </div>
                         <div id="tablePaginationRiwayat"></div>
                     </div>
@@ -407,12 +408,12 @@
                 <div class="pt-6">
                     <form id="formTolak">
                         <div>
-                            <label for="catatan" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            <label for="catatan" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
                                 Catatan
                                 <span class="text-red-400">*</span>
                             </label>
                             <textarea
-                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 dark:border-white/90 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                                 name="catatan" id="catatan" rows="6" placeholder="Berikan catatan"></textarea>
                             <p class="err text-theme-xs text-error-500" id="catatan_error"></p>
                         </div>
