@@ -102,23 +102,13 @@ class AuthService
     // ─────────────────────────────────────────────
     private function handleSipastiLogin(array $data): array
     {
-        // Sipasti disimpan di kis_users dengan id_pegawai = 'sipasti'
-        $user = $this->userRepo->findByIdPegawai('sipasti');
-        if (!$user) {
-            throw ValidationException::withMessages([
-                'nip' => 'Akun sipasti tidak terdaftar di sistem lokal',
-            ]);
-        }
-
-        Auth::login($user);
-        request()->session()->regenerate();
-
         $namaOpd   = $this->namaOpdService->resolveByKodeUnor('01.15');
         $sessionId = (string) Str::uuid();
-
+        request()->session()->regenerate();
         session([
             'nip'        => 'sipasti',
             'nama'       => $data['nama'] ?? null,
+            'id'         => $data['id_admin'] ?? null,
             'id_pegawai' => $data['id_admin'] ?? null,
             'level'      => $data['level'] ?? null,
             'kode_unor'  => '01.15',
@@ -129,7 +119,7 @@ class AuthService
 
         $this->recordAccessLog(
             sessionId: $sessionId,
-            idPegawai: 'sipasti',
+            idPegawai: (string) ($data['id_admin'] ?? ''),
             kodeUnor: '01.15',
             level: (int) ($data['level'] ?? 0),
         );
@@ -179,14 +169,10 @@ class AuthService
     // ─────────────────────────────────────────────
     // Catat audit log — jika gagal tidak break login
     // ─────────────────────────────────────────────
-    private function recordAccessLog(
-        string $sessionId,
-        string $idPegawai,
-        string $kodeUnor,
-        int    $level,
-    ): void {
+    private function recordAccessLog(string $sessionId, string $idPegawai, string $kodeUnor, int    $level): void
+    {
         try {
-            $ua       = request()->userAgent() ?? '';
+            $ua = request()->userAgent() ?? '';
             $this->accessLogRepo->create([
                 'id_session' => $sessionId,
                 'id_pegawai' => $idPegawai,

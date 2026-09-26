@@ -71,198 +71,251 @@
                         </a>
                     </li>
                     <!-- Admin -->
-                    <li>
-                        <a href="{{ url('admin') }}"
-                            class="menu-item group {{ request()->is('admin') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg class="{{ request()->is('admin') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12 3.5C7.30558 3.5 3.5 7.30558 3.5 12C3.5 14.1526 4.3002 16.1184 5.61936 17.616C6.17279 15.3096 8.24852 13.5955 10.7246 13.5955H13.2746C15.7509 13.5955 17.8268 15.31 18.38 17.6167C19.6996 16.119 20.5 14.153 20.5 12C20.5 7.30558 16.6944 3.5 12 3.5ZM17.0246 18.8566V18.8455C17.0246 16.7744 15.3457 15.0955 13.2746 15.0955H10.7246C8.65354 15.0955 6.97461 16.7744 6.97461 18.8455V18.856C8.38223 19.8895 10.1198 20.5 12 20.5C13.8798 20.5 15.6171 19.8898 17.0246 18.8566ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM11.9991 7.25C10.8847 7.25 9.98126 8.15342 9.98126 9.26784C9.98126 10.3823 10.8847 11.2857 11.9991 11.2857C13.1135 11.2857 14.0169 10.3823 14.0169 9.26784C14.0169 8.15342 13.1135 7.25 11.9991 7.25ZM8.48126 9.26784C8.48126 7.32499 10.0563 5.75 11.9991 5.75C13.9419 5.75 15.5169 7.32499 15.5169 9.26784C15.5169 11.2107 13.9419 12.7857 11.9991 12.7857C10.0563 12.7857 8.48126 11.2107 8.48126 9.26784Z"
-                                    fill="" />
-                            </svg>
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Admin
-                            </span>
-                        </a>
-                    </li>
-                    <!-- Master -->
-                    <li>
-                        <a href="#" @click.prevent="selected = (selected === 'Masters' ? '' : 'Masters')"
-                            class="menu-item group {{ request()->is('jenis-php', 'nilai-kerugian', 'status-tl', 'obrik', 'obrik-turunan') ? 'menu-item-active' : 'menu-item-inactive' }}">
-
-                            <svg class="{{ request()->is('jenis-php', 'nilai-kerugian', 'status-tl', 'obrik', 'obrik-turunan') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" />
-                            </svg>
-
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Data Master
-                            </span>
-
-                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                                :class="[(selected === 'Masters') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive',
-                                    sidebarToggle ? 'lg:hidden' : ''
-                                ]"
-                                width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </a>
-                        <div class="overflow-hidden transform translate"
-                            :class="(selected === 'Masters') ? 'block' : 'hidden'">
-                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                <li>
-                                    <a href="{{ url('jenis-php') }}"
-                                        class="menu-dropdown-item group {{ request()->is('jenis-php') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Jenis PHP
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('nilai-kerugian') }}"
-                                        class="menu-dropdown-item group {{ request()->is('nilai-kerugian') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Nilai Kerugian
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('status-tl') }}"
-                                        class="menu-dropdown-item group {{ request()->is('status-tl') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Status Tindak Lanjut
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('obrik') }}"
-                                        class="menu-dropdown-item group {{ request()->is('obrik') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Obrik
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('obrik-turunan') }}"
-                                        class="menu-dropdown-item group {{ request()->is('obrik-turunan') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Obrik Turunan
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <!-- Manajemen Tim -->
-                    <li>
-                        <a href="#"
-                            @click.prevent="selected = (selected === 'Manajemen-tim' ? '':'Manajemen-tim')"
-                            class="menu-item group {{ request()->is('daftar-tim', 'obrik-tim') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg class="{{ request()->is('daftar-tim', 'obrik-tim') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15.5 11C16.8807 11 18 9.88071 18 8.5C18 7.11929 16.8807 6 15.5 6C14.1193 6 13 7.11929 13 8.5C13 9.88071 14.1193 11 15.5 11Z
+                    @if (
+                        ((string) session('id') === '1' &&
+                            (string) session('level') === '1' &&
+                            (string) session('kode_unor') === '01.15') ||
+                            (string) (string) session('level') === '1')
+                        <li>
+                            <a href="{{ url('admin') }}"
+                                class="menu-item group {{ request()->is('admin') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                                <svg class="{{ request()->is('admin') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M12 3.5C7.30558 3.5 3.5 7.30558 3.5 12C3.5 14.1526 4.3002 16.1184 5.61936 17.616C6.17279 15.3096 8.24852 13.5955 10.7246 13.5955H13.2746C15.7509 13.5955 17.8268 15.31 18.38 17.6167C19.6996 16.119 20.5 14.153 20.5 12C20.5 7.30558 16.6944 3.5 12 3.5ZM17.0246 18.8566V18.8455C17.0246 16.7744 15.3457 15.0955 13.2746 15.0955H10.7246C8.65354 15.0955 6.97461 16.7744 6.97461 18.8455V18.856C8.38223 19.8895 10.1198 20.5 12 20.5C13.8798 20.5 15.6171 19.8898 17.0246 18.8566ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM11.9991 7.25C10.8847 7.25 9.98126 8.15342 9.98126 9.26784C9.98126 10.3823 10.8847 11.2857 11.9991 11.2857C13.1135 11.2857 14.0169 10.3823 14.0169 9.26784C14.0169 8.15342 13.1135 7.25 11.9991 7.25ZM8.48126 9.26784C8.48126 7.32499 10.0563 5.75 11.9991 5.75C13.9419 5.75 15.5169 7.32499 15.5169 9.26784C15.5169 11.2107 13.9419 12.7857 11.9991 12.7857C10.0563 12.7857 8.48126 11.2107 8.48126 9.26784Z"
+                                        fill="" />
+                                </svg>
+                                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                    Admin
+                                </span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (session('level') === '1' || session('level') === '2')
+                        <!-- Data Master -->
+                        <li>
+                            <a href="#" @click.prevent="selected = (selected === 'Masters' ? '' : 'Masters')"
+                                class="menu-item group {{ request()->is('jenis-php', 'nilai-kerugian', 'status-tl', 'obrik', 'obrik-turunan') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                                <svg class="{{ request()->is('jenis-php', 'nilai-kerugian', 'status-tl', 'obrik', 'obrik-turunan') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" />
+                                </svg>
+                                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                    Data Master
+                                </span>
+                                <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                                    :class="[(selected === 'Masters') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive',
+                                        sidebarToggle ? 'lg:hidden' : ''
+                                    ]"
+                                    width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                            <div class="overflow-hidden transform translate"
+                                :class="(selected === 'Masters') ? 'block' : 'hidden'">
+                                <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                                    class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                    @if ((string) session('id') === '1' && (string) session('level') === '1' && (string) session('kode_unor') === '01.15')
+                                        <li>
+                                            <a href="{{ url('jenis-php') }}"
+                                                class="menu-dropdown-item group {{ request()->is('jenis-php') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                                Jenis PHP
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ url('nilai-kerugian') }}"
+                                                class="menu-dropdown-item group {{ request()->is('nilai-kerugian') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                                Nilai Kerugian
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ url('status-tl') }}"
+                                                class="menu-dropdown-item group {{ request()->is('status-tl') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                                Status Tindak Lanjut
+                                            </a>
+                                        </li>
+                                    @endif
+                                    <li>
+                                        <a href="{{ url('obrik') }}"
+                                            class="menu-dropdown-item group {{ request()->is('obrik') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                            Obrik
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('obrik-turunan') }}"
+                                            class="menu-dropdown-item group {{ request()->is('obrik-turunan') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                            Obrik Turunan
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    @endif
+                    @if (session('level') === '1')
+                        <!-- Manajemen Tim -->
+                        <li>
+                            <a href="#"
+                                @click.prevent="selected = (selected === 'Manajemen-tim' ? '':'Manajemen-tim')"
+                                class="menu-item group {{ request()->is('daftar-tim', 'obrik-tim') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                                <svg class="{{ request()->is('daftar-tim', 'obrik-tim') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.5 11C16.8807 11 18 9.88071 18 8.5C18 7.11929 16.8807 6 15.5 6C14.1193 6 13 7.11929 13 8.5C13 9.88071 14.1193 11 15.5 11Z
                                     M8.5 11C9.88071 11 11 9.88071 11 8.5C11 7.11929 9.88071 6 8.5 6C7.11929 6 6 7.11929 6 8.5C6 9.88071 7.11929 11 8.5 11Z
                                     M3 18C3 15.7909 4.79086 14 7 14H10C12.2091 14 14 15.7909 14 18
                                     M10 18C10 15.7909 11.7909 14 14 14H17C19.2091 14 21 15.7909 21 18" stroke="#737070"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                    fill="none" />
-                            </svg>
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                        fill="none" />
+                                </svg>
 
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Manajemen Tim
-                            </span>
-                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                                :class="[(selected === 'Manajemen-tim') ? 'menu-item-arrow-active' :
-                                    'menu-item-arrow-inactive',
-                                    sidebarToggle ? 'lg:hidden' : ''
-                                ]"
-                                width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </a>
+                                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                    Manajemen Tim
+                                </span>
+                                <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                                    :class="[(selected === 'Manajemen-tim') ? 'menu-item-arrow-active' :
+                                        'menu-item-arrow-inactive',
+                                        sidebarToggle ? 'lg:hidden' : ''
+                                    ]"
+                                    width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
 
-                        <!-- Dropdown Menu Start -->
-                        <div class="overflow-hidden transform translate"
-                            :class="(selected === 'Manajemen-tim') ? 'block' : 'hidden'">
-                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                <li>
-                                    <a href="{{ url('daftar-tim') }}"
-                                        class="menu-dropdown-item group {{ request()->is('daftar-tim') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Daftar Tim
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('obrik-tim') }}"
-                                        class="menu-dropdown-item group {{ request()->is('obrik-tim') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Obrik Ditangani
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <!-- Manajemen Kasus -->
-                    <li>
-                        <a href="#"
-                            @click.prevent="selected = (selected === 'Manajemen-kasus' ? '':'Manajemen-kasus')"
-                            class="menu-item group {{ request()->is('daftar-kasus', 'verifikasi-ssr*') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg class="{{ request()->is('daftar-kasus', 'verifikasi-ssr*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
-                                    fill="none" stroke="#737070" stroke-width="1.5" stroke-linejoin="round" />
-
-                                <path d="M14 3V7H18" fill="none" stroke="#737070" stroke-width="1.5"
-                                    stroke-linejoin="round" />
-
-                                <circle cx="10.5" cy="12.5" r="2.5" fill="none" stroke="#737070"
-                                    stroke-width="1.5" />
-
-                                <path d="M12.5 14.5L14.5 16.5" fill="none" stroke="#737070" stroke-width="1.5"
-                                    stroke-linecap="round" />
-                            </svg>
-
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Manajemen Kasus
-                            </span>
-                            <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                                :class="[(selected === 'Manajemen-kasus') ? 'menu-item-arrow-active' :
-                                    'menu-item-arrow-inactive',
-                                    sidebarToggle ? 'lg:hidden' : ''
-                                ]"
-                                width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </a>
-                        <!-- Dropdown Menu Start -->
-                        <div class="overflow-hidden transform translate"
-                            :class="(selected === 'Manajemen-kasus') ? 'block' : 'hidden'">
-                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                <li>
-                                    <a href="{{ url('daftar-kasus') }}"
-                                        class="menu-dropdown-item group {{ request()->is('daftar-kasus') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        Daftar Kasus
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('verifikasi-ssr') }}"
-                                        class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('verifikasi-ssr*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        <span>Verifikasi SSR</span>
-                                        @if ($countApprove > 0)
-                                            <span
-                                                class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
-                                                {{ $countApprove }}
-                                            </span>
-                                        @endif
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Dropdown Menu End -->
-                    </li>
+                            <!-- Dropdown Menu Start -->
+                            <div class="overflow-hidden transform translate"
+                                :class="(selected === 'Manajemen-tim') ? 'block' : 'hidden'">
+                                <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                                    class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                    <li>
+                                        <a href="{{ url('daftar-tim') }}"
+                                            class="menu-dropdown-item group {{ request()->is('daftar-tim') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                            Daftar Tim
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('obrik-tim') }}"
+                                            class="menu-dropdown-item group {{ request()->is('obrik-tim') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                            Obrik Ditangani
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    @endif
+                    @if (session('level') === '1' || session('level') === '2')
+                        <!-- Manajemen Kasus -->
+                        <li>
+                            <a href="#"
+                                @click.prevent="selected = (selected === 'Manajemen-kasus' ? '':'Manajemen-kasus')"
+                                class="menu-item group {{ request()->is('daftar-kasus', 'verifikasi-ssr*') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                                <svg class="{{ request()->is('daftar-kasus', 'verifikasi-ssr*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M14 3H7C6.44772 3 6 3.44772 6 4V20C6 20.5523 6.44772 21 7 21H17C17.5523 21 18 20.5523 18 20V7L14 3Z"
+                                        fill="none" stroke="#737070" stroke-width="1.5"
+                                        stroke-linejoin="round" />
+                                    <path d="M14 3V7H18" fill="none" stroke="#737070" stroke-width="1.5"
+                                        stroke-linejoin="round" />
+                                    <circle cx="10.5" cy="12.5" r="2.5" fill="none" stroke="#737070"
+                                        stroke-width="1.5" />
+                                    <path d="M12.5 14.5L14.5 16.5" fill="none" stroke="#737070" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg>
+                                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                    Manajemen Kasus
+                                </span>
+                                <svg class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                                    :class="[(selected === 'Manajemen-kasus') ? 'menu-item-arrow-active' :
+                                        'menu-item-arrow-inactive',
+                                        sidebarToggle ? 'lg:hidden' : ''
+                                    ]"
+                                    width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                            <!-- Dropdown Menu Start -->
+                            <div class="overflow-hidden transform translate"
+                                :class="(selected === 'Manajemen-kasus') ? 'block' : 'hidden'">
+                                <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                                    class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                    <li>
+                                        <a href="{{ url('daftar-kasus') }}"
+                                            class="menu-dropdown-item group {{ request()->is('daftar-kasus') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                            Daftar Kasus
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('verifikasi-ssr') }}"
+                                            class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('verifikasi-ssr*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                            <span>Verifikasi SSR</span>
+                                            @if ($countApprove > 0)
+                                                <span
+                                                    class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+                                                    {{ $countApprove }}
+                                                </span>
+                                            @endif
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Dropdown Menu End -->
+                        </li>
+                    @endif
+                    @if (session('level') === '5')
+                        <li>
+                            <a href="{{ url('verifikasi-ssr') }}"
+                                class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('verifikasi-ssr*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                <svg version="1.1" id="CHECKLIST" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"
+                                    viewBox="0 0 1800 1800" enable-background="new 0 0 1800 1800"
+                                    xml:space="preserve" fill="#808080">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <g>
+                                            <path
+                                                d="M1506.693,279.092h-150.36v-85.277c0-17.353-14.065-31.418-31.419-31.418h-227.317 C1078.205,70.574,996.5,2.304,900.003,2.304c-96.499,0-178.202,68.27-197.595,160.092H475.091 c-17.353,0-31.419,14.065-31.419,31.418v85.277H293.307c-17.353,0-31.419,14.066-31.419,31.419v1455.764 c0,17.353,14.066,31.419,31.419,31.419h1213.386c17.354,0,31.42-14.066,31.42-31.419V310.511 C1538.113,293.158,1524.047,279.092,1506.693,279.092z M506.511,225.234h223.28c16.617,0,30.354-12.935,31.362-29.517 c4.436-73.219,65.424-130.574,138.85-130.574c73.425,0,134.413,57.355,138.849,130.574c1.009,16.582,14.746,29.517,31.363,29.517 h223.28v53.858v62.838v74.81H506.511v-74.81v-62.838V225.234z M1475.274,1734.855H324.728V341.93h118.944v106.229 c0,17.354,14.066,31.419,31.419,31.419h849.823c17.354,0,31.419-14.066,31.419-31.419V341.93h118.941V1734.855z">
+                                            </path>
+                                            <path
+                                                d="M663.633,684.019L534.366,813.291l-57.803-57.806c-12.272-12.265-32.164-12.265-44.437,0 c-12.269,12.272-12.269,32.164,0,44.437l80.021,80.022c6.136,6.132,14.176,9.201,22.219,9.201c8.043,0,16.083-3.069,22.219-9.201 l151.486-151.486c12.269-12.273,12.269-32.165,0-44.438C695.799,671.755,675.907,671.755,663.633,684.019z">
+                                            </path>
+                                            <path
+                                                d="M824.996,750.563c-17.354,0-31.419,14.066-31.419,31.419c0,17.354,14.066,31.419,31.419,31.419h520.665 c17.354,0,31.419-14.066,31.419-31.419c0-17.353-14.065-31.419-31.419-31.419H824.996z">
+                                            </path>
+                                            <path
+                                                d="M663.633,1039.925l-129.267,129.272l-57.803-57.807c-12.272-12.265-32.164-12.265-44.437,0 c-12.269,12.272-12.269,32.164,0,44.438l80.021,80.021c6.136,6.133,14.176,9.2,22.219,9.2c8.043,0,16.083-3.067,22.219-9.2 l151.486-151.486c12.269-12.272,12.269-32.163,0-44.438C695.799,1027.66,675.907,1027.66,663.633,1039.925z">
+                                            </path>
+                                            <path
+                                                d="M1345.661,1106.467H824.996c-17.354,0-31.419,14.066-31.419,31.42s14.066,31.42,31.419,31.42h520.665 c17.354,0,31.419-14.066,31.419-31.42S1363.015,1106.467,1345.661,1106.467z">
+                                            </path>
+                                            <path
+                                                d="M663.633,1395.83l-129.267,129.272l-57.803-57.808c-12.272-12.264-32.164-12.264-44.437,0 c-12.269,12.274-12.269,32.166,0,44.439l80.021,80.021c6.136,6.132,14.176,9.199,22.219,9.199c8.043,0,16.083-3.067,22.219-9.199 l151.486-151.486c12.269-12.274,12.269-32.166,0-44.438C695.799,1383.566,675.907,1383.566,663.633,1395.83z">
+                                            </path>
+                                            <path
+                                                d="M1345.661,1462.373H824.996c-17.354,0-31.419,14.066-31.419,31.42s14.066,31.418,31.419,31.418h520.665 c17.354,0,31.419-14.064,31.419-31.418S1363.015,1462.373,1345.661,1462.373z">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <span>Verifikasi SSR</span>
+                                @if ($countApprove > 0)
+                                    <span class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+                                        {{ $countApprove }}
+                                    </span>
+                                @endif
+                            </a>
+                        </li>
+                    @endif
                     <!-- Rekap Laporan -->
                     <li>
                         <a href="#"
@@ -305,7 +358,6 @@
                                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </a>
-
                         <!-- Dropdown Menu Start -->
                         <div class="overflow-hidden transform translate"
                             :class="(selected === 'Rekap-laporan') ? 'block' : 'hidden'">
@@ -317,18 +369,20 @@
                                         PHP / TNK
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="{{ url('rekap/apbkam') }}"
-                                        class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('rekap/apbkam') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        <span>APBKAM</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('rekap/pertahun') }}"
-                                        class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('rekap/pertahun') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                        <span>Pertahun</span>
-                                    </a>
-                                </li>
+                                @if (session('level') !== '3')
+                                    <li>
+                                        <a href="{{ url('rekap/apbkam') }}"
+                                            class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('rekap/apbkam') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                            <span>APBKAM</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('rekap/pertahun') }}"
+                                            class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('rekap/pertahun') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                            <span>Pertahun</span>
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                         <!-- Dropdown Menu End -->
@@ -419,43 +473,49 @@
                 </ul>
             </div>
             <!-- Data Log -->
-            <div>
-                <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
-                    <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
-                        Data Log
-                    </span>
-                    <svg :class="sidebarToggle ? 'lg:block hidden' : 'hidden'"
-                        class="mx-auto fill-current menu-group-icon" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M5.99915 10.2451C6.96564 10.2451 7.74915 11.0286 7.74915 11.9951V12.0051C7.74915 12.9716 6.96564 13.7551 5.99915 13.7551C5.03265 13.7551 4.24915 12.9716 4.24915 12.0051V11.9951C4.24915 11.0286 5.03265 10.2451 5.99915 10.2451ZM17.9991 10.2451C18.9656 10.2451 19.7491 11.0286 19.7491 11.9951V12.0051C19.7491 12.9716 18.9656 13.7551 17.9991 13.7551C17.0326 13.7551 16.2491 12.9716 16.2491 12.0051V11.9951C16.2491 11.0286 17.0326 10.2451 17.9991 10.2451ZM13.7491 11.9951C13.7491 11.0286 12.9656 10.2451 11.9991 10.2451C11.0326 10.2451 10.2491 11.0286 10.2491 11.9951V12.0051C10.2491 12.9716 11.0326 13.7551 11.9991 13.7551C12.9656 13.7551 13.7491 12.9716 13.7491 12.0051V11.9951Z"
-                            fill="" />
-                    </svg>
-                </h3>
-                <ul class="flex flex-col gap-4 mb-6">
-                    <!-- Riwayat Login -->
-                    <li>
-                        <a href="{{ url('access-log') }}"
-                            class="menu-item group {{ request()->is('access-log') ? 'menu-item-active' : 'menu-item-inactive' }}">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <!-- User -->
-                                <circle cx="12" cy="9" r="3" stroke="currentColor"
-                                    stroke-width="1.5" />
-                                <path d="M7 18C7 15.5 9.5 14 12 14C14.5 14 17 15.5 17 18" stroke="currentColor"
-                                    stroke-width="1.5" stroke-linecap="round" />
-                                <!-- Clock -->
-                                <circle cx="18" cy="18" r="3" stroke="currentColor"
-                                    stroke-width="1.5" />
-                                <path d="M18 17V18.5L19 19" stroke="currentColor" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                                Riwayat Login
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            @if (
+                ((string) session('id') === '1' &&
+                    (string) session('level') === '1' &&
+                    (string) session('kode_unor') === '01.15') ||
+                    session('level') === '1')
+                <div>
+                    <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
+                        <span class="menu-group-title" :class="sidebarToggle ? 'lg:hidden' : ''">
+                            Data Log
+                        </span>
+                        <svg :class="sidebarToggle ? 'lg:block hidden' : 'hidden'"
+                            class="mx-auto fill-current menu-group-icon" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M5.99915 10.2451C6.96564 10.2451 7.74915 11.0286 7.74915 11.9951V12.0051C7.74915 12.9716 6.96564 13.7551 5.99915 13.7551C5.03265 13.7551 4.24915 12.9716 4.24915 12.0051V11.9951C4.24915 11.0286 5.03265 10.2451 5.99915 10.2451ZM17.9991 10.2451C18.9656 10.2451 19.7491 11.0286 19.7491 11.9951V12.0051C19.7491 12.9716 18.9656 13.7551 17.9991 13.7551C17.0326 13.7551 16.2491 12.9716 16.2491 12.0051V11.9951C16.2491 11.0286 17.0326 10.2451 17.9991 10.2451ZM13.7491 11.9951C13.7491 11.0286 12.9656 10.2451 11.9991 10.2451C11.0326 10.2451 10.2491 11.0286 10.2491 11.9951V12.0051C10.2491 12.9716 11.0326 13.7551 11.9991 13.7551C12.9656 13.7551 13.7491 12.9716 13.7491 12.0051V11.9951Z"
+                                fill="" />
+                        </svg>
+                    </h3>
+                    <ul class="flex flex-col gap-4 mb-6">
+                        <!-- Riwayat Login -->
+                        <li>
+                            <a href="{{ url('access-log') }}"
+                                class="menu-item group {{ request()->is('access-log') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <!-- User -->
+                                    <circle cx="12" cy="9" r="3" stroke="currentColor"
+                                        stroke-width="1.5" />
+                                    <path d="M7 18C7 15.5 9.5 14 12 14C14.5 14 17 15.5 17 18" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" />
+                                    <!-- Clock -->
+                                    <circle cx="18" cy="18" r="3" stroke="currentColor"
+                                        stroke-width="1.5" />
+                                    <path d="M18 17V18.5L19 19" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                    Riwayat Login
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @endif
         </nav>
     </div>
 </aside>
