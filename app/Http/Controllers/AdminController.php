@@ -73,6 +73,9 @@ class AdminController extends Controller
             ->where('id_app', 14)
             ->orderBy('tingkatan_level')
             ->get();
+
+        $instansiList = Instansi::query()->orderBy('nama_instansi')->get();
+
         $tims = Tim::with('ketua')->get();
 
         return view('admin', compact(
@@ -81,6 +84,7 @@ class AdminController extends Controller
             'turunansmini',
             'levels',
             'tims',
+            'instansiList',
             'obriks',
         ));
     }
@@ -88,6 +92,16 @@ class AdminController extends Controller
     public function ajaxDataAdmin(Request $request): JsonResponse
     {
         $query = $this->baseUserQuery();
+        $kodeUnor = $request->input('kode_unor', 'semua');
+        $statusKasus = $request->input('status_kasus', 'semua');
+
+        if ($kodeUnor !== 'semua') {
+            $query->where('kode_unor', $kodeUnor);
+        }
+
+        if ($statusKasus !== 'semua') {
+            $query->where('selesai', $statusKasus);
+        }
 
         return DataTables::eloquent($query)
             ->addIndexColumn()

@@ -24,6 +24,31 @@
                         </button>
                     </div>
 
+                    <!-- Hapus komentar jika butuh filter status kasus -->
+                    <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
+                        <form id="formFilterStatusKasus"
+                            class="grid grid-cols-1 gap-4 px-6 py-5 md:grid-cols-4 dark:border-gray-800">
+                            <div class="md:col-span-3">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Status kasus
+                                </label>
+                                <select name="status_kasus" id="status_kasus"
+                                    class="select2 dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                    <option value="semua" selected>SEMUA</option>
+                                    <option value="1">SELESAI</option>
+                                    <option value="0">BELUM SELESAI</option>
+                                </select>
+                                <p class="err text-theme-xs text-error-500" id="status_kasus_error"></p>
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" id="filterBtn"
+                                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-gray-400">
+                                    Cari
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                     {{-- TOOLBAR --}}
                     <div
                         class="flex flex-col gap-4 border-b border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
@@ -68,6 +93,8 @@
                                     <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">NO. & TGL
                                         SURAT TUGAS</th>
                                     <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nomor LHP
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Status
                                     </th>
                                     <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Tanggal
                                         LHP
@@ -312,6 +339,12 @@
                     storeKasus: "{{ url('daftar-kasus') }}",
                 };
 
+                function getFilterPayload() {
+                    return {
+                        status_kasus: $('#status_kasus').val(),
+                    };
+                }
+
                 const SPINNER_HTML = `
                         <svg aria-hidden="true" class="w-5 h-5 animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -334,9 +367,45 @@
                     searching: true,
                     ordering: true,
                     lengthChange: false,
-                    ajax: {
-                        type: 'POST',
-                        url: URL.ajaxKasus
+                    ajax: function(data, callback, settings) {
+                        if (!$('#status_kasus').val()) {
+                            callback({
+                                draw: data.draw,
+                                recordsTotal: 0,
+                                recordsFiltered: 0,
+                                data: []
+                            });
+                            return;
+                        }
+
+                        $.ajax({
+                            type: 'POST',
+                            url: URL.ajaxKasus,
+                            data: Object.assign(data, getFilterPayload()),
+                            dataType: 'json',
+                            success: function(json) {
+                                callback(json);
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON
+                                    .errors) {
+                                    showFieldErrors(xhr.responseJSON.errors);
+                                } else {
+                                    Swal.fire({
+                                        title: "Gagal",
+                                        text: "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
+                                        icon: "error"
+                                    });
+                                }
+                                $('#filterBtn').prop('disabled', false).html('Cari');
+                                callback({
+                                    draw: data.draw,
+                                    recordsTotal: 0,
+                                    recordsFiltered: 0,
+                                    data: []
+                                });
+                            }
+                        });
                     },
                     columns: [{
                             data: 'DT_RowIndex',
@@ -363,6 +432,11 @@
                         {
                             data: 'nomor_lhp',
                             name: 'nomor_lhp',
+                            className: 'text-left'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status',
                             className: 'text-left'
                         },
                         {
@@ -408,6 +482,17 @@
 
                 dataTable.on('init.dt', moveDataTableFooter);
                 dataTable.on('draw.dt', moveDataTableFooter);
+
+                $('#formFilterStatusKasus').on('submit', function(e) {
+                    e.preventDefault();
+                    $('#filterBtn').prop('disabled', true).html(
+                        '<span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>'
+                    );
+
+                    dataTable.ajax.reload(function() {
+                        $('#filterBtn').prop('disabled', false).html('Cari');
+                    }, true);
+                });
 
                 function openModal() {
                     reset();

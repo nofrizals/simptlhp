@@ -24,6 +24,37 @@
                     </button>
                 </div>
 
+                <!-- Hapus komentar jika butuh filter obrik -->
+                <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
+                    <form id="formFilterAdmin" class="grid grid-cols-1 gap-4 px-6 py-5 md:grid-cols-4 dark:border-gray-800">
+                        <div class="md:col-span-3">
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Nama Obrik
+                            </label>
+                            <select name="kode_unor" id="kode_unor"
+                                class="select2 dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                @if ((string) session('level') === '3')
+                                    <option value="{{ session('kode_unor') }}" selected>{{ session('nama_opd') }}</option>
+                                @else
+                                    <option value="semua" selected>Semua Obrik</option>
+                                    @foreach ($instansiList as $instansi)
+                                        <option value="{{ $instansi->kode_instansi }}">
+                                            {{ strtoupper($instansi->nama_instansi) }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <p class="err text-theme-xs text-error-500" id="kode_unor_error"></p>
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" id="filterBtn"
+                                class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-gray-400">
+                                Cari
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
                 {{-- TOOLBAR --}}
                 <div
                     class="flex flex-col gap-4 border-b border-gray-200 px-6 py-5 md:flex-row md:items-center md:justify-between dark:border-gray-800">
@@ -130,7 +161,8 @@
                                     <option value="" disabled selected
                                         class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">Pilih OPD</option>
                                     @foreach ($instansis as $instansi)
-                                        <option value="{{ $instansi['kode'] }}">{{ ucwords(strtolower($instansi['nama'])) }}
+                                        <option value="{{ $instansi['kode'] }}">
+                                            {{ ucwords(strtolower($instansi['nama'])) }}
                                         </option>
                                     @endforeach
                                     @foreach ($kecamatans as $kecamatan)
@@ -404,6 +436,23 @@
                         turunanOpd: "{{ url('instansi/getMyTurunan') }}",
                     };
 
+                    function getFilterPayload() {
+                        return {
+                            kode_unor: $('#kode_unor').val(),
+                        };
+                    }
+
+                    function clearFieldErrors() {
+                        $('.err').html('');
+                    }
+
+                    function showFieldErrors(errors) {
+                        clearFieldErrors();
+                        $.each(errors, function(key, val) {
+                            $('#' + key + '_error').html(val[0]);
+                        });
+                    }
+
                     // ─── Spinner HTML ────────────────────────────────────────────────
                     const SPINNER_HTML = `
                         <svg aria-hidden="true" class="w-5 h-5 animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -431,9 +480,45 @@
                         searching: true,
                         ordering: true,
                         lengthChange: false,
-                        ajax: {
-                            type: 'POST',
-                            url: URL.ajaxAdmin
+                        ajax: function(data, callback, settings) {
+                            if (!$('#kode_unor').val()) {
+                                callback({
+                                    draw: data.draw,
+                                    recordsTotal: 0,
+                                    recordsFiltered: 0,
+                                    data: []
+                                });
+                                return;
+                            }
+
+                            $.ajax({
+                                type: 'POST',
+                                url: URL.ajaxAdmin,
+                                data: Object.assign(data, getFilterPayload()),
+                                dataType: 'json',
+                                success: function(json) {
+                                    callback(json);
+                                },
+                                error: function(xhr) {
+                                    if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON
+                                        .errors) {
+                                        showFieldErrors(xhr.responseJSON.errors);
+                                    } else {
+                                        Swal.fire({
+                                            title: "Gagal",
+                                            text: "Terjadi kesalahan pada server. Coba lagi dalam beberapa saat.",
+                                            icon: "error"
+                                        });
+                                    }
+                                    $('#filterBtn').prop('disabled', false).html('Cari');
+                                    callback({
+                                        draw: data.draw,
+                                        recordsTotal: 0,
+                                        recordsFiltered: 0,
+                                        data: []
+                                    });
+                                }
+                            });
                         },
                         columns: [{
                                 data: 'DT_RowIndex',
@@ -495,6 +580,19 @@
 
                     dataTable.on('init.dt', moveDataTableFooter);
                     dataTable.on('draw.dt', moveDataTableFooter);
+
+                    $('#formFilterAdmin').on('submit', function(e) {
+                        e.preventDefault();
+                        clearFieldErrors();
+
+                        $('#filterBtn').prop('disabled', true).html(
+                            '<span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>'
+                        );
+
+                        dataTable.ajax.reload(function() {
+                            $('#filterBtn').prop('disabled', false).html('Cari');
+                        }, true);
+                    });
 
                     // ════════════════════════════════════════════════════════════════
                     // MODAL ADMIN — Helper

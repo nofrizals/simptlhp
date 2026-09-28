@@ -25,13 +25,17 @@ class KasusController extends Controller
         return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'obriks', 'ketua_tims', 'status'));
     }
 
-    public function ajaxDataDaftarKasus()
+    public function ajaxDataDaftarKasus(Request $request)
     {
         $data = Kasus::with(['jenis_php', 'instansi'])
             ->withCount(['temuans as temuans_count' => function (Builder $query): void {
                 $query->whereNull('deleted_by');
             }])
             ->orderBy('id_kasus', 'desc');
+        $status = $request->input('status_kasus', 'semua');
+        if ($status !== 'semua') {
+            $data->where('selesai', $status);
+        }
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('id_jenis_php', function (Kasus $value): string {
@@ -49,6 +53,16 @@ class KasusController extends Controller
             ->addColumn('nomor_lhp', function ($value) {
                 return '<span class="dark:text-white/90">' . $value->nomor_lhp ?? '-' . '</span>';
             })
+            ->editColumn('status', function ($value) {
+                $badge = $value->selesai === '1'
+                    ? '<span class="px-2 py-0.5 text-xs font-medium text-green-600 bg-green-50 rounded-md dark:bg-black dark:text-green-400">Selesai</span>'
+                    : '<span class="px-2 py-0.5 text-xs font-medium text-red-600 bg-red-50 rounded-md dark:bg-black dark:text-red-400 whitespace-nowrap">Belum Selesai</span>';
+
+                return '<div class="flex items-center gap-2 dark:text-white/90">'
+                    . $badge
+                    . '</div>';
+            })
+
             ->addColumn('tanggal_lhp', function ($value) {
                 return $value->tanggal_lhp ? '<span class="dark:text-white/90">' . Carbon::parse($value->tanggal_lhp)->translatedFormat('d F Y') . '</span>' : '-';
             })
@@ -76,7 +90,7 @@ class KasusController extends Controller
                     }
                 });
             })
-            ->rawColumns(['id_jenis_php', 'tahun_pemeriksaan', 'spt', 'nomor_lhp', 'tanggal_lhp', 'kode_unor', 'action'])
+            ->rawColumns(['id_jenis_php', 'tahun_pemeriksaan', 'spt', 'nomor_lhp', 'status', 'tanggal_lhp', 'kode_unor', 'action'])
             ->make(true);
     }
 
