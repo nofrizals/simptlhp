@@ -957,67 +957,180 @@
                 }
             }
 
+            // let id_tindak_lanjut = null;
+            // $(document).on('click', '.fileTindakLanjut', function() {
+            //     $('#containerTable').addClass('hidden');
+            //     $('#fileUpload').removeClass('hidden');
+            //     $('#tableUploadFile').removeClass('hidden');
+            //     id_tindak_lanjut = $(this).data('id');
+            //     $('#btnReloadTindakLanjut').on('click', function() {
+            //         $('#dtUploadFile').DataTable().ajax.reload(null, false);
+            //     });
+            //     dtUploadFileTable = $('#dtUploadFile').DataTable({
+            //         processing: true,
+            //         serverSide: true,
+            //         responsive: false,
+            //         scrollX: true,
+            //         dom: 'rtip',
+            //         searching: true,
+            //         ordering: false,
+            //         lengthChange: false,
+            //         ajax: {
+            //             type: 'POST',
+            //             url: `{{ url('tindak-lanjut') }}/${id_tindak_lanjut}/pembayaran/ajaxUploadFile`
+            //         },
+            //         columns: [{
+            //                 data: 'DT_RowIndex',
+            //                 name: 'DT_RowIndex',
+            //                 orderable: false,
+            //                 searchable: false,
+            //                 className: 'text-center'
+            //             },
+            //             {
+            //                 data: 'file',
+            //                 name: 'file',
+            //                 className: 'text-left'
+            //             },
+            //             {
+            //                 data: 'log',
+            //                 name: 'log',
+            //                 className: 'text-center'
+            //             },
+            //             {
+            //                 data: 'action',
+            //                 name: 'action',
+            //                 className: 'text-center'
+            //             }
+            //         ],
+            //         language: {
+            //             processing: "",
+            //             zeroRecords: "Data tidak ditemukan",
+            //             info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+            //             paginate: {
+            //                 previous: "←",
+            //                 next: "→"
+            //             }
+            //         },
+            //         initComplete: function() {
+            //             $('#dtUploadFile_info').appendTo('#tableInfoUploadFile');
+            //             $('#dtUploadFile_paginate').appendTo(
+            //                 '#tablePaginationUploadFile');
+            //         }
+            //     });
+            // })
+
             let id_tindak_lanjut = null;
+            let dtUploadFileTable = null;
+
+
+            // =====================================================
+            // KLIK FILE
+            // =====================================================
             $(document).on('click', '.fileTindakLanjut', function() {
+
+                id_tindak_lanjut = $(this).data('id');
+
+                // Tampilkan halaman upload
                 $('#containerTable').addClass('hidden');
                 $('#fileUpload').removeClass('hidden');
                 $('#tableUploadFile').removeClass('hidden');
-                id_tindak_lanjut = $(this).data('id');
-                $('#btnReloadTindakLanjut').on('click', function() {
-                    $('#dtUploadFile').DataTable().ajax.reload(null, false);
-                });
-                dtUploadFileTable = $('#dtUploadFile').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    responsive: false,
-                    scrollX: true,
-                    dom: 'rtip',
-                    searching: true,
-                    ordering: false,
-                    lengthChange: false,
-                    ajax: {
-                        type: 'POST',
-                        url: `{{ url('tindak-lanjut') }}/${id_tindak_lanjut}/pembayaran/ajaxUploadFile`
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false,
-                            className: 'text-center'
+
+
+                // =================================================
+                // JIKA DATATABLE BELUM DIBUAT
+                // =================================================
+                if (!$.fn.DataTable.isDataTable('#dtUploadFile')) {
+
+                    dtUploadFileTable = $('#dtUploadFile').DataTable({
+
+                        processing: true,
+                        serverSide: true,
+                        responsive: false,
+                        scrollX: true,
+                        dom: 'rtip',
+                        searching: true,
+                        ordering: false,
+                        lengthChange: false,
+
+                        ajax: {
+                            type: 'POST',
+                            url: `{{ url('tindak-lanjut') }}/${id_tindak_lanjut}/pembayaran/ajaxUploadFile`
                         },
-                        {
-                            data: 'file',
-                            name: 'file',
-                            className: 'text-left'
+
+                        columns: [{
+                                data: 'DT_RowIndex',
+                                name: 'DT_RowIndex',
+                                orderable: false,
+                                searchable: false,
+                                className: 'text-center'
+                            },
+                            {
+                                data: 'file',
+                                name: 'file',
+                                className: 'text-left'
+                            },
+                            {
+                                data: 'log',
+                                name: 'log',
+                                className: 'text-center'
+                            },
+                            {
+                                data: 'action',
+                                name: 'action',
+                                className: 'text-center'
+                            }
+                        ],
+
+                        language: {
+                            processing: "",
+                            zeroRecords: "Data tidak ditemukan",
+                            info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                            paginate: {
+                                previous: "←",
+                                next: "→"
+                            }
                         },
-                        {
-                            data: 'log',
-                            name: 'log',
-                            className: 'text-center'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            className: 'text-center'
+
+                        initComplete: function() {
+
+                            $('#dtUploadFile_info')
+                                .appendTo('#tableInfoUploadFile');
+
+                            $('#dtUploadFile_paginate')
+                                .appendTo('#tablePaginationUploadFile');
                         }
-                    ],
-                    language: {
-                        processing: "",
-                        zeroRecords: "Data tidak ditemukan",
-                        info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
-                        paginate: {
-                            previous: "←",
-                            next: "→"
-                        }
-                    },
-                    initComplete: function() {
-                        $('#dtUploadFile_info').appendTo('#tableInfoUploadFile');
-                        $('#dtUploadFile_paginate').appendTo(
-                            '#tablePaginationUploadFile');
-                    }
-                });
-            })
+                    });
+
+                }
+
+                // =================================================
+                // JIKA DATATABLE SUDAH ADA
+                // =================================================
+                else {
+
+                    dtUploadFileTable = $('#dtUploadFile').DataTable();
+
+                    dtUploadFileTable.ajax
+                        .url(
+                            `{{ url('tindak-lanjut') }}/${id_tindak_lanjut}/pembayaran/ajaxUploadFile`
+                        )
+                        .load();
+                }
+
+            });
+
+
+            // =====================================================
+            // RELOAD DATA
+            // =====================================================
+            $(document).on('click', '#btnReloadTindakLanjut', function() {
+
+                if (dtUploadFileTable) {
+                    dtUploadFileTable.ajax.reload(null, false);
+                }
+
+            });
+
 
             $('#formUploadFile').submit(function(e) {
                 e.preventDefault();

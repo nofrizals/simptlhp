@@ -504,10 +504,14 @@ class TindakLanjutController extends Controller
                     : '<span class="inline-flex items-center rounded-full border border-red-200 bg-red-100 dark:bg-red-500 px-3 py-1 text-xs font-medium text-red-700 dark:text-white/90">Tidak Aktif</span>';
 
                 if ($value->edited_by) {
-                    $log = '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e($value->edited_by) . '</strong><br>'
+                    $log = '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e(
+                        $value->edited_by == 1 ? 'Admin Inspektorat' : $value->editedBy->nama_pegawai
+                    ) . '</strong><br>'
                         . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 } else {
-                    $log = '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
+                    $log = '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e(
+                        $value->created_by == 1 ? 'Admin Inspektorat' : $value->createdBy->nama_pegawai
+                    ) . '</strong><br>'
                         . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 }
 
