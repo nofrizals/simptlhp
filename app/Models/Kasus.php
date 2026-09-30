@@ -14,7 +14,7 @@ class Kasus extends Model
     public $timestamps = false;
     protected $guarded = [];
     public const SEARCHABLE_COLUMNS = [
-        'tahun_pemeriksaan'
+        'nama_unor'
     ];
 
     public function jenis_php()

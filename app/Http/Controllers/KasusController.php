@@ -7,6 +7,7 @@ use App\Models\JenisPhp;
 use App\Models\Kasus;
 use App\Models\PegawaiSimak;
 use App\Models\StatusTl;
+use App\Models\Unor;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -53,7 +54,7 @@ class KasusController extends Controller
             ->addColumn('nomor_lhp', function ($value) {
                 return '<span class="dark:text-white/90">' . $value->nomor_lhp ?? '-' . '</span>';
             })
-            ->editColumn('status', function ($value) {
+            ->addColumn('status', function ($value) {
                 $badge = $value->selesai === '1'
                     ? '<span class="px-2 py-0.5 text-xs font-medium text-green-600 bg-green-50 rounded-md dark:bg-black dark:text-green-400">Selesai</span>'
                     : '<span class="px-2 py-0.5 text-xs font-medium text-red-600 bg-red-50 rounded-md dark:bg-black dark:text-red-400 whitespace-nowrap">Belum Selesai</span>';
@@ -82,13 +83,12 @@ class KasusController extends Controller
                         </a>
                     </div>';
             })
-            ->filterColumn('tahun_pemeriksaan', function (Builder $query, string $keyword) {
-                $query->where(function (Builder $q) use ($keyword) {
-                    foreach (Kasus::SEARCHABLE_COLUMNS as $i => $column) {
-                        $method = $i === 0 ? 'where' : 'orWhere';
-                        $q->{$method}($column, 'LIKE', "%{$keyword}%");
-                    }
-                });
+            ->filterColumn('kode_unor', function (Builder $query, string $keyword) {
+                $query->whereHas(
+                    'instansi',
+                    fn(Builder $q) =>
+                    $q->where('nama_instansi', 'LIKE', "%{$keyword}%")
+                );
             })
             ->rawColumns(['id_jenis_php', 'tahun_pemeriksaan', 'spt', 'nomor_lhp', 'status', 'tanggal_lhp', 'kode_unor', 'action'])
             ->make(true);
