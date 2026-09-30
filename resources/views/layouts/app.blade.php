@@ -274,17 +274,21 @@
 $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))" :class="{ 'dark bg-gray-900': darkMode === true }">
 
     @include('partials.preloader')
-    <div class="flex h-screen overflow-hidden">
+    <div class="flex min-h-screen">
         @include('partials.sidebar')
-        <div class="relative flex min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden">
+
+        <div class="relative flex min-w-0 flex-1 flex-col">
             @include('partials.overlay')
             @include('partials.header')
+
             <div id="alert-container" class="mb-4"></div>
-            <main class="flex-1 p-6 lg:p-8">
+
+            <main class="p-6 lg:p-8">
                 @yield('content')
             </main>
         </div>
     </div>
+
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
