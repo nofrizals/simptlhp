@@ -43,16 +43,8 @@ class AuthService
             return $this->handleSipastiLogin($data);
         }
 
-        // 3. Cari user di DB lokal berdasarkan nip_baru dari SSO
-        // $user = $this->userRepo->findByIdPegawai($data['id_pegawai']);
-
-        $user = null;
-        if (($data['simak'] ?? 0) == 0) {
-            // User biasa
-            $user = $this->userRepo->findByIdPegawai($data['nip_baru']);
-        } else {
-            $user = $this->userRepo->findByNipBaru($data['id_pegawai']);
-        }
+        $identifier = $data['nip_baru'] ?? $data['id_pegawai'];
+        $user = $this->userRepo->findByIdPegawai($identifier);
 
         if (!$user) {
             throw ValidationException::withMessages([
@@ -68,9 +60,9 @@ class AuthService
         $sessionId = (string) Str::uuid();
 
         // 6. Set semua session data
-        $nip = ((int) $data['simak'] === 1) ? ($data['nip_baru'] ?? $data['nip_baru']) : $data['nip_baru'];
+        $nip = ((int) $data['simak'] === 1) ? ($data['nip_baru'] ?? $data['id_pegawai']) : $data['id_pegawai'];
         session([
-            'nip'        => $nip,
+            'nip'        => $identifier,
             'nama'       => $data['nama_pegawai'] ?? null,
             'id_pegawai' => $data['id_pegawai'],
             'level'      => $data['tingkatan_level'],
