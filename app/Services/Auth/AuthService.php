@@ -49,9 +49,9 @@ class AuthService
         $user = null;
         if (($data['simak'] ?? 0) == 0) {
             // User biasa
-            $user = $this->userRepo->findByIdPegawai($data['id_pegawai']);
+            $user = $this->userRepo->findByIdPegawai($data['nip_baru']);
         } else {
-            $user = $this->userRepo->findByNipBaru($data['nip_baru']);
+            $user = $this->userRepo->findByNipBaru($data['id_pegawai']);
         }
 
         if (!$user) {
@@ -68,7 +68,7 @@ class AuthService
         $sessionId = (string) Str::uuid();
 
         // 6. Set semua session data
-        $nip = ((int) $data['simak'] === 1) ? ($data['nip_baru'] ?? $data['id_pegawai']) : $data['id_pegawai'];
+        $nip = ((int) $data['simak'] === 1) ? ($data['nip_baru'] ?? $data['nip_baru']) : $data['nip_baru'];
         session([
             'nip'        => $nip,
             'nama'       => $data['nama_pegawai'] ?? null,
