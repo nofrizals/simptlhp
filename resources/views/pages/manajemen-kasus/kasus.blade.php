@@ -119,7 +119,7 @@
             </div>
         </div>
         <!-- Modal -->
-        <div id="modalKasus"
+        {{-- <div id="modalKasus"
             class="fixed inset-0 flex items-start justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
             <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
             <div id="modalContent"
@@ -317,6 +317,196 @@
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+        <div id="modalKasus"
+            class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 opacity-0 pointer-events-none transition-opacity duration-300 sm:p-6">
+            <!-- Overlay -->
+            <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
+            <!-- Modal -->
+            <div id="modalContent"
+                class="relative my-4 w-full max-w-[800px] scale-95 transform rounded-3xl bg-white p-5 transition-transform duration-300 dark:bg-gray-900 sm:my-8 sm:p-6 lg:p-8">
+                <!-- Close Button -->
+                <button id="closeModalBtn" type="button"
+                    class="absolute right-3 top-3 z-50 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-5 sm:top-5 sm:h-11 sm:w-11">
+                    <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
+                            fill="" />
+                    </svg>
+                </button>
+                <!-- Modal Inner -->
+                <div class="rounded-2xl bg-white dark:bg-white/[0.03]">
+                    <!-- Header -->
+                    <div class="border-b border-gray-200 px-5 py-4 sm:px-6 dark:border-gray-800">
+                        <h3 class="modal-header text-base font-medium text-gray-800 dark:text-white/90">
+                        </h3>
+                    </div>
+                    <!-- Body -->
+                    <div class="p-5 sm:p-6 lg:p-7">
+                        <form id="formKasus">
+                            <!-- Hidden ID -->
+                            <input type="hidden" id="id" name="id">
+                            <!-- ============================= -->
+                            <!-- DATA PEMERIKSAAN -->
+                            <!-- ============================= -->
+                            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                                <!-- Nama Obrik -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Nama Obrik <span class="text-red-400">*</span>
+                                    </label>
+                                    <select name="kode_unor" id="kode_unor" data-placeholder="Pilih OPD"
+                                        class="opd h-11 w-full rounded-lg border border-gray-300 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                        <option value="" disabled selected
+                                            class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                            Pilih OPD
+                                        </option>
+                                        @foreach ($obriks as $obrik)
+                                            <option value="{{ $obrik->kode_instansi }}"
+                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                                {{ ucwords(strtolower($obrik->nama_instansi)) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <p class="err text-theme-xs text-error-500" id="kode_unor_error"></p>
+                                </div>
+                                <!-- Tahun Pemeriksaan -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Tahun Pemeriksaan <span class="text-red-400">*</span>
+                                    </label>
+                                    <select name="tahun_pemeriksaan" id="tahun_pemeriksaan"
+                                        class="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                        <option selected disabled value=""
+                                            class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                            Pilih tahun
+                                        </option>
+                                        @for ($i = 2005; $i <= date('Y'); $i++)
+                                            <option value="{{ $i }}"
+                                                class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                                {{ $i }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                    <p class="err text-theme-xs text-error-500" id="tahun_pemeriksaan_error"></p>
+                                </div>
+                                <!-- Nomor LHP -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Nomor LHP <span class="text-red-400">*</span>
+                                    </label>
+                                    <input type="text" name="nomor_lhp" id="nomor_lhp" placeholder="No. LHP"
+                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    <p class="err text-theme-xs text-error-500" id="nomor_lhp_error"></p>
+                                </div>
+                                <!-- Ketua Tim -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Ketua Tim <span class="text-red-400">*</span>
+                                    </label>
+                                    <select name="nip_ketua" id="nip_ketua" data-placeholder="Pilih Ketua Tim"
+                                        class="opd h-11 w-full rounded-lg border border-gray-300 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                        <option value="" selected disabled>
+                                            Pilih Ketua Tim
+                                        </option>
+                                        @foreach ($ketua_tims as $ketua_tim)
+                                            <option value="{{ $ketua_tim->nip_baru }}"
+                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                                {{ ucwords(strtolower($ketua_tim->nama_pegawai)) }}
+                                                - {{ $ketua_tim->nip_baru }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <p class="err text-theme-xs text-error-500" id="nip_ketua_error"></p>
+                                </div>
+                                <!-- Nomor SPT -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        No. SPT <span class="text-red-400">*</span>
+                                    </label>
+                                    <input type="text" name="nomor_spt" id="nomor_spt" placeholder="No. Surat Tugas"
+                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    <p class="err text-theme-xs text-error-500" id="nomor_spt_error"></p>
+                                </div>
+                                <!-- Tanggal SPT -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Tgl. SPT <span class="text-red-400">*</span>
+                                    </label>
+                                    <input type="text" name="tanggal_spt" id="tanggal_spt"
+                                        placeholder="Pilih tanggal SPT"
+                                        class="datepickerKasus h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    <p class="err text-theme-xs text-error-500" id="tanggal_spt_error"></p>
+                                </div>
+                                <!-- SPT Mulai -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        SPT Mulai <span class="text-red-400">*</span>
+                                    </label>
+                                    <input type="text" name="spt_mulai" id="spt_mulai"
+                                        placeholder="Mulai Pemeriksaan"
+                                        class="datepickerKasus h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    <p class="err text-theme-xs text-error-500" id="spt_mulai_error"></p>
+                                </div>
+                                <!-- SPT Selesai -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        SPT Selesai <span class="text-red-400">*</span>
+                                    </label>
+                                    <input type="text" name="spt_selesai" id="spt_selesai"
+                                        placeholder="Selesai Pemeriksaan"
+                                        class="datepickerKasus h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    <p class="err text-theme-xs text-error-500" id="spt_selesai_error"></p>
+                                </div>
+                                <!-- Jenis PHP -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Jenis PHP <span class="text-red-400">*</span>
+                                    </label>
+                                    <select name="id_jenis_php" id="id_jenis_php"
+                                        class="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                        <option value="" selected disabled
+                                            class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                            Jenis PHP
+                                        </option>
+                                        @foreach ($jenisPhp as $item)
+                                            <option value="{{ $item->id_jenis_php }}"
+                                                class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                                                {{ $item->jenis_php }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <p class="err text-theme-xs text-error-500" id="id_jenis_php_error"></p>
+                                </div>
+                                <!-- Tanggal LHP -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Tanggal LHP <span class="text-red-400">*</span>
+                                    </label>
+                                    <input type="text" name="tanggal_lhp" id="tanggal_lhp" placeholder="Tanggal LHP"
+                                        class="datepickerKasus h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    <p class="err text-theme-xs text-error-500" id="tanggal_lhp_error"></p>
+                                </div>
+                            </div>
+                            <!-- ============================= -->
+                            <!-- ACTION BUTTON -->
+                            <!-- ============================= -->
+                            <div
+                                class="mt-7 flex flex-col-reverse gap-3 border-t border-gray-100 pt-5 sm:flex-row sm:items-center dark:border-gray-800">
+                                <button type="button"
+                                    class="cancel flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 sm:w-auto">
+                                    Cancel
+                                </button>
+                                <button type="submit" id="btn-save"
+                                    class="bg-brand-500 hover:bg-brand-600 flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition-colors sm:w-auto">
+                                    Simpan
+                                </button>
                             </div>
                         </form>
                     </div>

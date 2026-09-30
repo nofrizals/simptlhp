@@ -266,7 +266,7 @@
                 }
 
                 $("#openModalBtn").click(function() {
-                    $('.modal-header').html('Form Tambah Obrik');
+                    $('.modal-header').html('Form Tambah Obrik Turunan');
                     if (!$('.opd').hasClass("select2-hidden-accessible")) {
                         $('.opd').select2({
                             dropdownParent: $('#modalObrikTurunan'),
