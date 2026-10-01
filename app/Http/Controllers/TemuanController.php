@@ -23,7 +23,7 @@ class TemuanController extends Controller
             ->withCount(['rekomendasi as rekomendasi_count' => function (Builder $query): void {
                 $query->whereNull('deleted_by');
             }])
-            ->orderByDesc('id_temuan');
+            ->orderBy('id_temuan');
 
         return DataTables::eloquent($data)
             ->addIndexColumn()
