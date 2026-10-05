@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
-use App\Models\Kasus;
-use App\Models\PegawaiSimak;
 use App\Models\StatusTl;
-use App\Models\Unor;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\PegawaiSimak;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class KasusController extends Controller
 {
     public function index()
     {
-        $ketua_tims = PegawaiSimak::select('id_pegawai', 'nama_pegawai', 'nip_baru')->where('kode_unor', '01.09')->distinct()->orderBy('nama_pegawai')->get();
+        $ketua_tims = PegawaiSimak::select('id_pegawai', 'nama_pegawai', 'nip_baru')->where('kode_unor', 'LIKE', '01.09%')->distinct()->orderBy('nama_pegawai')->get();
         $obriks = Instansi::where('kode_instansi', 'not like', 'obrik%')->get();
         $jenisPhp = JenisPhp::get();
         $status = StatusTl::get();
