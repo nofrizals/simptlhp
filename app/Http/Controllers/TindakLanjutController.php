@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Temuan;
+use App\Models\Kasus;
 use App\Models\Pembayaran;
 use App\Models\Rekomendasi;
-use Illuminate\Support\Str;
+use App\Models\Temuan;
 use App\Models\Tindaklanjut;
-use Illuminate\Http\Request;
 use App\Models\VerifikasiSsr;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Throwable;
 use Yajra\DataTables\Facades\DataTables;
 
 class TindakLanjutController extends Controller
@@ -21,7 +23,7 @@ class TindakLanjutController extends Controller
     public function ajaxData(Request $request, Rekomendasi $rekomendasi): JsonResponse
     {
         $data = Tindaklanjut::query()
-            ->where('id_rekomendasi', $rekomendasi->id_rekomendasi)
+            ->where('id_rekomendasi', $rekomendasi->id_rekomendasi)->whereNull('deleted_by')
             ->orderByDesc('id_rekomendasi');
 
         return DataTables::eloquent($data)
@@ -62,11 +64,11 @@ class TindakLanjutController extends Controller
             })
             ->addColumn('status_tindak_lanjut', function (Tindaklanjut $value): string {
                 if ($value->status?->status_tl) {
-                    if ($value->id_status == 2) {
-                        $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '</b><br> Note: <code>' . e($value->ssr?->reject_note ?: '-') . '</code>';
-                    } else {
-                        $status_tindak_lanjut = $value->status?->status_tl;
-                    }
+                    // if ($value->id_status == 2) {
+                    //     $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '</b><br> Note: <code>' . e($value->verifikasiSsr?->reject_note ?: '-') . '</code>';
+                    // } else {
+                    $status_tindak_lanjut = $value->status?->status_tl;
+                    // }
                 } else {
                     $status_tindak_lanjut = '-';
                 }
@@ -147,20 +149,20 @@ class TindakLanjutController extends Controller
                             </a>';
                 }
 
-                if ($value->id_status == 2) {
-                    $action .= '
-                            <a href="javascript:void(0)"
-                                data-id="' . $value->id_tindak_lanjut . '"
-                                class="btn-ajukanUlangTindakLanjut col-span-2 flex items-center justify-center px-3 py-1.5 rounded-md
-                                    bg-violet-50 text-violet-600 border border-violet-200
-                                    dark:bg-violet-800 dark:text-white/90
-                                    hover:bg-violet-600 hover:text-white
-                                    dark:hover:bg-violet-200
-                                    transition duration-200 text-sm font-medium"
-                                title="Ajukan Ulang">
-                                Ajukan Ulang
-                            </a>';
-                }
+                // if ($value->id_status == 2) {
+                //     $action .= '
+                //             <a href="javascript:void(0)"
+                //                 data-id="' . $value->id_tindak_lanjut . '"
+                //                 class="btn-ajukanUlangTindakLanjut col-span-2 flex items-center justify-center px-3 py-1.5 rounded-md
+                //                     bg-violet-50 text-violet-600 border border-violet-200
+                //                     dark:bg-violet-800 dark:text-white/90
+                //                     hover:bg-violet-600 hover:text-white
+                //                     dark:hover:bg-violet-200
+                //                     transition duration-200 text-sm font-medium"
+                //                 title="Ajukan Ulang">
+                //                 Ajukan Ulang
+                //             </a>';
+                // }
                 $action .= '
                     </div>';
                 return $action;
@@ -232,6 +234,7 @@ class TindakLanjutController extends Controller
                 $besaran = (float) ($temuan->{$besaranField} ?? 0);
 
                 $totalTerpakai = (float) Tindaklanjut::whereIn('id_rekomendasi', $idRekomendasiList)
+                    ->whereNull('deleted_by')
                     ->when($currentId, fn($q) => $q->where('id_tindak_lanjut', '!=', $currentId))
                     ->sum($field);
 
@@ -261,6 +264,27 @@ class TindakLanjutController extends Controller
             $validated['edited_by'] = (string) session('id_pegawai');
             $validated['edited_at'] = now();
             $temuanRow->update($validated);
+            // Ambil status dari request/validated,
+            // karena Tindaklanjut.id_status bisa NULL untuk SSR
+            $idStatus = (int) $validated['id_status'];
+
+            // Jika status hasil edit adalah SSR
+            if ($idStatus === 1) {
+                $verifikasiSsrRow = VerifikasiSsr::where(
+                    'id_tindak_lanjut',
+                    $temuanRow->id_tindak_lanjut
+                )
+                    ->latest('id')
+                    ->first();
+
+                if ($verifikasiSsrRow) {
+                    $verifikasiSsrRow->update([
+                        'reject_by'   => null,
+                        'reject_at'   => null,
+                        'reject_note' => null,
+                    ]);
+                }
+            }
             $message = 'Data berhasil diupdate';
         } else {
             DB::transaction(function () use ($validated, &$temuanRow) {
@@ -283,6 +307,91 @@ class TindakLanjutController extends Controller
             'status'  => (bool) $temuanRow,
             'message' => $temuanRow ? $message : 'Gagal menyimpan data',
         ]);
+
+        // $validated = $validator->safe()->except(['id', 'setor', 'setor2', 'setor3', 'setor4']);
+        // $validated['id_rekomendasi'] = $rekomendasi->id_rekomendasi;
+
+        // $idStatus = (int) $validated['id_status'];
+        // $userId   = (string) session('id_pegawai');
+
+        // try {
+        //     DB::transaction(function () use ($validated, $currentId, $idStatus, $userId, $rekomendasi, $temuan) {
+        //         $now = now();
+
+        //         if ($currentId) {
+        //             $tl = Tindaklanjut::where('id_rekomendasi', $rekomendasi->id_rekomendasi)
+        //                 ->findOrFail($currentId);
+
+        //             if ($idStatus === 1) {
+        //                 $cek = VerifikasiSsr::where('id_tindak_lanjut', $tl->id_tindak_lanjut)
+        //                     ->latest('id')
+        //                     ->first();
+
+        //                 if ($cek && ! $cek->reject_by) { // batalkan persetujuan
+        //                     $cek->update([
+        //                         ...$validated,
+        //                         'approve_by' => null,
+        //                         'approve_at' => null,
+        //                         'edited_by'  => $userId,
+        //                         'edited_at'  => $now,
+        //                     ]);
+        //                 } else {
+        //                     VerifikasiSsr::create([
+        //                         ...$validated,
+        //                         'label'            => (string) Str::uuid(),
+        //                         'created_by'       => $userId,
+        //                         'created_at'       => $now,
+        //                         'id_tindak_lanjut' => $tl->id_tindak_lanjut,
+        //                     ]);
+        //                 }
+
+        //                 unset($validated['id_status']);
+        //                 $validated['created_by'] = $userId; // sama dengan perilaku lama
+        //                 $validated['created_at'] = $now;
+        //             } else {
+        //                 VerifikasiSsr::where('id_tindak_lanjut', $tl->id_tindak_lanjut)
+        //                     ->whereNull('approve_by')
+        //                     ->whereNull('reject_by')
+        //                     ->delete();
+
+        //                 $validated['edited_by'] = $userId;
+        //                 $validated['edited_at'] = $now;
+        //             }
+
+        //             $tl->update($validated);
+        //         } else {
+        //             $dataTl = $validated;
+        //             if ($idStatus === 1) {
+        //                 unset($dataTl['id_status']);
+        //             }
+        //             $dataTl['created_by'] = $userId;
+        //             $dataTl['created_at'] = $now;
+
+        //             $tl = Tindaklanjut::create($dataTl);
+
+        //             VerifikasiSsr::create([
+        //                 ...$validated,
+        //                 'label'            => (string) Str::uuid(),
+        //                 'created_by'       => $userId,
+        //                 'created_at'       => $now,
+        //                 'id_tindak_lanjut' => $tl->id_tindak_lanjut,
+        //             ]);
+        //         }
+
+        //         if ($idStatus !== 1) {
+        //             Kasus::whereKey($temuan->id_kasus)->update(['selesai' => 0]);
+        //         }
+        //     });
+        // } catch (Throwable $e) {
+        //     report($e);
+
+        //     return response()->json(['status' => false, 'message' => 'Terjadi kesalahan']);
+        // }
+
+        // return response()->json([
+        //     'status'  => true,
+        //     'message' => $currentId ? 'Data berhasil diupdate' : 'Data berhasil ditambahkan',
+        // ]);
     }
 
     public function edit(Tindaklanjut $tindaklanjut): JsonResponse
@@ -320,25 +429,59 @@ class TindakLanjutController extends Controller
         ]);
     }
 
-    public function ajukanUlang(Tindaklanjut $tindaklanjut): JsonResponse
-    {
-        $verif = VerifikasiSsr::where('id_tindak_lanjut', $tindaklanjut->id_tindak_lanjut)->firstOrFail();
-        $tindaklanjut->update([
-            'id_status' => NULL,
-            'edited_at' => now(),
-            'edited_by' => (string) session('id_pegawai')
-        ]);
-        $verif->update([
-            'id_status' => 1,
-            'edited_at' => now(),
-            'edited_by' => (string) session('id_pegawai'),
-            'reject_note' => NULL,
-            'reject_at' => NULL,
-            'reject_by' => NULL
-        ]);
+    // public function ajukanUlang(Tindaklanjut $tindaklanjut): JsonResponse
+    // {
+    //     $verif = VerifikasiSsr::where('id_tindak_lanjut', $tindaklanjut->id_tindak_lanjut)->firstOrFail();
+    //     $tindaklanjut->update([
+    //         'id_status' => NULL,
+    //         'edited_at' => now(),
+    //         'edited_by' => (string) session('id_pegawai')
+    //     ]);
+    //     $verif->update([
+    //         'id_status' => 1,
+    //         'edited_at' => now(),
+    //         'edited_by' => (string) session('id_pegawai'),
+    //         'reject_note' => NULL,
+    //         'reject_at' => NULL,
+    //         'reject_by' => NULL
+    //     ]);
 
-        return response()->json($tindaklanjut);
-    }
+    //     return response()->json($tindaklanjut);
+    // }
+
+    // public function ajukanUlang(Tindaklanjut $tindaklanjut): JsonResponse
+    // {
+    //     DB::transaction(function () use ($tindaklanjut) {
+
+    //         $verif = VerifikasiSsr::where(
+    //             'id_tindak_lanjut',
+    //             $tindaklanjut->id_tindak_lanjut
+    //         )->first();
+
+    //         if (!$verif) {
+    //             abort(404, 'Data Verifikasi SSR tidak ditemukan.');
+    //         }
+
+    //         $tindaklanjut->update([
+    //             'id_status' => 3,
+    //             'edited_at' => now(),
+    //             'edited_by' => (string) session('id_pegawai')
+    //         ]);
+
+    //         $verif->update([
+    //             'id_status' => 2,
+    //             'edited_at' => now(),
+    //             'edited_by' => (string) session('id_pegawai'),
+    //             'reject_note' => null,
+    //             'reject_at' => null,
+    //             'reject_by' => null
+    //         ]);
+    //     });
+
+    //     return response()->json([
+    //         'message' => 'Pengajuan berhasil diajukan ulang.'
+    //     ]);
+    // }
 
     public function getTemuanKerugian(Request $request)
     {
@@ -496,7 +639,7 @@ class TindakLanjutController extends Controller
                 return '<span class="dark:text-white/90">Rp ' . number_format((float) $value->nominal, 2, ',', '.') . '</span>';
             })
             ->addColumn('keterangan', function (Pembayaran $value): string {
-                return '<span class="dark:text-white/90">Rp ' . $value->keterangan . '</span>';
+                return '<span class="dark:text-white/90">' . $value->keterangan . '</span>';
             })
             ->addColumn('date', function (Pembayaran $value): string {
                 $status = $value->deleted_by === null

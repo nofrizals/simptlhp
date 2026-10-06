@@ -24,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::setLocale('id');
         View::composer('partials.sidebar', function ($view) {
-            $countApprove = VerifikasiSsr::whereNull('approve_by')->whereNull('reject_by')->count();
+            // $countApprove = VerifikasiSsr::whereNull('approve_by')->whereNull('reject_by')->count();
+            $countApprove = VerifikasiSsr::whereNull('approve_by')->whereNull('reject_by')->where('id_status', '<>', 3)->count();
 
             $view->with('countApprove', $countApprove);
         });

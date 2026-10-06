@@ -19,6 +19,7 @@ class RekomendasiController extends Controller
             ->where('id_temuan', $temuan->id_temuan)
             ->withCount('tindakLanjuts')
             ->with('tindakLanjutAktif.status')
+            ->whereNull('deleted_by')
             ->orderByDesc('id_temuan');
 
         return DataTables::eloquent($data)
