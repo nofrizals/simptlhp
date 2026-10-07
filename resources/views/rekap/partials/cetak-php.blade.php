@@ -63,15 +63,18 @@
 
             <br>
 
-            <div class="overflow-x-auto">
-                <table class="tablexls min-w-full border border-gray-300 text-xs dark:border-white/90">
+            <div class="w-full overflow-x-auto">
+                <table class="border border-gray-300 text-xs dark:border-white/90"
+                    style="width: 100%; min-width: 1400px; table-layout: fixed;">
+
                     <thead>
                         <tr>
                             <th
                                 class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
                                 TEMUAN</th>
-                            <th class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90"
-                                width="100px">NILAI KERUGIAN</th>
+                            <th
+                                class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
+                                NILAI KERUGIAN</th>
                             <th
                                 class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
                                 PENYEBAB</th>
@@ -79,16 +82,21 @@
                                 class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
                                 REKOMENDASI
                             </th>
-                            <th class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90"
-                                width="350px">TINDAK LANJUT</th>
-                            <th class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90"
-                                width="100px">TEMUAN KEUANGAN</th>
-                            <th class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90"
-                                width="100px">STOR</th>
-                            <th class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90"
-                                width="100px">SISA SETOR</th>
-                            <th class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90"
-                                width="10px">STATUS</th>
+                            <th
+                                class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
+                                TINDAK LANJUT</th>
+                            <th
+                                class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
+                                TEMUAN KEUANGAN</th>
+                            <th
+                                class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
+                                STOR</th>
+                            <th
+                                class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
+                                SISA SETOR</th>
+                            <th
+                                class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
+                                STATUS</th>
                             <th
                                 class="border border-gray-300 px-2 py-2 text-center dark:border-white/90 dark:text-white/90">
                                 KETERANGAN
@@ -102,41 +110,85 @@
                     <tbody>
                         @forelse ($rows as $row)
                             <tr>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['temuan'] }}</td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {!! $row['nilai_kerugian'] !!}</td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['penyebab'] }}</td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['rekomendasi'] }}</td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['tindak_lanjut'] }}</td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top text-right dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top text-center dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['rincian'] > 0 ? 'Rp' . number_format($row['rincian'], 2, ',', '.') : '-' }}
                                 </td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top text-right dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top text-center dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['setor'] > 0 ? 'Rp' . number_format($row['setor'], 2, ',', '.') : '-' }}
                                 </td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top text-right dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top text-center dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['sisa'] > 0 ? 'Rp' . number_format($row['sisa'], 2, ',', '.') : '-' }}
                                 </td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top text-center dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top text-center dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['status_tl'] }}</td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['keterangan'] }}</td>
-                                <td
-                                    class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90">
+                                <td class="border border-gray-300 px-2 py-2 align-top dark:border-white/90 dark:text-white/90"
+                                    style="
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    ">
                                     {{ $row['tgl_tindak_lanjut'] ? \Carbon\Carbon::parse($row['tgl_tindak_lanjut'])->translatedFormat('d F Y') : '-' }}
                                     <br>
                                     Petugas entry : {{ $row['created_by_nama'] ?? '-' }}
