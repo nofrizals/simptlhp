@@ -97,9 +97,19 @@ final class RekapTnkReportBuilder
         ];
         $keuangan['jumlah'] = $keuangan['ssr'] + $keuangan['bsr'] + $keuangan['bd'];
 
-        $totalAdmKeu = $admin['jumlah'] + $keuangan['jumlah'];
-        $adminRatio = $totalAdmKeu ? (int) round($admin['jumlah'] / $totalAdmKeu * 100) : 0;
-        $keuanganRatio = $totalAdmKeu ? (int) round($keuangan['jumlah'] / $totalAdmKeu * 100) : 0;
+        // kodingan bawaan agil, total rekomendasi dibagi SSR,BSR,BD di kali 100
+        // $totalAdmKeu = $admin['jumlah'] + $keuangan['jumlah'];
+        // $adminRatio = $totalAdmKeu ? (int) round($admin['jumlah'] / $totalAdmKeu * 100) : 0;
+        // $keuanganRatio = $totalAdmKeu ? (int) round($keuangan['jumlah'] / $totalAdmKeu * 100) : 0;
+
+        //total rekomendasi dibagi SSR di kali 100
+        $totalRekomendasi = $isTgr ? $temuanCount : $rekomendasiCount;
+        $adminRatio = $totalRekomendasi > 0
+            ? (int) round(($admin['ssr'] / $totalRekomendasi) * 100)
+            : 0;
+        $keuanganRatio = $totalRekomendasi > 0
+            ? (int) round(($keuangan['ssr'] / $totalRekomendasi) * 100)
+            : 0;
 
         return [
             'isTgr'            => $isTgr,
