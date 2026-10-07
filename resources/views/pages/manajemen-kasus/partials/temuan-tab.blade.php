@@ -724,52 +724,54 @@
                     closeModalRekomendasi();
                 });
 
-                $('#formRekomendasi').submit(function(e) {
-                    e.preventDefault();
-                    const idTemuan = $('#idTemuan').val();
-                    const formData = new FormData(this);
-
-                    $.ajax({
-                        type: 'POST',
-                        url: `{{ url('daftar-kasus') }}/${idTemuan}/rekomendasi`,
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        dataType: 'json',
-                        beforeSend: function() {
-                            $('#btn-save-rekomendasi').prop('disabled', true).text(
-                                'Menyimpan...');
-                        },
-                        success: function(response) {
-                            if (response.status === false) {
-                                $.each(response.error, function(key, val) {
-                                    $('#' + key + '_error').html(val[0]);
-                                });
-                            } else {
-                                $('#dtRekomendasi').DataTable().ajax.reload(null,
-                                    false);
-                                closeModalRekomendasi();
-                                resetFormRekomendasi();
+                $('#formRekomendasi')
+                    .off('submit.rekomendasi')
+                    .on('submit.rekomendasi', function(e) {
+                        e.preventDefault();
+                        const idTemuan = $('#idTemuan').val();
+                        const formData = new FormData(this);
+                        console.count('SUBMIT REKOMENDASI');
+                        $.ajax({
+                            type: 'POST',
+                            url: `{{ url('daftar-kasus') }}/${idTemuan}/rekomendasi`,
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            dataType: 'json',
+                            beforeSend: function() {
+                                $('#btn-save-rekomendasi').prop('disabled', true).text(
+                                    'Menyimpan...');
+                            },
+                            success: function(response) {
+                                if (response.status === false) {
+                                    $.each(response.error, function(key, val) {
+                                        $('#' + key + '_error').html(val[0]);
+                                    });
+                                } else {
+                                    $('#dtRekomendasi').DataTable().ajax.reload(null,
+                                        false);
+                                    closeModalRekomendasi();
+                                    resetFormRekomendasi();
+                                    Swal.fire({
+                                        title: 'Sukses',
+                                        text: response.message,
+                                        icon: 'success'
+                                    });
+                                }
+                            },
+                            error: function() {
                                 Swal.fire({
-                                    title: 'Sukses',
-                                    text: response.message,
-                                    icon: 'success'
+                                    title: 'Gagal',
+                                    text: 'Terjadi kesalahan server',
+                                    icon: 'error'
                                 });
+                            },
+                            complete: function() {
+                                $('#btn-save-rekomendasi').prop('disabled', false).text(
+                                    'Simpan');
                             }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                title: 'Gagal',
-                                text: 'Terjadi kesalahan server',
-                                icon: 'error'
-                            });
-                        },
-                        complete: function() {
-                            $('#btn-save-rekomendasi').prop('disabled', false).text(
-                                'Simpan');
-                        }
+                        });
                     });
-                });
 
                 $(document).on('click', '.btn-editRekomendasi', function() {
                     const id = $(this).data('id');
