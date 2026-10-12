@@ -20,7 +20,7 @@ class KasusController extends Controller
     {
         $ketua_tims = PegawaiSimak::select('id_pegawai', 'nama_pegawai', 'nip_baru')->where('kode_unor', 'LIKE', '01.09%')->distinct()->orderBy('nama_pegawai')->get();
         $obriks = Instansi::where('kode_instansi', 'not like', 'obrik%')->get();
-        $jenisPhp = JenisPhp::get();
+        $jenisPhp = JenisPhp::whereNull('deleted_at')->get();
         $status = StatusTl::get();
         return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'obriks', 'ketua_tims', 'status'));
     }

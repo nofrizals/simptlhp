@@ -45,7 +45,7 @@ final class RekapController extends Controller
     public function phpTnk(): View
     {
         return view('rekap.php-tnk', [
-            'jenisPhpList'     => JenisPhp::query()->orderBy('jenis_php')->get(),
+            'jenisPhpList'     => JenisPhp::query()->whereNull('deleted_at')->orderBy('jenis_php')->get(),
             'tahunPemeriksaan' => $this->getDistinctTahunPemeriksaan(),
             'instansiList'     => Instansi::query()->orderBy('nama_instansi')->get(),
         ]);
