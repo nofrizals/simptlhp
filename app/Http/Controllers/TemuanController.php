@@ -53,11 +53,11 @@ class TemuanController extends Controller
             })
             ->addColumn('log', function (Temuan $value): string {
                 if ($value->edited_by) {
-                    return '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e($value->editedBy->nama_pegawai) . '</strong><br>'
+                    return '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e($value->editedBy->nama_pegawai ?? $value->edited_by) . '</strong><br>'
                         . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 }
 
-                return '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai) . '</strong><br>'
+                return '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai ?? $value->created_by) . '</strong><br>'
                     . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y') . '</span>';
             })
             ->addColumn('action', function (Temuan $value): string {
