@@ -72,7 +72,7 @@
 
                     {{-- SEARCH --}}
                     <div class="relative">
-                        <input id="customSearch" type="text" placeholder="Cari admin..."
+                        <input id="customSearch" type="search" placeholder="Cari admin..."
                             class="h-10 w-72 rounded-lg border border-gray-300 dark:border-white/90 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
@@ -368,7 +368,7 @@
 
                                 {{-- SEARCH --}}
                                 <div class="relative">
-                                    <input id="simakCustomSearch" type="text" placeholder="Cari pegawai..."
+                                    <input id="simakCustomSearch" type="search" placeholder="Cari pegawai..."
                                         class="h-10 w-72 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white">
                                 </div>
                             </div>
