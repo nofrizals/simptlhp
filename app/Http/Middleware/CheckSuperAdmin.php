@@ -18,7 +18,7 @@ class CheckSuperAdmin
         if (
             (string) session('id') === '1' &&
             (string) session('level') === '1' &&
-            (string) session('kode_unor') === '01.15'
+            (string) session('kode_unor') === '01.09'
         ) {
             return $next($request);
         }

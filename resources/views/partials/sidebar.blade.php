@@ -74,7 +74,7 @@
                     @if (
                         ((string) session('id') === '1' &&
                             (string) session('level') === '1' &&
-                            (string) session('kode_unor') === '01.15') ||
+                            (string) session('kode_unor') === '01.09') ||
                             (string) (string) session('level') === '1')
                         <li>
                             <a href="{{ url('admin') }}"
@@ -120,7 +120,7 @@
                                 :class="(selected === 'Masters') ? 'block' : 'hidden'">
                                 <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                                    @if ((string) session('id') === '1' && (string) session('level') === '1' && (string) session('kode_unor') === '01.15')
+                                    @if ((string) session('id') === '1' && (string) session('level') === '1' && (string) session('kode_unor') === '01.09')
                                         <li>
                                             <a href="{{ url('jenis-php') }}"
                                                 class="menu-dropdown-item group {{ request()->is('jenis-php') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
@@ -476,7 +476,7 @@
             @if (
                 ((string) session('id') === '1' &&
                     (string) session('level') === '1' &&
-                    (string) session('kode_unor') === '01.15') ||
+                    (string) session('kode_unor') === '01.09') ||
                     session('level') === '1')
                 <div>
                     <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">

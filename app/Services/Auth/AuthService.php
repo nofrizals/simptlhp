@@ -94,7 +94,7 @@ class AuthService
     // ─────────────────────────────────────────────
     private function handleSipastiLogin(array $data): array
     {
-        $namaOpd   = $this->namaOpdService->resolveByKodeUnor('01.15');
+        $namaOpd   = $this->namaOpdService->resolveByKodeUnor('01.09');
         $sessionId = (string) Str::uuid();
         request()->session()->regenerate();
         session([
@@ -103,7 +103,7 @@ class AuthService
             'id'         => $data['id_admin'] ?? null,
             'id_pegawai' => $data['id_admin'] ?? null,
             'level'      => $data['level'] ?? null,
-            'kode_unor'  => '01.15',
+            'kode_unor'  => '01.09',
             'nama_opd'   => $namaOpd,
             'is_simak'   => false,
             'session_id' => $sessionId,
@@ -112,7 +112,7 @@ class AuthService
         $this->recordAccessLog(
             sessionId: $sessionId,
             idPegawai: (string) ($data['id_admin'] ?? ''),
-            kodeUnor: '01.15',
+            kodeUnor: '01.09',
             level: (int) ($data['level'] ?? 0),
         );
 
