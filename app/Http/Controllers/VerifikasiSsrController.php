@@ -284,8 +284,15 @@ class VerifikasiSsrController extends Controller
                 <img src="' . asset('images/pdf.png') . '" alt="PDF" width="40">
             </a>';
             })
+            // ->addColumn('nominal', function (Pembayaran $value): string {
+            //     return 'Rp ' . number_format((float) $value->nominal, 2, ',', '.');
+            // })
             ->addColumn('nominal', function (Pembayaran $value): string {
-                return 'Rp ' . number_format((float) $value->nominal, 2, ',', '.');
+                $nominal = ((int) $value->nominal) / 100;
+
+                return '<span class="dark:text-white/90">Rp '
+                    . number_format($nominal, 2, ',', '.')
+                    . '</span>';
             })
             ->rawColumns(['jenis', 'tanggal', 'bukti', 'nominal'])
             ->make(true);

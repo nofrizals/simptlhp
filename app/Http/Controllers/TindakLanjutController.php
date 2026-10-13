@@ -166,12 +166,51 @@ class TindakLanjutController extends Controller
             ->make(true);
     }
 
+    private function normalisasiNominal($nilai): ?string
+    {
+        if ($nilai === null || trim((string) $nilai) === '') {
+            return null;
+        }
+
+        $nilai = trim((string) $nilai);
+
+        if (!preg_match('/^(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d{1,2})?$/', $nilai)) {
+            return $nilai;
+        }
+
+        $nilai = str_replace('.', '', $nilai);
+        $nilai = str_replace(',', '.', $nilai);
+
+        return $nilai;
+    }
+
     public function store(Request $request, Rekomendasi $rekomendasi): JsonResponse
     {
         $rekomendasi->loadMissing('temuan');
         $temuan = $rekomendasi->temuan;
 
         $currentId = $request->filled('id') ? $request->integer('id') : null;
+
+        $nominalFields = [
+            'rincian_keuangan',
+            'setor',
+            'rincian_keuangan2',
+            'setor2',
+            'rincian_keuangan3',
+            'setor3',
+            'rincian_keuangan4',
+            'setor4',
+        ];
+
+        foreach ($nominalFields as $field) {
+            if ($request->has($field)) {
+                $request->merge([
+                    $field => $this->normalisasiNominal(
+                        $request->input($field)
+                    ),
+                ]);
+            }
+        }
 
         $validator = Validator::make($request->all(), [
             'tindak_lanjut'      => 'nullable|string',
@@ -390,14 +429,18 @@ class TindakLanjutController extends Controller
 
     public function saveBuktiPembayaran(Request $request, $id_tindak_lanjut)
     {
+        $nominalInput = trim(
+            (string) $request->input('nominal_pembayaran', '')
+        );
         $validator = Validator::make($request->all(), [
             'jenis_pembayaran'                  => 'required',
-            'nominal_pembayaran'                => 'required|numeric',
+            'nominal_pembayaran'                => ['required', 'regex:/^(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d{1,2})?$/',],
             'bukti_pembayaran'                  => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'keterangan_pembayaran'             => 'required',
         ], [
             'jenis_pembayaran.required'         => 'Pilih jenis pembayaran',
             'nominal_pembayaran.required'       => 'Wajib diisi',
+            'nominal_pembayaran.regex'          => 'Format nominal tidak valid. Contoh: 21.500.770,00',
             'bukti_pembayaran.required'         => 'Tidak boleh kosong',
             'bukti_pembayaran.mimes'            => 'Format harus pdf',
             'bukti_pembayaran.max'              => 'File yang diupload maksimal 2MB',
@@ -411,9 +454,18 @@ class TindakLanjutController extends Controller
         }
 
         $validated = $validator->validated();
+        // Konversi format Indonesia menjadi bilangan bulat dalam satuan sen.
+        $nominalNormal = str_replace('.', '', $nominalInput);
+        $nominalNormal = str_replace(',', '.', $nominalNormal);
+
+        $parts = explode('.', $nominalNormal, 2);
+        $rupiah = $parts[0];
+        $sen = str_pad($parts[1] ?? '', 2, '0');
+
+        $nominalUntukDB = (int) ($rupiah . $sen);
         $data = [
             'jenis'         => $validated['jenis_pembayaran'],
-            'nominal'       => $validated['nominal_pembayaran'],
+            'nominal'       => $nominalUntukDB,
             'keterangan'    => $validated['keterangan_pembayaran']
         ];
 
@@ -438,7 +490,7 @@ class TindakLanjutController extends Controller
                     ->sum('nominal');
                 Tindaklanjut::where('id_tindak_lanjut', $id_tindak_lanjut)
                     ->update([
-                        $fieldSetor => $total
+                        $fieldSetor => $total / 100
                     ]);
             }
             DB::commit();
@@ -481,8 +533,15 @@ class TindakLanjutController extends Controller
                 <img src="' . asset('images/pdf.png') . '" alt="PDF" width="40" class="dark:brightness-0 dark:invert dark:opacity-90">
             </a>';
             })
+            // ->addColumn('nominal', function (Pembayaran $value): string {
+            //     return '<span class="dark:text-white/90">Rp ' . number_format((float) $value->nominal, 2, ',', '.') . '</span>';
+            // })
             ->addColumn('nominal', function (Pembayaran $value): string {
-                return '<span class="dark:text-white/90">Rp ' . number_format((float) $value->nominal, 2, ',', '.') . '</span>';
+                $nominal = ((int) $value->nominal) / 100;
+
+                return '<span class="dark:text-white/90">Rp '
+                    . number_format($nominal, 2, ',', '.')
+                    . '</span>';
             })
             ->addColumn('keterangan', function (Pembayaran $value): string {
                 return '<span class="dark:text-white/90">' . $value->keterangan . '</span>';

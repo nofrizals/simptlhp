@@ -140,61 +140,6 @@
 </div>
 
 {{-- Modal Rekomendasi --}}
-{{-- <div id="modalRekomendasi"
-    class="fixed inset-0 flex items-start justify-center p-5 overflow-y-auto modal z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="fixed inset-0 h-full w-full bg-black/10 backdrop-blur-xs"></div>
-    <div id="modalRekomendasiContent"
-        class="relative w-full max-w-[800px] rounded-3xl bg-white p-6 
-            transform scale-95 transition-transform duration-300
-            dark:bg-gray-900 lg:p-10">
-        <button id="closeModalBtnRekomendasi"
-            class="absolute right-3 top-3 z-50 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11">
-            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
-                    fill="" />
-            </svg>
-        </button>
-        <div class="rounded-2xl bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-            <div class="border-b border-gray-200 px-6 pb-3 pt-3">
-                <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Form Rekomendasi</h3>
-            </div>
-            <div class="space-y-6 border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
-                <form id="formRekomendasi">
-                    <div class="-mx-2.5 flex flex-wrap gap-y-5">
-                        <input type="hidden" id="rekomendasi_id" name="id">
-                        <div class="w-full px-2.5 xl:w-1/2">
-                            <div class="flex gap-3">
-                                <div class="w-full">
-                                    <label for="rekomendasi"
-                                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Rekomendasi
-                                        <span class="text-red-400">*</span></label>
-                                    <textarea
-                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                                        name="rekomendasi" id="rekomendasi" rows="6"></textarea>
-                                    <p class="err text-theme-xs text-error-500" id="rekomendasi_error"></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-full px-2.5">
-                            <div class="mt-1 flex items-center gap-3">
-                                <button type="submit" id="btn-save-rekomendasi"
-                                    class="flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white hover:bg-brand-600">
-                                    Simpan
-                                </button>
-                                <button type="button" id="btn-cancel-rekomendasi"
-                                    class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
-                                    Batal
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
 <div id="modalRekomendasi"
     class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 opacity-0 pointer-events-none transition-opacity duration-300 sm:p-6">
     <!-- Overlay -->
@@ -251,7 +196,6 @@
         </div>
     </div>
 </div>
-
 
 @include('pages.manajemen-kasus.partials.tindaklanjut-tab')
 @push('scripts')
@@ -431,9 +375,7 @@
                     if ($.fn.DataTable.isDataTable('#dtRekomendasi')) {
                         $('#dtRekomendasi').DataTable().ajax.reload(null, true);
                     }
-
                 }
-
             });
 
             $('#btnReloadTemuan').on('click', function() {
@@ -554,6 +496,18 @@
                 });
             });
 
+            function formatNominalIndonesia(value) {
+                if (value === null || value === undefined || value === '') {
+                    return '';
+                }
+
+                return new Intl.NumberFormat('id-ID', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                    useGrouping: true
+                }).format(Number(value));
+            }
+
             $(document).on('click', '.btn-editTindakLanjut', function() {
                 const tindaklanjut = $(this).data('id');
                 resetFormTindakLanjut();
@@ -567,10 +521,14 @@
                         $('#tgl_tindak_lanjut').val(response.tgl_tindak_lanjut);
                         $('#id_status').val(response.id_status).change();
                         $('#keterangan').val(response.keterangan);
-                        $('#rincianPajak').val(response.rincian_keuangan);
-                        $('#rincianDaerah').val(response.rincian_keuangan2);
-                        $('#rincianDesa').val(response.rincian_keuangan3);
-                        $('#rincianBlud').val(response.rincian_keuangan4);
+                        $('#rincianPajak').val(
+                            formatNominalIndonesia(response.rincian_keuangan));
+                        $('#rincianDaerah').val(
+                            formatNominalIndonesia(response.rincian_keuangan2));
+                        $('#rincianDesa').val(
+                            formatNominalIndonesia(response.rincian_keuangan3));
+                        $('#rincianBlud').val(
+                            formatNominalIndonesia(response.rincian_keuangan4));
                     }
                 });
             });
@@ -623,52 +581,7 @@
                 });
             });
 
-            // $(document).on('click', '.btn-ajukanUlangTindakLanjut', function() {
-            //     const id = $(this).data('id');
-            //     Swal.fire({
-            //         title: 'Apakah anda yakin?',
-            //         icon: 'warning',
-            //         showCancelButton: true,
-            //         cancelButtonText: 'Batal',
-            //         confirmButtonText: 'Yakin',
-            //         reverseButtons: true,
-            //     }).then((result) => {
-            //         if (result.isConfirmed) {
-            //             $.ajax({
-            //                 type: 'GET',
-            //                 url: `{{ url('tindak_lanjut') }}/${id}`,
-            //                 dataType: 'json',
-            //                 success: function(response) {
-            //                     $('#dtTindakLanjut').DataTable().ajax
-            //                         .reload(
-            //                             null,
-            //                             false);
-            //                     Swal.fire({
-            //                         title: 'Sukses',
-            //                         text: response.message,
-            //                         icon: 'success'
-            //                     });
-            //                 },
-            //                 error: function(xhr) {
-            //                     let message =
-            //                         "Terjadi kesalahan pada server.";
-            //                     if (xhr.responseJSON && xhr.responseJSON
-            //                         .message) {
-            //                         message = xhr.responseJSON.message;
-            //                     }
-            //                     Swal.fire({
-            //                         title: "Gagal",
-            //                         text: message,
-            //                         icon: "error"
-            //                     });
-            //                 }
-            //             });
-            //         }
-            //     });
-            // });
-
             let tindak_lanjut = '';
-
             $(document).on('click', '.pembayaran', function() {
                 $('#containerTable').addClass('hidden');
                 $('#pembayaranTable').removeClass('hidden');
@@ -913,8 +826,10 @@
             function formatRupiah(value) {
                 return new Intl.NumberFormat('id-ID', {
                     style: 'currency',
-                    currency: 'IDR'
-                }).format(value ?? 0);
+                    currency: 'IDR',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(Number(value ?? 0));
             }
 
             function cekFormPembayaran(res) {
@@ -1015,75 +930,9 @@
                 }
             }
 
-            // let id_tindak_lanjut = null;
-            // $(document).on('click', '.fileTindakLanjut', function() {
-            //     $('#containerTable').addClass('hidden');
-            //     $('#fileUpload').removeClass('hidden');
-            //     $('#tableUploadFile').removeClass('hidden');
-            //     id_tindak_lanjut = $(this).data('id');
-            //     $('#btnReloadTindakLanjut').on('click', function() {
-            //         $('#dtUploadFile').DataTable().ajax.reload(null, false);
-            //     });
-            //     dtUploadFileTable = $('#dtUploadFile').DataTable({
-            //         processing: true,
-            //         serverSide: true,
-            //         responsive: false,
-            //         scrollX: true,
-            //         dom: 'rtip',
-            //         searching: true,
-            //         ordering: false,
-            //         lengthChange: false,
-            //         ajax: {
-            //             type: 'POST',
-            //             url: `{{ url('tindak-lanjut') }}/${id_tindak_lanjut}/pembayaran/ajaxUploadFile`
-            //         },
-            //         columns: [{
-            //                 data: 'DT_RowIndex',
-            //                 name: 'DT_RowIndex',
-            //                 orderable: false,
-            //                 searchable: false,
-            //                 className: 'text-center'
-            //             },
-            //             {
-            //                 data: 'file',
-            //                 name: 'file',
-            //                 className: 'text-left'
-            //             },
-            //             {
-            //                 data: 'log',
-            //                 name: 'log',
-            //                 className: 'text-center'
-            //             },
-            //             {
-            //                 data: 'action',
-            //                 name: 'action',
-            //                 className: 'text-center'
-            //             }
-            //         ],
-            //         language: {
-            //             processing: "",
-            //             zeroRecords: "Data tidak ditemukan",
-            //             info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
-            //             paginate: {
-            //                 previous: "←",
-            //                 next: "→"
-            //             }
-            //         },
-            //         initComplete: function() {
-            //             $('#dtUploadFile_info').appendTo('#tableInfoUploadFile');
-            //             $('#dtUploadFile_paginate').appendTo(
-            //                 '#tablePaginationUploadFile');
-            //         }
-            //     });
-            // })
-
             let id_tindak_lanjut = null;
             let dtUploadFileTable = null;
 
-
-            // =====================================================
-            // KLIK FILE
-            // =====================================================
             $(document).on('click', '.fileTindakLanjut', function() {
 
                 id_tindak_lanjut = $(this).data('id');
@@ -1177,18 +1026,12 @@
 
             });
 
-
-            // =====================================================
-            // RELOAD DATA
-            // =====================================================
             $(document).on('click', '#btnReloadTindakLanjut', function() {
 
                 if (dtUploadFileTable) {
                     dtUploadFileTable.ajax.reload(null, false);
                 }
-
             });
-
 
             $('#formUploadFile').submit(function(e) {
                 e.preventDefault();
