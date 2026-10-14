@@ -422,6 +422,14 @@
         </div>
     </div>
     {{-- Table Pembayaran --}}
+    <div id="loadingPembayaran" class="hidden flex items-center justify-center py-10">
+        <div class="flex flex-col items-center gap-3">
+            <div class="h-10 w-10 animate-spin rounded-full border-4 border-amber-500 border-t-transparent"></div>
+            <p class="text-sm text-gray-500 dark:text-white/90">
+                Memuat data pembayaran...
+            </p>
+        </div>
+    </div>
     <div id="pembayaranTable" class="hidden">
         <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
             <div class="space-y-6">
@@ -648,7 +656,6 @@
                         </form>
                         <div id="dinamisFormPembayaran"
                             class="mt-8 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 hidden">
-
                             <div class="relative overflow-x-auto">
                                 {{-- Loading --}}
                                 <div id="tableLoadingPembayaran"

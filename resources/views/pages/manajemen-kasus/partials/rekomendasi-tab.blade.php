@@ -583,8 +583,23 @@
 
             let tindak_lanjut = '';
             $(document).on('click', '.pembayaran', function() {
+                $('#formBuktiPembayaran')[0].reset();
+                $('#jenis_pembayaran').val('');
+
+                $('#nominal_pembayaran').val('');
+                $('#bukti_pembayaran').val('');
+                $('#keterangan_pembayaran').val('');
+
+                $('.nominal_pembayaran').addClass('hidden');
+                $('.bukti_pembayaran').addClass('hidden');
+                $('.keterangan_pembayaran').addClass('hidden');
+                $('#btn-save-bukti-pembayaran').addClass('hidden');
+
+                $('.err').text('');
+                $('#dinamisFormPembayaran').addClass('hidden');
                 $('#containerTable').addClass('hidden');
-                $('#pembayaranTable').removeClass('hidden');
+                $('#pembayaranTable').addClass('hidden');
+                $('#loadingPembayaran').removeClass('hidden');
                 let id_tindak_lanjut = $(this).data('id');
                 $('#id_tindak_lanjut').val(id_tindak_lanjut);
                 $('#btnReloadTindakLanjut').on('click', function() {
@@ -594,7 +609,11 @@
                 if ($.fn.DataTable.isDataTable('#dtBuktiPembayaran')) {
                     dtBuktiPembayaranTable.ajax.url(
                         `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
-                    ).load();
+                    ).load(function() {
+                        // Data selesai dimuat
+                        $('#loadingPembayaran').addClass('hidden');
+                        $('#pembayaranTable').removeClass('hidden');
+                    });
                 } else {
                     dtBuktiPembayaranTable = $('#dtBuktiPembayaran')
                         .DataTable({
@@ -608,7 +627,11 @@
                             lengthChange: false,
                             ajax: {
                                 type: 'POST',
-                                url: `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`
+                                url: `{{ url('daftar-kasus') }}/${id_tindak_lanjut}/tindak_lanjut/ajaxPembayaran`,
+                                complete: function() {
+                                    $('#loadingPembayaran').addClass('hidden');
+                                    $('#pembayaranTable').removeClass('hidden');
+                                }
                             },
                             columns: [{
                                     data: 'DT_RowIndex',
