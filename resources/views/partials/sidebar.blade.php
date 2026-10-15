@@ -18,6 +18,8 @@
     <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <!-- Sidebar Menu -->
         <nav x-data="{ selected: $persist('Dashboard') }" x-init="@if (request()->is('dashboard') || request()->is('/')) selected = 'Dashboard';
+        @elseif(request()->is('kepegawaian'))
+            selected = 'kepegawaian';
         @elseif(request()->is('admin'))
             selected = 'admin';
         @elseif(request()->is('peraturan'))
@@ -76,6 +78,21 @@
                             (string) session('level') === '1' &&
                             (string) session('kode_unor') === '01.09') ||
                             (string) (string) session('level') === '1')
+                        <li>
+                            <a href="{{ url('kepegawaian') }}"
+                                class="menu-item group {{ request()->is('kepegawaian*') ? 'menu-item-active' : 'menu-item-inactive' }}">
+                                <svg class="{{ request()->is('kepegawaian*') ? 'menu-item-icon-active' : 'menu-item-icon-inactive' }}"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5 5H19C20.1046 5 21 5.89543 21 7V17C21 18.1046 20.1046 19 19 19H5C3.89543 19 3 18.1046 3 17V7C3 5.89543 3.89543 5 5 5ZM9 8C7.89543 8 7 8.89543 7 10C7 11.1046 7.89543 12 9 12C10.1046 12 11 11.1046 11 10C11 8.89543 10.1046 8 9 8ZM5.5 16C5.9 14.5 7.1 13.5 9 13.5C10.9 13.5 12.1 14.5 12.5 16H5.5ZM14 9.25C14 8.83579 14.3358 8.5 14.75 8.5H18C18.4142 8.5 18.75 8.83579 18.75 9.25C18.75 9.66421 18.4142 10 18 10H14.75C14.3358 10 14 9.66421 14 9.25ZM14 13C14 12.5858 14.3358 12.25 14.75 12.25H18C18.4142 12.25 18.75 12.5858 18.75 13C18.75 13.4142 18.4142 13.75 18 13.75H14.75C14.3358 13.75 14 13.4142 14 13Z"
+                                        fill="" />
+                                </svg>
+                                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                    Kepegawaian
+                                </span>
+                            </a>
+                        </li>
                         <li>
                             <a href="{{ url('admin') }}"
                                 class="menu-item group {{ request()->is('admin') ? 'menu-item-active' : 'menu-item-inactive' }}">
@@ -168,9 +185,9 @@
                                     <path d="M15.5 11C16.8807 11 18 9.88071 18 8.5C18 7.11929 16.8807 6 15.5 6C14.1193 6 13 7.11929 13 8.5C13 9.88071 14.1193 11 15.5 11Z
                                     M8.5 11C9.88071 11 11 9.88071 11 8.5C11 7.11929 9.88071 6 8.5 6C7.11929 6 6 7.11929 6 8.5C6 9.88071 7.11929 11 8.5 11Z
                                     M3 18C3 15.7909 4.79086 14 7 14H10C12.2091 14 14 15.7909 14 18
-                                    M10 18C10 15.7909 11.7909 14 14 14H17C19.2091 14 21 15.7909 21 18" stroke="#737070"
-                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                                        fill="none" />
+                                    M10 18C10 15.7909 11.7909 14 14 14H17C19.2091 14 21 15.7909 21 18"
+                                        stroke="#737070" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" fill="none" />
                                 </svg>
 
                                 <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">

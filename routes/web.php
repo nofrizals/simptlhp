@@ -7,6 +7,7 @@ use App\Http\Controllers\FileTindakLanjutController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\KasusController;
+use App\Http\Controllers\KepegawaianController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\NilaiKerugianController;
 use App\Http\Controllers\ObrikController;
@@ -42,6 +43,14 @@ Route::middleware('app.auth')->group(function () {
         Route::post('ajax-data-admin', [AdminController::class, 'ajaxDataAdmin']);
         Route::post('ajax-data-simak', [AdminController::class, 'ajaxDataSimak']);
         Route::post('instansi/getMyTurunan', [InstansiController::class, 'getMyTurunan']);
+
+        // --> Menu Kepegawaian
+        Route::get('kepegawaian', [KepegawaianController::class, 'index']);
+        // Route::post('admin', [AdminController::class, 'store']);
+        // Route::delete('admin/{admin}', [AdminController::class, 'destroy']);
+        // Route::post('ajax-data-admin', [AdminController::class, 'ajaxDataAdmin']);
+        // Route::post('ajax-data-simak', [AdminController::class, 'ajaxDataSimak']);
+        // Route::post('instansi/getMyTurunan', [InstansiController::class, 'getMyTurunan']);
     });
 
     Route::middleware('app.super')->group(function () { //middleware superadmin
