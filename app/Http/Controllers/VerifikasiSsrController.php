@@ -235,12 +235,31 @@ class VerifikasiSsrController extends Controller
             ], 422);
         }
 
-        $adaBuktiPembayaran = Pembayaran::where('id_tindak_lanjut', $id)->exists();
-        if (!$adaBuktiPembayaran) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Bukti pembayaran belum tersedia. Tidak dapat disetujui.'
-            ], 422);
+        // $adaBuktiPembayaran = Pembayaran::where('id_tindak_lanjut', $id)->exists();
+        // if (!$adaBuktiPembayaran) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Bukti pembayaran belum tersedia. Tidak dapat disetujui.'
+        //     ], 422);
+        // }
+
+        $tindakLanjut = Tindaklanjut::findOrFail($id);
+        $adaRincianKeuangan =
+            (float) $tindakLanjut->rincian_keuangan != 0 ||
+            (float) $tindakLanjut->rincian_keuangan2 != 0 ||
+            (float) $tindakLanjut->rincian_keuangan3 != 0 ||
+            (float) $tindakLanjut->rincian_keuangan4 != 0;
+        if ($adaRincianKeuangan) {
+            $adaBuktiPembayaran = Pembayaran::where(
+                'id_tindak_lanjut',
+                $id
+            )->exists();
+            if (!$adaBuktiPembayaran) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bukti pembayaran belum tersedia. Tidak dapat disetujui.'
+                ], 422);
+            }
         }
 
         DB::transaction(function () use ($verifikasi, $id) {
