@@ -36,6 +36,12 @@ class KasusController extends Controller
         if ($status !== 'semua') {
             $data->where('selesai', $status);
         }
+        //tambahkan obrik yang ditangani berdasarkan tim(user) yang login
+        if (session('tim')) {
+            $data->whereHas('instansi', function (Builder $query): void {
+                $query->where('id_tim', session('tim'));
+            });
+        }
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('id_jenis_php', function (Kasus $value): string {
