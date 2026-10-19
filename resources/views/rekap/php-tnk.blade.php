@@ -59,9 +59,30 @@
                                 <option value="{{ session('kode_unor') }}" selected>{{ session('nama_opd') }}</option>
                             @else
                                 <option value="semua" selected>Semua Obrik</option>
-                                @foreach ($instansiList as $instansi)
-                                    <option value="{{ $instansi->kode_instansi }}">
-                                        {{ strtoupper($instansi->nama_instansi) }}
+                                @foreach ($instansiList as $vinstansi)
+                                    <option value="{{ $vinstansi->kode_unor }}">
+                                        {{ strtoupper($vinstansi->nama_unor) }}
+                                    </option>
+                                @endforeach
+
+                                {{-- Kecamatan --}}
+                                @foreach ($kecamatanList as $vkecamatan)
+                                    <option value="{{ $vkecamatan->kode_unor }}">
+                                        {{ strtoupper($vkecamatan->nama_unor) }}
+                                    </option>
+                                @endforeach
+
+                                {{-- Instansi turunan --}}
+                                @foreach ($turunanList as $vturunan)
+                                    <option value="{{ $vturunan->kode_instansi }}">
+                                        {{ strtoupper($vturunan->nama_instansi) }}
+                                    </option>
+                                @endforeach
+
+                                {{-- Obrik --}}
+                                @foreach ($obrikList as $vobrik)
+                                    <option value="{{ $vobrik->kode_instansi }}">
+                                        {{ strtoupper($vobrik->nama_instansi) }}
                                     </option>
                                 @endforeach
                             @endif

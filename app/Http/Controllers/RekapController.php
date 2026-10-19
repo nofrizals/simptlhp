@@ -16,6 +16,7 @@ use App\Http\Requests\Rekap\FilterRekapRequest;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
 use App\Models\Kasus;
+use App\Models\Unor;
 use App\Services\Rekap\RekapApbkamReportBuilder;
 use App\Services\Rekap\RekapPertahunReportBuilder;
 use App\Services\Rekap\RekapPhpReportBuilder;
@@ -45,9 +46,12 @@ final class RekapController extends Controller
     public function phpTnk(): View
     {
         return view('rekap.php-tnk', [
-            'jenisPhpList'     => JenisPhp::query()->whereNull('deleted_at')->orderBy('jenis_php')->get(),
-            'tahunPemeriksaan' => $this->getDistinctTahunPemeriksaan(),
-            'instansiList'     => Instansi::query()->orderBy('nama_instansi')->get(),
+            'jenisPhpList'      => JenisPhp::query()->whereNull('deleted_at')->orderBy('jenis_php')->get(),
+            'tahunPemeriksaan'  => $this->getDistinctTahunPemeriksaan(),
+            'instansiList'      => Unor::instansi()->get(),
+            'kecamatanList'     => Unor::kecamatan()->get(),
+            'turunanList'       => Instansi::readTurunan(),
+            'obrikList'         => Instansi::read(true)
         ]);
     }
 

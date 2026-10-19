@@ -114,7 +114,10 @@
                                     <option value="" disabled selected
                                         class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">Pilih OPD</option>
                                     <option value="01.13">Dinas Kesehatan</option>
-                                    <option value="01.23">Dinas Pendidikan dan Kebudayaan</option>
+                                    <option value="01.53">Dinas Kesehatan, Pengendalian Penduduk & Keluarga Berencana
+                                    </option>
+                                    <option value="01.48">Dinas Pendidikan</option>
+                                    <option value="01.49">Dinas Kebudayaan, Pariwisata, Kepemudaan Dan Olahraga</option>
                                     @foreach ($kecamatans as $kecamatan)
                                         <option value="{{ $kecamatan['kode'] }}">
                                             {{ ucwords(strtolower($kecamatan['nama'])) }}</option>

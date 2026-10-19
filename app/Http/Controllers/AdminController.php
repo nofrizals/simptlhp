@@ -46,15 +46,15 @@ class AdminController extends Controller
 
     public function index(): View
     {
-        $instansis = Unor::whereRaw('CHAR_LENGTH(kode_unor) <= 5')
-            ->whereRaw('RIGHT(kode_unor, 2) < 32')
-            ->get(['kode_unor', 'nama_unor'])
-            ->map(fn($i) => ['kode' => $i->kode_unor, 'nama' => $i->nama_unor]);
+        // $instansis = Unor::whereRaw('CHAR_LENGTH(kode_unor) <= 5')
+        //     ->whereRaw('RIGHT(kode_unor, 2) < 32')
+        //     ->get(['kode_unor', 'nama_unor'])
+        //     ->map(fn($i) => ['kode' => $i->kode_unor, 'nama' => $i->nama_unor]);
 
-        $kecamatans = Unor::whereRaw('CHAR_LENGTH(kode_unor) = ?', [5])
-            ->whereRaw('RIGHT(kode_unor, 2) BETWEEN ? AND ?', [32, 45])
-            ->get(['kode_unor', 'nama_unor'])
-            ->map(fn($i) => ['kode' => $i->kode_unor, 'nama' => $i->nama_unor]);
+        // $kecamatans = Unor::whereRaw('CHAR_LENGTH(kode_unor) = ?', [5])
+        //     ->whereRaw('RIGHT(kode_unor, 2) BETWEEN ? AND ?', [32, 45])
+        //     ->get(['kode_unor', 'nama_unor'])
+        //     ->map(fn($i) => ['kode' => $i->kode_unor, 'nama' => $i->nama_unor]);
 
         $turunansmini = Instansi::where('kode_instansi', 'like', 'obrik%')
             ->get(['kode_instansi', 'nama_instansi'])
@@ -74,17 +74,25 @@ class AdminController extends Controller
             ->orderBy('tingkatan_level')
             ->get();
 
-        $instansiList = Instansi::query()->orderBy('nama_instansi')->get();
+        // $instansiList = Instansi::query()->orderBy('nama_instansi')->get();
+
+        $instansiList = Unor::instansi()->get();
+        $kecamatanList = Unor::kecamatan()->get();
+        $turunanList = Instansi::readTurunan();
+        $obrikList = Instansi::read(true);
 
         $tims = Tim::with('ketua')->get();
 
         return view('admin', compact(
-            'instansis',
-            'kecamatans',
+            // 'instansis',
+            // 'kecamatans',
             'turunansmini',
             'levels',
             'tims',
             'instansiList',
+            'kecamatanList',
+            'turunanList',
+            'obrikList',
             'obriks',
         ));
     }

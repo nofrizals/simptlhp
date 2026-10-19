@@ -51,4 +51,40 @@ class Instansi extends Model
     {
         return $this->belongsTo(Tim::class, 'id_tim', 'id');
     }
+
+    public static function read(bool $obrik = false)
+    {
+        $query = self::query();
+
+        if ($obrik) {
+            $query->where('kode_instansi', 'like', 'obrik%');
+        } else {
+            $query->where('kode_instansi', 'not like', 'obrik%');
+        }
+
+        $tim = session('tim');
+
+        if ($tim) {
+            $query->where('id_tim', $tim);
+        }
+
+        return $query
+            ->orderBy('kode_instansi', 'asc')
+            ->get();
+    }
+
+    public static function readTurunan()
+    {
+        $query = self::query()
+            ->whereRaw('CHAR_LENGTH(TRIM(kode_instansi)) = ?', [8])
+            ->where('kode_instansi', 'not like', 'obrik%');
+
+        $tim = session('tim');
+
+        if ($tim) {
+            $query->where('id_tim', $tim);
+        }
+
+        return $query->get();
+    }
 }

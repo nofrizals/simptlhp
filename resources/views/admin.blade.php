@@ -38,9 +38,31 @@
                                     <option value="{{ session('kode_unor') }}" selected>{{ session('nama_opd') }}</option>
                                 @else
                                     <option value="semua" selected>Semua Obrik</option>
-                                    @foreach ($instansiList as $instansi)
-                                        <option value="{{ $instansi->kode_instansi }}">
-                                            {{ strtoupper($instansi->nama_instansi) }}
+                                    {{-- Instansi --}}
+                                    @foreach ($instansiList as $vinstansi)
+                                        <option value="{{ $vinstansi->kode_unor }}">
+                                            {{ $vinstansi->nama_unor }}
+                                        </option>
+                                    @endforeach
+
+                                    {{-- Kecamatan --}}
+                                    @foreach ($kecamatanList as $vkecamatan)
+                                        <option value="{{ $vkecamatan->kode_unor }}">
+                                            {{ $vkecamatan->nama_unor }}
+                                        </option>
+                                    @endforeach
+
+                                    {{-- Instansi turunan --}}
+                                    @foreach ($turunanList as $vturunan)
+                                        <option value="{{ $vturunan->kode_instansi }}">
+                                            {{ $vturunan->nama_instansi }}
+                                        </option>
+                                    @endforeach
+
+                                    {{-- Obrik --}}
+                                    @foreach ($obrikList as $vobrik)
+                                        <option value="{{ $vobrik->kode_instansi }}">
+                                            {{ strtoupper($vobrik->nama_instansi) }}
                                         </option>
                                     @endforeach
                                 @endif
@@ -161,14 +183,14 @@
                                     class="opd dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
                                     <option value="" disabled selected
                                         class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">Pilih OPD</option>
-                                    @foreach ($instansis as $instansi)
-                                        <option value="{{ $instansi['kode'] }}">
-                                            {{ ucwords(strtolower($instansi['nama'])) }}
+                                    @foreach ($instansiList as $instansi)
+                                        <option value="{{ $instansi['kode_unor'] }}">
+                                            {{ ucwords(strtolower($instansi['nama_unor'])) }}
                                         </option>
                                     @endforeach
-                                    @foreach ($kecamatans as $kecamatan)
-                                        <option value="{{ $kecamatan['kode'] }}">
-                                            {{ ucwords(strtolower($kecamatan['nama'])) }}</option>
+                                    @foreach ($kecamatanList as $kecamatan)
+                                        <option value="{{ $kecamatan['kode_unor'] }}">
+                                            {{ ucwords(strtolower($kecamatan['nama_unor'])) }}</option>
                                     @endforeach
                                     @foreach ($turunansmini as $turunanmini)
                                         <option value="{{ $turunanmini['kode'] }}">
@@ -341,14 +363,14 @@
                                     class="opd_simak dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
                                     <option value="" disabled selected
                                         class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">Pilih OPD</option>
-                                    @foreach ($instansis as $instansi)
-                                        <option value="{{ $instansi['kode'] }}">
-                                            {{ ucwords(strtolower($instansi['nama'])) }}
+                                    @foreach ($instansiList as $instansi)
+                                        <option value="{{ $instansi['kode_unor'] }}">
+                                            {{ ucwords(strtolower($instansi['nama_unor'])) }}
                                         </option>
                                     @endforeach
-                                    @foreach ($kecamatans as $kecamatan)
-                                        <option value="{{ $kecamatan['kode'] }}">
-                                            {{ ucwords(strtolower($kecamatan['nama'])) }}</option>
+                                    @foreach ($kecamatanList as $kecamatan)
+                                        <option value="{{ $kecamatan['kode_unor'] }}">
+                                            {{ ucwords(strtolower($kecamatan['nama_unor'])) }}</option>
                                     @endforeach
                                 </select>
                             </div>
