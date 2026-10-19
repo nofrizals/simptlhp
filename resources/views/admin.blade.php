@@ -26,7 +26,8 @@
 
                 <!-- Hapus komentar jika butuh filter obrik -->
                 <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
-                    <form id="formFilterAdmin" class="grid grid-cols-1 gap-4 px-6 py-5 md:grid-cols-4 dark:border-gray-800">
+                    <form id="formFilterAdmin"
+                        class="grid grid-cols-1 gap-4 border-b border-gray-200 px-6 py-5 md:grid-cols-4 lg:grid-cols-5 dark:border-gray-800">
                         <div class="md:col-span-3">
                             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                 Nama Obrik
@@ -441,6 +442,12 @@
                             kode_unor: $('#kode_unor').val(),
                         };
                     }
+
+                    $('#kode_unor').select2({
+                        width: '100%',
+                        placeholder: 'Pilih Nama Obrik',
+                        allowClear: false
+                    });
 
                     function clearFieldErrors() {
                         $('.err').html('');
