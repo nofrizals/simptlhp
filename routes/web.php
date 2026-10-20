@@ -185,4 +185,8 @@ Route::middleware('app.auth')->group(function () {
 
     //Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    //Profil
+    Route::get('/profil', [AuthController::class, 'profil'])->name('profil');
+    Route::post('/profil', [AuthController::class, 'updateProfil'])->name('profil.update');
 });

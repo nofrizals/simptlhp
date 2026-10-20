@@ -1,4 +1,9 @@
-<header x-data="{ menuToggle: false }"
+{{-- <header x-data="{ menuToggle: false }" --}}
+<header x-data="{
+    menuToggle: false,
+    profileModalOpen: {{ $errors->any() ? 'true' : 'false' }},
+    changePassword: {{ $errors->has('current_password') || $errors->has('password') || $errors->has('password_confirmation') ? 'true' : 'false' }}
+}"
     class="sticky top-0 z-10 flex w-full border-gray-200 bg-white lg:border-b dark:border-gray-800 dark:bg-gray-900">
     <div class="flex grow flex-col items-center justify-between lg:flex-row lg:px-6">
         <div
@@ -101,6 +106,22 @@
                         </span>
                     </div>
 
+                    <!-- Menu Profil -->
+                    @if (session('is_simak') == 0)
+                        <button type="button" @click="profileModalOpen = true; dropdownOpen = false"
+                            class="group mt-3 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white">
+
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="fill-gray-500 group-hover:fill-gray-700 dark:group-hover:fill-white/90">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12ZM12 14C8.68629 14 6 16.6863 6 20H18C18 16.6863 15.3137 14 12 14Z"
+                                    fill="" />
+                            </svg>
+                            Profil
+                        </button>
+                    @endif
+
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button
@@ -121,4 +142,109 @@
             <!-- User Area -->
         </div>
     </div>
+
+    <!-- Modal Profil -->
+    <div x-show="profileModalOpen" x-cloak @keydown.escape.window="profileModalOpen = false"
+        class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 backdrop-blur-xs p-4">
+        <div x-show="profileModalOpen" x-transition
+            class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900">
+
+            <!-- Header Modal -->
+            <div class="mb-5 flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
+                        Profil Pengguna
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Periksa dan ubah data profil Anda.
+                    </p>
+                </div>
+
+                <button type="button" @click="profileModalOpen = false"
+                    class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">
+                    &times;
+                </button>
+            </div>
+
+            <!-- Form Profil -->
+            <form id="profileForm" action="{{ route('profil.update') }}" method="POST">
+                @csrf
+
+                <div class="mb-4">
+                    <label for="nama" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Nama Lengkap
+                    </label>
+                    <input type="text" id="nama" name="nama" value="{{ old('nama', session('nama')) }}"
+                        readonly disabled
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                </div>
+
+                <div class="mb-5">
+                    <label for="nip" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        NIP
+                    </label>
+                    <input type="text" id="nip" name="nip" value="{{ old('nip', session('nip')) }}"
+                        readonly disabled
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                </div>
+
+                <!-- Password Lama -->
+                <div class="mb-4">
+                    <label for="current_password"
+                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Password Lama
+                    </label>
+                    <input type="password" id="current_password" name="current_password"
+                        autocomplete="current-password" placeholder="Masukkan password lama"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                    <p data-error-for="current_password" class="mt-1 hidden text-sm text-red-600"></p>
+                </div>
+
+                <!-- Password Baru -->
+                <div class="mb-4">
+                    <label for="password" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Password Baru
+                    </label>
+                    <input type="password" id="password" name="password" autocomplete="new-password"
+                        minlength="8" placeholder="Minimal 8 karakter"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                    <p data-error-for="password" class="mt-1 hidden text-sm text-red-600"></p>
+                </div>
+
+                <!-- Konfirmasi Password Baru -->
+                <div class="mb-5">
+                    <label for="password_confirmation"
+                        class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Konfirmasi Password Baru
+                    </label>
+                    <input type="password" id="password_confirmation" name="password_confirmation"
+                        autocomplete="new-password" minlength="8" placeholder="Ulangi password baru"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                    <p data-error-for="password_confirmation" class="mt-1 hidden text-sm text-red-600"></p>
+                </div>
+
+                <!-- Tombol -->
+                <div class="flex justify-end gap-3">
+                    <button type="button" @click="profileModalOpen = false" id="btnBatal"
+                        class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 disabled:cursor-not-allowed
+           disabled:opacity-50">
+                        Batal
+                    </button>
+
+                    <button type="submit" id="btnSimpan"
+                        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed
+           disabled:opacity-50">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Akhir Modal Profil -->
+
 </header>
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>

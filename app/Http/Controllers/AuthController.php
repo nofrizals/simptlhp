@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Clients\EgovClient;
+use App\Exceptions\SsoUnavailableException;
 use App\Models\AccessLog;
+use App\Models\User;
 use App\Services\Auth\AuthService;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use App\Exceptions\SsoUnavailableException;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -147,6 +149,74 @@ class AuthController extends Controller
                 'msg'    => 'Terjadi kesalahan server',
             ], 500);
         }
+    }
+
+
+    public function profil()
+    {
+        $user = User::where('nip', session('nip'))->firstOrFail();
+        return view('profil', compact('user'));
+    }
+
+    public function updateProfil(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'current_password' => ['required', 'string'],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'different:current_password',
+            ],
+        ], [
+            'current_password.required' => 'Password lama wajib diisi.',
+            'password.required' => 'Password baru wajib diisi.',
+            'password.min' => 'Password baru minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+            'password.different' => 'Password baru harus berbeda dari password lama.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Periksa kembali input Anda.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $user = User::where(
+            'id_pegawai',
+            session('nip')
+        )->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Data pengguna tidak ditemukan.',
+            ], 404);
+        }
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'message' => 'Password lama tidak sesuai.',
+                'errors' => [
+                    'current_password' => [
+                        'Password lama tidak sesuai.',
+                    ],
+                ],
+            ], 422);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return response()->json([
+            'message' => 'Password berhasil diperbarui. Silakan login kembali.',
+            'logout' => true,
+            'redirect' => route('login'),
+        ]);
     }
 
     public function logout(Request $request)

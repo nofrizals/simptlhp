@@ -273,6 +273,24 @@
 <body x-data="{ page: @yield('page-data'), loaded: true, darkMode: false, stickyMenu: false, sidebarToggle: false, scrollTop: false }" x-init="darkMode = JSON.parse(localStorage.getItem('darkMode'));
 $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))" :class="{ 'dark bg-gray-900': darkMode === true }">
 
+
+    @if (session('success'))
+        <div class="fixed right-5 top-20 z-[60] rounded-lg bg-green-100 px-4 py-3 text-sm text-green-800 shadow-lg">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="fixed right-5 top-20 z-[60] rounded-lg bg-red-100 px-4 py-3 text-sm text-red-800 shadow-lg">
+            <ul class="list-inside list-disc">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+
     @include('partials.preloader')
     <div class="flex min-h-screen">
         @include('partials.sidebar')
@@ -338,6 +356,153 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
                 $('#alert-container').fadeOut();
             }, 5000);
         }
+
+        function aktifkanTombol() {
+            sedangDiproses = false;
+
+            if (btnSimpan) {
+                btnSimpan.disabled = false;
+                btnSimpan.textContent = 'Simpan Perubahan';
+            }
+
+            if (btnBatal) {
+                btnBatal.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('profileForm');
+            if (!form) return;
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                // Hapus error sebelumnya
+                form.querySelectorAll('[data-error-for]').forEach(el => {
+                    el.textContent = '';
+                    el.classList.add('hidden');
+                });
+
+                // Hapus pesan sukses sebelumnya
+                const oldSuccess = document.getElementById('profileSuccess');
+                if (oldSuccess) oldSuccess.remove();
+
+                const submitButton = form.querySelector(
+                    'button[type="submit"]'
+                );
+
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Menyimpan...';
+                }
+                if (btnBatal) {
+                    btnBatal.disabled = true;
+                }
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'same-origin'
+                    });
+
+                    const result = await response.json();
+                    if (!response.ok) {
+                        if (result.errors) {
+                            Object.entries(result.errors).forEach(
+                                ([field, messages]) => {
+                                    const errorElement = form.querySelector(
+                                        `[data-error-for="${field}"]`
+                                    );
+
+                                    if (errorElement) {
+                                        errorElement.textContent = messages[0];
+                                        errorElement.classList.remove('hidden');
+                                    }
+                                }
+                            );
+                        } else {
+                            alert(result.message || 'Terjadi kesalahan.');
+                        }
+                        // Aktifkan kembali tombol jika password salah
+                        aktifkanTombol();
+                        return;
+                    }
+
+                    // Tampilkan pesan sukses
+                    const success = document.createElement('div');
+                    success.id = 'profileSuccess';
+                    success.className =
+                        'mb-4 rounded-lg bg-green-100 px-4 py-3 text-sm text-green-800';
+                    success.textContent = result.message;
+
+                    form.prepend(success);
+
+                    // Nonaktifkan tombol dan pertahankan statusnya
+                    if (btnSimpan) {
+                        btnSimpan.disabled = true;
+                        btnSimpan.textContent = 'Simpan Perubahan';
+                    }
+
+                    if (btnBatal) {
+                        btnBatal.disabled = true;
+                    }
+
+                    // Kosongkan field password
+                    [
+                        'current_password',
+                        'password',
+                        'password_confirmation'
+                    ].forEach(id => {
+                        const input = document.getElementById(id);
+                        if (input) input.value = '';
+                    });
+
+                    // Beri waktu 2 detik untuk membaca pesan sukses
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // Redirect sesuai instruksi dari server
+                    if (result.logout === true) {
+                        window.location.assign('/login');
+                        return;
+                    }
+
+                    // Jika tidak perlu logout, pulihkan tombol
+                    sedangDiproses = false;
+
+                    if (btnSimpan) {
+                        btnSimpan.disabled = false;
+                        btnSimpan.textContent = 'Simpan Perubahan';
+                    }
+
+                    if (btnBatal) {
+                        btnBatal.disabled = false;
+                    }
+
+                    form.dispatchEvent(new CustomEvent('password-updated', {
+                        bubbles: true
+                    }));
+
+                } catch (error) {
+                    console.error(error);
+                    alert('Tidak dapat menghubungi server. Silakan coba lagi.');
+                    aktifkanTombol();
+                    sedangDiproses = false;
+
+                    if (btnSimpan) {
+                        btnSimpan.disabled = false;
+                        btnSimpan.textContent = 'Simpan Perubahan';
+                    }
+
+                    if (btnBatal) {
+                        btnBatal.disabled = false;
+                    }
+                }
+
+            });
+        });
     </script>
     @stack('scripts')
 </body>
