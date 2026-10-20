@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
-use App\Models\StatusTl;
+use App\Models\Kasus;
 use App\Models\PegawaiSimak;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Models\StatusTl;
+use App\Models\Unor;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class KasusController extends Controller
@@ -19,10 +20,13 @@ class KasusController extends Controller
     public function index()
     {
         $ketua_tims = PegawaiSimak::select('id_pegawai', 'nama_pegawai', 'nip_baru')->where('kode_unor', 'LIKE', '01.09%')->distinct()->orderBy('nama_pegawai')->get();
-        $obriks = Instansi::where('kode_instansi', 'not like', 'obrik%')->get();
+        $instansiList = Unor::instansi()->get();
+        $kecamatanList = Unor::kecamatan()->get();
+        $turunanList = Instansi::readTurunan();
+        $obrikList = Instansi::read(true);
         $jenisPhp = JenisPhp::whereNull('deleted_at')->get();
         $status = StatusTl::get();
-        return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'obriks', 'ketua_tims', 'status'));
+        return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'instansiList', 'kecamatanList', 'turunanList', 'obrikList', 'ketua_tims', 'status'));
     }
 
     public function ajaxDataDaftarKasus(Request $request)

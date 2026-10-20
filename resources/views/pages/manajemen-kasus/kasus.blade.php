@@ -367,11 +367,22 @@
                                             class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                             Pilih OPD
                                         </option>
-                                        @foreach ($obriks as $obrik)
-                                            <option value="{{ $obrik->kode_instansi }}"
-                                                class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
-                                                {{ ucwords(strtolower($obrik->nama_instansi)) }}
+                                        @foreach ($instansiList as $instansi)
+                                            <option value="{{ $instansi['kode_unor'] }}">
+                                                {{ ucwords(strtolower($instansi['nama_unor'])) }}
                                             </option>
+                                        @endforeach
+                                        @foreach ($kecamatanList as $kecamatan)
+                                            <option value="{{ $kecamatan['kode_unor'] }}">
+                                                {{ ucwords(strtolower($kecamatan['nama_unor'])) }}</option>
+                                        @endforeach
+                                        @foreach ($turunanList as $turunanmini)
+                                            <option value="{{ $turunanmini['kode_instansi'] }}">
+                                                {{ ucwords(strtolower($turunanmini['nama_instansi'])) }}</option>
+                                        @endforeach
+                                        @foreach ($obrikList as $obrik)
+                                            <option value="{{ $obrik['kode_instansi'] }}">
+                                                {{ ucwords(strtolower($obrik['nama_instansi'])) }}</option>
                                         @endforeach
                                     </select>
                                     <p class="err text-theme-xs text-error-500" id="kode_unor_error"></p>
