@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Unor;
+use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
-use App\Models\Kasus;
-use App\Models\PegawaiSimak;
 use App\Models\StatusTl;
-use App\Models\Unor;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\PegawaiSimak;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
 
 class KasusController extends Controller
 {
@@ -138,7 +138,8 @@ class KasusController extends Controller
             'spt_selesai'       => $data->spt_selesai,
             'nomor_lhp'         => $data->nomor_lhp,
             'tanggal_lhp'       => Carbon::parse($data->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
-            'kode_unor'         => ucwords(strtolower($data->instansi->nama_instansi)),
+            'nama_instansi'     => ucwords(strtolower($data->instansi->nama_instansi)),
+            'kode_unor'         => $data->kode_unor,
             'nip_ketua'         => $data->nip_ketua ?? '-',
         ]);
     }
