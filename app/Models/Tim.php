@@ -32,16 +32,16 @@ class Tim extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by', 'id_user');
+        return $this->belongsTo(PegawaiSimak::class, 'created_by', 'id_pegawai');
     }
 
     public function editedBy()
     {
-        return $this->belongsTo(User::class, 'edited_by', 'id_user');
+        return $this->belongsTo(PegawaiSimak::class, 'edited_by', 'id_pegawai');
     }
 
     public function deletedBy()
     {
-        return $this->belongsTo(User::class, 'deleted_by', 'id_user');
+        return $this->belongsTo(PegawaiSimak::class, 'deleted_by', 'id_pegawai');
     }
 }
