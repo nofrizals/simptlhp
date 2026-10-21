@@ -121,31 +121,48 @@ class TindakLanjutController extends Controller
                             Pembayaran
                         </a>';
 
+                // if ($value->id_status != 1) {
+                //     $action .= '
+                //             <a href="javascript:void(0)"
+                //                 data-id="' . $value->id_tindak_lanjut . '"
+                //                 title="Hapus"
+                //                 class="btn-deleteTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
+                //                     bg-red-50 text-red-600 border border-red-200                                    
+                //                     dark:bg-red-800 dark:text-white/90
+                //                     hover:bg-red-600 hover:text-white
+                //                     dark:hover:bg-amber-200
+                //                     transition duration-200 text-sm font-medium">
+                //                 Hapus
+                //             </a>
+
+                //             <a href="javascript:void(0)"
+                //                 data-id="' . $value->id_tindak_lanjut . '"
+                //                 class="btn-editTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
+                //                     bg-emerald-50 text-emerald-600 border border-emerald-200
+                //                     dark:bg-emerald-800 dark:text-white/90
+                //                     hover:bg-emerald-600 hover:text-white
+                //                     dark:hover:bg-emerald-200
+                //                     transition duration-200 dark:hover:text-emerald-400 dark:text-white/90 text-sm font-medium"
+                //                 title="Edit">
+                //                 Edit
+                //             </a>';
+                // }
+
                 if ($value->id_status != 1) {
                     $action .= '
-                            <a href="javascript:void(0)"
-                                data-id="' . $value->id_tindak_lanjut . '"
-                                title="Hapus"
-                                class="btn-deleteTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
-                                    bg-red-50 text-red-600 border border-red-200                                    
-                                    dark:bg-red-800 dark:text-white/90
-                                    hover:bg-red-600 hover:text-white
-                                    dark:hover:bg-amber-200
-                                    transition duration-200 text-sm font-medium">
-                                Hapus
-                            </a>
+                        <a href="javascript:void(0)"
+                            data-id="' . $value->id_tindak_lanjut . '"
+                            title="Hapus"
+                            class="btn-deleteTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md bg-red-50 text-red-600 border border-red-200 dark:bg-red-800 dark:text-white/90 hover:bg-red-600 hover:text-white dark:hover:bg-amber-200 transition duration-200 text-sm font-medium">Hapus
+                        </a>';
+                }
 
-                            <a href="javascript:void(0)"
-                                data-id="' . $value->id_tindak_lanjut . '"
-                                class="btn-editTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
-                                    bg-emerald-50 text-emerald-600 border border-emerald-200
-                                    dark:bg-emerald-800 dark:text-white/90
-                                    hover:bg-emerald-600 hover:text-white
-                                    dark:hover:bg-emerald-200
-                                    transition duration-200 dark:hover:text-emerald-400 dark:text-white/90 text-sm font-medium"
-                                title="Edit">
-                                Edit
-                            </a>';
+                if ($value->id_status != 1 || session('level') == 1) {
+                    $action .= '
+                        <a href="javascript:void(0)"
+                            data-id="' . $value->id_tindak_lanjut . '"
+                            class="btn-editTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-800 dark:text-white/90 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-200 transition duration-200 dark:hover:text-emerald-400 dark:text-white/90 text-sm font-medium" title="Edit">Edit
+                        </a>';
                 }
                 $action .= '
                     </div>';
