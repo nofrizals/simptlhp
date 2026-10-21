@@ -40,9 +40,6 @@ final class RekapController extends Controller
         private readonly RekapPertahunReportBuilder $pertahunReportBuilder,
     ) {}
 
-    /**
-     * Tampilkan halaman filter + tabel Rekap PHP/TNK.
-     */
     public function phpTnk(): View
     {
         return view('rekap.php-tnk', [
@@ -55,13 +52,9 @@ final class RekapController extends Controller
         ]);
     }
 
-    /**
-     * Endpoint server-side Yajra DataTables untuk listing kasus sesuai filter.
-     */
     public function data(FilterRekapRequest $request): JsonResponse
     {
         $filters = $request->validated();
-
         $query = Kasus::query()
             ->with(['jenis_php', 'instansi'])
             ->whereNull('deleted_by')
@@ -95,8 +88,8 @@ final class RekapController extends Controller
             })
             ->addColumn('status_info', function (Kasus $kasus): string {
                 return (int) $kasus->selesai === 1
-                    ? '<span class="text-success dark:text-white/90">SELESAI</span>'
-                    : '<span class="text-danger dark:text-white/90">BELUM SELESAI</span>';
+                    ? '<span class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs text-green-700 ring-green-600/20 dark:bg-green-500/20 dark:text-green-400">SELESAI</span>'
+                    : '<span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs text-red-700 ring-red-600/20 dark:bg-red-500/20 dark:text-red-400">BELUM SELESAI</span>';
             })
             ->editColumn('tanggal_lhp', function (Kasus $kasus): string {
                 return $kasus->tanggal_lhp
@@ -118,9 +111,6 @@ final class RekapController extends Controller
             ->toJson();
     }
 
-    /**
-     * Tampilkan hasil "Cetak PHP" untuk satu kasus, di-load ke #lembarRekap via AJAX.
-     */
     public function cetakPhp(Kasus $kasus): View
     {
         $report = $this->phpReportBuilder->build($kasus);
@@ -135,9 +125,6 @@ final class RekapController extends Controller
         ]);
     }
 
-    /**
-     * Tampilkan hasil "Cetak TNK" (rekap tindak lanjut) untuk satu kasus.
-     */
     public function cetakTnk(Kasus $kasus): View
     {
         $report = $this->tnkReportBuilder->build($kasus);
@@ -158,9 +145,6 @@ final class RekapController extends Controller
         ]);
     }
 
-    /**
-     * Export "Cetak PHP" ke file Excel (.xlsx).
-     */
     public function exportPhp(Kasus $kasus): BinaryFileResponse
     {
         $namaObrik = $kasus->instansi?->nama_instansi ?? (string) $kasus->kode_unor;
@@ -170,9 +154,6 @@ final class RekapController extends Controller
         return Excel::download(new RekapPhpExport($kasus, $this->phpReportBuilder), $filename);
     }
 
-    /**
-     * Export "Cetak TNK" ke file Excel (.xlsx).
-     */
     public function exportTnk(Kasus $kasus): BinaryFileResponse
     {
         $kasus->loadMissing('jenis_php');
@@ -182,11 +163,6 @@ final class RekapController extends Controller
         return Excel::download(new RekapTnkExport($kasus, $this->tnkReportBuilder), $filename);
     }
 
-    /**
-     * Ambil daftar tahun pemeriksaan unik, diurutkan descending.
-     *
-     * @return \Illuminate\Support\Collection<int, string>
-     */
     private function getDistinctTahunPemeriksaan(): \Illuminate\Support\Collection
     {
         return Kasus::query()
@@ -219,9 +195,6 @@ final class RekapController extends Controller
         ]);
     }
 
-    /**
-     * Export "Cetak Kolektif TNK" ke file Excel (.xlsx).
-     */
     public function exportTnkKolektif(FilterRekapKolektifRequest $request): BinaryFileResponse
     {
         $filters = $request->validated();
@@ -244,9 +217,6 @@ final class RekapController extends Controller
         );
     }
 
-    /**
-     * Tampilkan halaman filter APBKAM.
-     */
     public function apbkam(SimakUnorService $simakUnorService): View
     {
         return view('rekap.apbkam', [
@@ -255,9 +225,6 @@ final class RekapController extends Controller
         ]);
     }
 
-    /**
-     * Tampilkan hasil rekap APBKAM (partial, di-load via AJAX ke #lembarRekap).
-     */
     public function cetakApbkam(FilterRekapApbkamRequest $request): View
     {
         $filters = $request->validated();
@@ -277,9 +244,6 @@ final class RekapController extends Controller
         ]);
     }
 
-    /**
-     * Export APBKAM ke Excel.
-     */
     public function exportApbkam(FilterRekapApbkamRequest $request): BinaryFileResponse
     {
         $filters = $request->validated();
@@ -300,9 +264,6 @@ final class RekapController extends Controller
         );
     }
 
-    /**
-     * Tampilkan halaman filter Rekap Pertahun.
-     */
     public function pertahun(): View
     {
         return view('rekap.pertahun', [
@@ -310,9 +271,6 @@ final class RekapController extends Controller
         ]);
     }
 
-    /**
-     * Tampilkan hasil rekap pertahun (partial, di-load via AJAX ke #lembarRekap).
-     */
     public function cetakPertahun(FilterRekapPertahunRequest $request): View
     {
         $filters = $request->validated();
@@ -329,9 +287,6 @@ final class RekapController extends Controller
         ]);
     }
 
-    /**
-     * Export Rekap Pertahun ke Excel.
-     */
     public function exportPertahun(FilterRekapPertahunRequest $request): BinaryFileResponse
     {
         $filters = $request->validated();
