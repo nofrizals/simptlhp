@@ -9,9 +9,9 @@ use App\Models\Tindaklanjut;
 use App\Models\VerifikasiSsr;
 use App\Models\FileTindakLanjut;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
 
 class VerifikasiSsrController extends Controller
 {
@@ -22,7 +22,7 @@ class VerifikasiSsrController extends Controller
 
     public function ajaxDataVerifikasiSsr()
     {
-        $data = VerifikasiSsr::with(['status', 'rekomendasi'])->orderBy('id', 'desc');
+        $data = VerifikasiSsr::with(['status', 'rekomendasi'])->where('id_status', 1)->orderBy('id', 'desc');
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('tgl_tindak_lanjut', function ($value) {
@@ -235,14 +235,6 @@ class VerifikasiSsrController extends Controller
             ], 422);
         }
 
-        // $adaBuktiPembayaran = Pembayaran::where('id_tindak_lanjut', $id)->exists();
-        // if (!$adaBuktiPembayaran) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Bukti pembayaran belum tersedia. Tidak dapat disetujui.'
-        //     ], 422);
-        // }
-
         $tindakLanjut = Tindaklanjut::findOrFail($id);
         $adaRincianKeuangan =
             (float) $tindakLanjut->rincian_keuangan != 0 ||
@@ -268,7 +260,6 @@ class VerifikasiSsrController extends Controller
                 'approve_by' => session('id_pegawai'),
             ]);
 
-            // Ubah status tindak lanjut
             $tindak_lanjut = Tindaklanjut::where('id_tindak_lanjut', $id)->firstOrFail();
 
             $tindak_lanjut->update([
@@ -303,9 +294,6 @@ class VerifikasiSsrController extends Controller
                 <img src="' . asset('images/pdf.png') . '" alt="PDF" width="40">
             </a>';
             })
-            // ->addColumn('nominal', function (Pembayaran $value): string {
-            //     return 'Rp ' . number_format((float) $value->nominal, 2, ',', '.');
-            // })
             ->addColumn('nominal', function (Pembayaran $value): string {
                 $nominal = ((int) $value->nominal) / 100;
 

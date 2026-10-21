@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rekomendasi;
-use App\Models\Temuan;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
+use App\Models\Temuan;
+use App\Models\Rekomendasi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 
 class RekomendasiController extends Controller
 {
@@ -20,7 +20,7 @@ class RekomendasiController extends Controller
             ->withCount('tindakLanjuts')
             ->with('tindakLanjutAktif.status')
             ->whereNull('deleted_by')
-            ->orderByDesc('id_temuan');
+            ->orderByDesc('id_rekomendasi');
 
         return DataTables::eloquent($data)
             ->addIndexColumn()
