@@ -22,7 +22,8 @@ class VerifikasiSsrController extends Controller
 
     public function ajaxDataVerifikasiSsr()
     {
-        $data = VerifikasiSsr::with(['status', 'rekomendasi'])->where('id_status', 1)->orderBy('id', 'desc');
+        $data = VerifikasiSsr::with(['status', 'rekomendasi'])->where('id_status', 1)->orderByRaw('CASE WHEN approve_by IS NULL AND reject_by IS NULL THEN 0 ELSE 1 END')
+            ->orderBy('id', 'desc');
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('tgl_tindak_lanjut', function ($value) {
