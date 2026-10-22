@@ -139,12 +139,39 @@ class AdminController extends Controller
                 return '<span class="dark:text-white/90">' . e($nama) . '</span>';
             })
             ->addColumn('level', function (User $user) {
-                return '<span class="dark:text-white/90">' . e($user->nama_level ?? '-') . '</span>';
+                $level = '<span class="dark:text-white/90">'
+                    . e($user->nama_level ?? '-')
+                    . '</span>';
+                if ($user->tingkatan_level == 2) {
+                    $tim = \Illuminate\Support\Facades\DB::table('kis_tim_anggota as a')
+                        ->join('kis_tims as b', 'a.id_tim', '=', 'b.id')
+                        ->where('a.id_user', $user->id_user)
+                        ->select('b.name', 'b.nip_ketua')
+                        ->first();
+                    if ($tim) {
+                        $level .= '<br><code class="text-red-400">['
+                            . e($tim->name)
+                            . ']</code>';
+
+                        $pegawai = \Illuminate\Support\Facades\DB::connection('mysql_root')
+                            ->table('kis_users')
+                            ->select('nama_pegawai', 'id_pegawai')
+                            ->where('id_pegawai', $tim->nip_ketua)
+                            ->where('id_app', 14)
+                            ->first();
+
+                        if ($pegawai) {
+                            $level .= '<br><span class="text-red-400">('
+                                . e($pegawai->nama_pegawai)
+                                . ')</span>';
+                        }
+                    }
+                }
+                return $level;
             })
             ->addColumn('action', function (User $user) {
                 $timId   = TimAnggota::where('id_user', $user->id_user)->value('id_tim') ?? '';
                 $isObrik = strlen((string) $user->kode_unor) === 8;
-
                 return $this->renderActionButtons($user, $timId, $isObrik);
             })
             ->rawColumns(['id_pegawai', 'nama_pegawai', 'nama_obrik', 'level', 'action'])
