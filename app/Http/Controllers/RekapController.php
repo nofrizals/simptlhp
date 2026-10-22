@@ -157,8 +157,10 @@ final class RekapController extends Controller
     public function exportTnk(Kasus $kasus): BinaryFileResponse
     {
         $kasus->loadMissing('jenis_php');
+        $jenisPhp = $kasus->jenis_php?->jenis_php ?? '';
+        $jenisPhp = preg_replace('/[\/\\\\]+/', '-', $jenisPhp);
         $filename = 'REKAPITULASI TINDAK LANJUT HASIL PEMERIKSAAN '
-            . $kasus->jenis_php?->jenis_php . ' TAHUN ' . $kasus->tahun_pemeriksaan . '.xlsx';
+            . $jenisPhp . ' TAHUN ' . $kasus->tahun_pemeriksaan . '.xlsx';
 
         return Excel::download(new RekapTnkExport($kasus, $this->tnkReportBuilder), $filename);
     }
