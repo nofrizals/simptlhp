@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Instansi;
 use App\Models\Tim;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Instansi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
 
 class ObrikDitanganiController extends Controller
 {
@@ -27,7 +26,8 @@ class ObrikDitanganiController extends Controller
                 return '<span class="dark:text-white/90">' . ucwords(strtolower($value->nama_instansi)) ?? '-' . '</span>';
             })
             ->addColumn('id_tim', function ($value) {
-                return '<span class="dark:text-white/90">' . $value->tim->name ?? '-' . '</span>';
+                return '<span class="dark:text-white/90">' . ($value->tim?->name ?? '-')
+                    . '</span>';
             })
             ->addColumn('action', function ($value) {
                 return '
