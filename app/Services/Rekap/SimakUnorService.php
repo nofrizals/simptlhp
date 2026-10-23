@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services\Rekap;
 
-use App\Models\Instansi;
 use App\Models\Unor;
+use App\Models\Instansi;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 final class SimakUnorService
 {
-    /**
-     * Replikasi Simak::getByKodeUnor() (CI): coba resolve dari `m_unor` (mysql_simak)
-     * untuk kode setingkat kecamatan (<=5 karakter), fallback ke `kis_instansis`,
-     * dan terakhir kembalikan kode mentah kalau semua gagal.
-     */
     public function resolveNamaKecamatan(string $kodeUnor): string
     {
         if (strlen($kodeUnor) <= 5) {
@@ -31,31 +26,48 @@ final class SimakUnorService
         return $instansi?->nama_instansi ?? $kodeUnor;
     }
 
-    /**
-     * Replikasi Simak_model::readKecamatan() — daftar kecamatan untuk dropdown filter.
-     *
-     * @return Collection<int, Unor>
-     */
     // public function listKecamatan(): Collection
     // {
-    //     return Unor::query()
-    //         ->whereRaw('CHAR_LENGTH(kode_unor) = 5')
-    //         ->whereRaw('RIGHT(kode_unor, 2) >= 32')
-    //         ->whereRaw('RIGHT(kode_unor, 2) <= 45')
-    //         ->orderBy('nama_unor')
-    //         ->get();
+    //     return Cache::remember('rekap.kecamatan-list', now()->addHours(6), function () {
+    //         $query = Unor::query()
+    //             ->whereRaw('CHAR_LENGTH(kode_unor) = 5')
+    //             ->whereRaw('RIGHT(kode_unor, 2) >= 32')
+    //             ->whereRaw('RIGHT(kode_unor, 2) <= 45');
+
+    //         $tim = session('tim');
+    //         if ($tim) {
+    //             $query->where('id_tim', $tim);
+    //         }
+
+    //         return $query
+    //             ->orderBy('nama_unor')
+    //             ->get();
+    //     });
     // }
 
 
     public function listKecamatan(): Collection
     {
-        return Cache::remember('rekap.kecamatan-list', now()->addHours(6), function () {
-            return Unor::query()
-                ->whereRaw('CHAR_LENGTH(kode_unor) = 5')
-                ->whereRaw('RIGHT(kode_unor, 2) >= 32')
-                ->whereRaw('RIGHT(kode_unor, 2) <= 45')
-                ->orderBy('nama_unor')
-                ->get();
-        });
+        $tim = session('tim');
+        $cacheKey = 'rekap.kecamatan-list.' . ($tim ?? 'semua');
+
+        return Cache::remember(
+            $cacheKey,
+            now()->addHours(6),
+            function () use ($tim) {
+                $query = Instansi::query()
+                    ->whereRaw('CHAR_LENGTH(kode_instansi) = 5')
+                    ->whereRaw('RIGHT(kode_instansi, 2) >= 32')
+                    ->whereRaw('RIGHT(kode_instansi, 2) <= 45');
+
+                if ($tim !== null && $tim !== '') {
+                    $query->where('id_tim', $tim);
+                }
+
+                return $query
+                    ->orderBy('nama_instansi')
+                    ->get();
+            }
+        );
     }
 }
