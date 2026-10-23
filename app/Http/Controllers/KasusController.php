@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Unor;
 use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
@@ -20,13 +19,11 @@ class KasusController extends Controller
     public function index()
     {
         $ketua_tims = PegawaiSimak::select('id_pegawai', 'nama_pegawai', 'nip_baru')->where('kode_unor', 'LIKE', '01.09%')->distinct()->orderBy('nama_pegawai')->get();
-        $instansiList = Unor::instansi()->get();
-        $kecamatanList = Unor::kecamatan()->get();
-        $turunanList = Instansi::readTurunan();
+        $turunanList = Instansi::read();
         $obrikList = Instansi::read(true);
         $jenisPhp = JenisPhp::whereNull('deleted_at')->get();
         $status = StatusTl::get();
-        return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'instansiList', 'kecamatanList', 'turunanList', 'obrikList', 'ketua_tims', 'status'));
+        return view('pages.manajemen-kasus.kasus', compact('jenisPhp', 'turunanList', 'obrikList', 'ketua_tims', 'status'));
     }
 
     public function ajaxDataDaftarKasus(Request $request)

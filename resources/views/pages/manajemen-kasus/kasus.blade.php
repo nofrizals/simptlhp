@@ -159,15 +159,6 @@
                                             class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                                             Pilih OPD
                                         </option>
-                                        @foreach ($instansiList as $instansi)
-                                            <option value="{{ $instansi['kode_unor'] }}">
-                                                {{ ucwords(strtolower($instansi['nama_unor'])) }}
-                                            </option>
-                                        @endforeach
-                                        @foreach ($kecamatanList as $kecamatan)
-                                            <option value="{{ $kecamatan['kode_unor'] }}">
-                                                {{ ucwords(strtolower($kecamatan['nama_unor'])) }}</option>
-                                        @endforeach
                                         @foreach ($turunanList as $turunanmini)
                                             <option value="{{ $turunanmini['kode_instansi'] }}">
                                                 {{ ucwords(strtolower($turunanmini['nama_instansi'])) }}</option>

@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Instansi;
-use App\Models\Level;
-use App\Models\PegawaiSimak;
 use App\Models\Tim;
-use App\Models\TimAnggota;
-use App\Models\Unor;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use App\Models\Level;
+use App\Models\Instansi;
 use Illuminate\View\View;
+use App\Models\TimAnggota;
+use App\Models\PegawaiSimak;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -46,16 +45,6 @@ class AdminController extends Controller
 
     public function index(): View
     {
-        // $instansis = Unor::whereRaw('CHAR_LENGTH(kode_unor) <= 5')
-        //     ->whereRaw('RIGHT(kode_unor, 2) < 32')
-        //     ->get(['kode_unor', 'nama_unor'])
-        //     ->map(fn($i) => ['kode' => $i->kode_unor, 'nama' => $i->nama_unor]);
-
-        // $kecamatans = Unor::whereRaw('CHAR_LENGTH(kode_unor) = ?', [5])
-        //     ->whereRaw('RIGHT(kode_unor, 2) BETWEEN ? AND ?', [32, 45])
-        //     ->get(['kode_unor', 'nama_unor'])
-        //     ->map(fn($i) => ['kode' => $i->kode_unor, 'nama' => $i->nama_unor]);
-
         $turunansmini = Instansi::where('kode_instansi', 'like', 'obrik%')
             ->get(['kode_instansi', 'nama_instansi'])
             ->map(fn($tm) => ['kode' => $tm->kode_instansi, 'nama' => $tm->nama_instansi]);
@@ -74,23 +63,15 @@ class AdminController extends Controller
             ->orderBy('tingkatan_level')
             ->get();
 
-        // $instansiList = Instansi::query()->orderBy('nama_instansi')->get();
-
-        $instansiList = Unor::instansi()->get();
-        $kecamatanList = Unor::kecamatan()->get();
-        $turunanList = Instansi::readTurunan();
+        $turunanList = Instansi::read();
         $obrikList = Instansi::read(true);
 
         $tims = Tim::with('ketua')->get();
 
         return view('admin', compact(
-            // 'instansis',
-            // 'kecamatans',
             'turunansmini',
             'levels',
             'tims',
-            'instansiList',
-            'kecamatanList',
             'turunanList',
             'obrikList',
             'obriks',

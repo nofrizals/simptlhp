@@ -4,31 +4,30 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exports\RekapApbkamExport;
-use App\Exports\RekapPertahunExport;
+use Carbon\Carbon;
+use App\Models\Kasus;
+use App\Models\Instansi;
+use App\Models\JenisPhp;
 use App\Exports\RekapPhpExport;
 use App\Exports\RekapTnkExport;
+use Illuminate\Http\JsonResponse;
+use App\Exports\RekapApbkamExport;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RekapPertahunExport;
 use App\Exports\RekapTnkKolektifExport;
+use Yajra\DataTables\Facades\DataTables;
+use App\Services\Rekap\SimakUnorService;
+use App\Services\Rekap\RekapTnkReportBuilder;
+use App\Services\Rekap\RekapPhpReportBuilder;
+use App\Http\Requests\Rekap\FilterRekapRequest;
+use App\Services\Rekap\RekapApbkamReportBuilder;
+use App\Services\Rekap\RekapPertahunReportBuilder;
+use App\Services\Rekap\RekapTnkKolektifReportBuilder;
 use App\Http\Requests\Rekap\FilterRekapApbkamRequest;
 use App\Http\Requests\Rekap\FilterRekapKolektifRequest;
 use App\Http\Requests\Rekap\FilterRekapPertahunRequest;
-use App\Http\Requests\Rekap\FilterRekapRequest;
-use App\Models\Instansi;
-use App\Models\JenisPhp;
-use App\Models\Kasus;
-use App\Models\Unor;
-use App\Services\Rekap\RekapApbkamReportBuilder;
-use App\Services\Rekap\RekapPertahunReportBuilder;
-use App\Services\Rekap\RekapPhpReportBuilder;
-use App\Services\Rekap\RekapTnkKolektifReportBuilder;
-use App\Services\Rekap\RekapTnkReportBuilder;
-use App\Services\Rekap\SimakUnorService;
-use Carbon\Carbon;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
-use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Yajra\DataTables\Facades\DataTables;
 
 final class RekapController extends Controller
 {
@@ -45,9 +44,7 @@ final class RekapController extends Controller
         return view('rekap.php-tnk', [
             'jenisPhpList'      => JenisPhp::query()->whereNull('deleted_at')->orderBy('jenis_php')->get(),
             'tahunPemeriksaan'  => $this->getDistinctTahunPemeriksaan(),
-            'instansiList'      => Unor::instansi()->get(),
-            'kecamatanList'     => Unor::kecamatan()->get(),
-            'turunanList'       => Instansi::readTurunan(),
+            'turunanList'       => Instansi::read(),
             'obrikList'         => Instansi::read(true)
         ]);
     }

@@ -59,19 +59,6 @@
                                 <option value="{{ session('kode_unor') }}" selected>{{ session('nama_opd') }}</option>
                             @else
                                 <option value="semua" selected>Semua Obrik</option>
-                                @foreach ($instansiList as $vinstansi)
-                                    <option value="{{ $vinstansi->kode_unor }}">
-                                        {{ strtoupper($vinstansi->nama_unor) }}
-                                    </option>
-                                @endforeach
-
-                                {{-- Kecamatan --}}
-                                @foreach ($kecamatanList as $vkecamatan)
-                                    <option value="{{ $vkecamatan->kode_unor }}">
-                                        {{ strtoupper($vkecamatan->nama_unor) }}
-                                    </option>
-                                @endforeach
-
                                 {{-- Instansi turunan --}}
                                 @foreach ($turunanList as $vturunan)
                                     <option value="{{ $vturunan->kode_instansi }}">
@@ -352,11 +339,6 @@
                 }
             });
 
-
-            // $('#customSearch').on('input', function() {
-            //     dtRekap.search(this.value).draw();
-            // });
-
             $('#pageLength').on('change', function() {
                 dtRekap.page.len(this.value).draw();
             });
@@ -468,9 +450,6 @@
                 });
             });
 
-            // Export Excel: baik #rekapphp-xlsx maupun #rekaptnk-xlsx dirender di dalam
-            // partial cetak-php/cetak-tnk (delegasi event lewat document, bukan #lembarRekap,
-            // supaya tetap kena walau elemen baru dimuat via AJAX).
             $(document).on('click', '#rekapphp-xlsx', function() {
                 let idKasus = $(this).data('id');
                 window.location.href = URL.exportPhp.replace('__ID__', idKasus);
@@ -541,9 +520,6 @@
 
                 printWindow.document.close();
                 printWindow.focus();
-
-                // Tunggu render selesai sebelum memanggil print(), supaya dialog cetak
-                // tidak muncul sebelum layout & style selesai di-apply oleh browser.
                 printWindow.onload = function() {
                     printWindow.print();
                     printWindow.close();

@@ -72,19 +72,4 @@ class Instansi extends Model
             ->orderBy('kode_instansi', 'asc')
             ->get();
     }
-
-    public static function readTurunan()
-    {
-        $query = self::query()
-            ->whereRaw('CHAR_LENGTH(TRIM(kode_instansi)) = ?', [8])
-            ->where('kode_instansi', 'not like', 'obrik%');
-
-        $tim = session('tim');
-
-        if ($tim) {
-            $query->where('id_tim', $tim);
-        }
-
-        return $query->get();
-    }
 }
