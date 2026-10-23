@@ -137,7 +137,7 @@ Route::middleware('app.auth')->group(function () {
         Route::delete('file-tindak-lanjut/{id}', [FileTindakLanjutController::class, 'destroyFileTindakLanjut'])->name('tindak_lanjut.destroyFileTindakLanjut');
     });
     // Manajemen Kasus -> Verifikasi SSR
-    Route::middleware('level:1,2,5')->group(function () {
+    Route::middleware('level:1,5')->group(function () {
         Route::get('verifikasi-ssr', [VerifikasiSsrController::class, 'index']);
         Route::post('ajax-data-verifikasi-ssr', [VerifikasiSsrController::class, 'ajaxDataVerifikasiSsr']);
         Route::get('verifikasi-ssr/approve/{label}', [VerifikasiSsrController::class, 'approve'])->name('verifikasi-ssr.approve');

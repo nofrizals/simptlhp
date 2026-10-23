@@ -271,18 +271,20 @@
                                             Daftar Kasus
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="{{ url('verifikasi-ssr') }}"
-                                            class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('verifikasi-ssr*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
-                                            <span>Verifikasi SSR</span>
-                                            @if ($countApprove > 0)
-                                                <span
-                                                    class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
-                                                    {{ $countApprove }}
-                                                </span>
-                                            @endif
-                                        </a>
-                                    </li>
+                                    @if (session('level') === '1')
+                                        <li>
+                                            <a href="{{ url('verifikasi-ssr') }}"
+                                                class="menu-dropdown-item group flex items-center gap-2 {{ request()->is('verifikasi-ssr*') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive' }}">
+                                                <span>Verifikasi SSR</span>
+                                                @if ($countApprove > 0)
+                                                    <span
+                                                        class="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+                                                        {{ $countApprove }}
+                                                    </span>
+                                                @endif
+                                            </a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                             <!-- Dropdown Menu End -->
