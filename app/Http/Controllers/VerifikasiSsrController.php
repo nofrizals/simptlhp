@@ -24,6 +24,11 @@ class VerifikasiSsrController extends Controller
     {
         $data = VerifikasiSsr::with(['status', 'rekomendasi'])->where('id_status', 1)->orderByRaw('CASE WHEN approve_by IS NULL AND reject_by IS NULL THEN 0 ELSE 1 END')
             ->orderBy('id', 'desc');
+        if (session('tim')) {
+            $data->whereHas('rekomendasi.temuan.kasus.instansi', function (Builder $data): void {
+                $data->where('id_tim', session('tim'));
+            });
+        }
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('tgl_tindak_lanjut', function ($value) {
