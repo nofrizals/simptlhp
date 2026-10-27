@@ -202,7 +202,7 @@
     <script>
         $(document).ready(function() {
             function showSection(id) {
-                $('#sectionRekomendasi, #sectionTindakLanjut').addClass('hidden');
+                $('#sectionRekomendasi, #sectionTindakLanjut, #pembayaranTable').addClass('hidden');
                 $('#' + id).removeClass('hidden').css('opacity', 0).animate({
                     opacity: 1
                 }, 200);
