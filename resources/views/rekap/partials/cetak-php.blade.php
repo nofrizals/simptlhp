@@ -189,7 +189,8 @@
         overflow-wrap: anywhere !important;
         word-break: break-word !important;
     ">
-                                    {{ $row['tgl_tindak_lanjut'] ? \Carbon\Carbon::parse($row['tgl_tindak_lanjut'])->translatedFormat('d F Y') : '-' }}
+                                    {{-- {{ $row['tgl_tindak_lanjut'] ? \Carbon\Carbon::parse($row['tgl_tindak_lanjut'])->translatedFormat('d F Y') : '-' }} --}}
+                                    {{ !empty($row['created_at']) ? \Carbon\Carbon::parse($row['created_at'])->translatedFormat('d F Y') : '-' }}
                                     <br>
                                     Petugas entry : {{ $row['created_by_nama'] ?? '-' }}
                                     <br><br>

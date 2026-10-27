@@ -140,6 +140,7 @@ final class RekapPhpReportBuilder
                     'tgl_tindak_lanjut' => $tindakLanjut?->tgl_tindak_lanjut,
                     'created_by_nama'   => $tindakLanjut?->createdBy?->nama_pegawai,
                     'edited_by_nama'    => $tindakLanjut?->editedBy?->nama_pegawai,
+                    'created_at'        => $tindakLanjut?->created_at,
                     'edited_at'         => $tindakLanjut?->edited_at,
                 ];
 
