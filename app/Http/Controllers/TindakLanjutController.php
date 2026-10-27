@@ -205,9 +205,7 @@ class TindakLanjutController extends Controller
     {
         $rekomendasi->loadMissing('temuan');
         $temuan = $rekomendasi->temuan;
-
         $currentId = $request->filled('id') ? $request->integer('id') : null;
-
         $nominalFields = [
             'rincian_keuangan',
             'setor',
@@ -218,7 +216,6 @@ class TindakLanjutController extends Controller
             'rincian_keuangan4',
             'setor4',
         ];
-
         foreach ($nominalFields as $field) {
             if ($request->has($field)) {
                 $request->merge([
@@ -228,7 +225,6 @@ class TindakLanjutController extends Controller
                 ]);
             }
         }
-
         $validator = Validator::make($request->all(), [
             'tindak_lanjut'      => 'nullable|string',
             'rincian_keuangan'   => 'nullable|numeric|min:0',
@@ -251,7 +247,6 @@ class TindakLanjutController extends Controller
             'tgl_tindak_lanjut.required' => 'Tanggal tindak lanjut wajib diisi.',
             'tgl_tindak_lanjut.date'     => 'Tanggal tindak lanjut tidak valid.',
         ]);
-
         $validator->after(function ($validator) use ($request, $temuan, $currentId) {
             $categories = [
                 'rincian_keuangan'  => 'besaran_kerugian',
@@ -259,25 +254,18 @@ class TindakLanjutController extends Controller
                 'rincian_keuangan3' => 'besaran_kerugian3',
                 'rincian_keuangan4' => 'besaran_kerugian4',
             ];
-
-            // Semua rekomendasi di bawah temuan yang sama, karena TindakLanjut
-            // tidak punya FK langsung ke Temuan.
             $idRekomendasiList = Rekomendasi::where('id_temuan', $temuan->id_temuan)
                 ->pluck('id_rekomendasi');
-
             foreach ($categories as $field => $besaranField) {
                 $nilaiBaru = (float) $request->input($field, 0);
                 if ($nilaiBaru <= 0) {
                     continue;
                 }
-
                 $besaran = (float) ($temuan->{$besaranField} ?? 0);
-
                 $totalTerpakai = (float) Tindaklanjut::whereIn('id_rekomendasi', $idRekomendasiList)
                     ->whereNull('deleted_by')
                     ->when($currentId, fn($q) => $q->where('id_tindak_lanjut', '!=', $currentId))
                     ->sum($field);
-
                 if (($totalTerpakai + $nilaiBaru) > $besaran) {
                     $sisa = max($besaran - $totalTerpakai, 0);
                     $validator->errors()->add(
@@ -297,51 +285,79 @@ class TindakLanjutController extends Controller
 
         $validated = $validator->safe()->except('id');
         $validated['id_rekomendasi'] = $rekomendasi->id_rekomendasi;
-
-        if ($request->filled('id')) {
-            $temuanRow = Tindaklanjut::where('id_rekomendasi', $rekomendasi->id_rekomendasi)
-                ->findOrFail($currentId);
-            $validated['edited_by'] = (string) session('id_pegawai');
-            $validated['edited_at'] = now();
-            $temuanRow->update($validated);
-            // Ambil status dari request/validated,
-            // karena Tindaklanjut.id_status bisa NULL untuk SSR
-            $idStatus = (int) $validated['id_status'];
-
-            // Jika status hasil edit adalah SSR
-            if ($idStatus === 1) {
-                $verifikasiSsrRow = VerifikasiSsr::where(
-                    'id_tindak_lanjut',
-                    $temuanRow->id_tindak_lanjut
-                )
-                    ->latest('id')
-                    ->first();
-
-                if ($verifikasiSsrRow) {
-                    $verifikasiSsrRow->update([
-                        'reject_by'   => null,
-                        'reject_at'   => null,
-                        'reject_note' => null,
-                    ]);
+        $message = $request->filled('id') ? 'Data berhasil diupdate' : 'Data berhasil ditambahkan';
+        $temuanRow = DB::transaction(function () use (
+            $request,
+            $validated,
+            $currentId
+        ) {
+            $isEdit = $request->filled('id');
+            if ($isEdit) {
+                $temuanRow = Tindaklanjut::where('id_rekomendasi', $validated['id_rekomendasi'])->findOrFail($currentId);
+                $idStatus = (int) $validated['id_status'];
+                $now = now();
+                $pegawai = (string) session('id_pegawai');
+                $dataTindaklanjut = $validated;
+                if ($idStatus === 1) {
+                    $dataTindaklanjut['id_status'] = null;
                 }
+                $dataTindaklanjut['edited_by'] = $pegawai;
+                $dataTindaklanjut['edited_at'] = $now;
+                $temuanRow->update($dataTindaklanjut);
+                $verifikasi = VerifikasiSsr::where('id_tindak_lanjut', $temuanRow->id_tindak_lanjut)->latest('id')->first();
+                if ($verifikasi) {
+                    $dataVerifikasi = $validated;
+                    $dataVerifikasi['id_status'] = $idStatus;
+                    unset(
+                        $dataVerifikasi['created_by'],
+                        $dataVerifikasi['created_at']
+                    );
+                    $dataVerifikasi['edited_by'] = $pegawai;
+                    $dataVerifikasi['edited_at'] = $now;
+                    if ($idStatus === 1) {
+                        $dataVerifikasi['reject_by'] = null;
+                        $dataVerifikasi['reject_at'] = null;
+                        $dataVerifikasi['reject_note'] = null;
+                    }
+                    $verifikasi->update($dataVerifikasi);
+                } else {
+                    $dataVerifikasi = $validated;
+                    $dataVerifikasi['id_status'] = $idStatus;
+                    $dataVerifikasi['id_tindak_lanjut'] =
+                        $temuanRow->id_tindak_lanjut;
+                    $dataVerifikasi['label'] = (string) Str::uuid();
+                    $dataVerifikasi['created_by'] = $pegawai;
+                    $dataVerifikasi['created_at'] = $now;
+
+                    if ($idStatus === 1) {
+                        $dataVerifikasi['reject_by'] = null;
+                        $dataVerifikasi['reject_at'] = null;
+                        $dataVerifikasi['reject_note'] = null;
+                    }
+                    VerifikasiSsr::create($dataVerifikasi);
+                }
+                return $temuanRow;
             }
-            $message = 'Data berhasil diupdate';
-        } else {
-            DB::transaction(function () use ($validated, &$temuanRow) {
-                $idStatus = $validated['id_status'];
-                if ((int) $validated['id_status'] === 1) {
-                    $validated['id_status'] = null;
-                }
-                $validated['created_by'] = (string) session('id_pegawai');
-                $validated['created_at'] = now();
-                $temuanRow = Tindaklanjut::create($validated);
-                $validated['label'] = Str::uuid();
-                $validated['id_status'] = $idStatus;
-                $validated['id_tindak_lanjut'] = $temuanRow->id_tindak_lanjut;
-                $temuanRow = VerifikasiSsr::create($validated);
-            });
-            $message = 'Data berhasil ditambahkan';
-        }
+            $idStatus = (int) $validated['id_status'];
+            $pegawai = (string) session('id_pegawai');
+            $now = now();
+
+            $dataTindaklanjut = $validated;
+            if ($idStatus === 1) {
+                $dataTindaklanjut['id_status'] = null;
+            }
+            $dataTindaklanjut['created_by'] = $pegawai;
+            $dataTindaklanjut['created_at'] = $now;
+            $temuanRow = Tindaklanjut::create($dataTindaklanjut);
+            $dataVerifikasi = $validated;
+            $dataVerifikasi['id_status'] = $idStatus;
+            $dataVerifikasi['id_tindak_lanjut'] = $temuanRow->id_tindak_lanjut;
+            $dataVerifikasi['label'] = (string) Str::uuid();
+            $dataVerifikasi['created_by'] = $pegawai;
+            $dataVerifikasi['created_at'] = $now;
+            VerifikasiSsr::create($dataVerifikasi);
+            return $temuanRow;
+        });
 
         return response()->json([
             'status'  => (bool) $temuanRow,
@@ -351,10 +367,11 @@ class TindakLanjutController extends Controller
 
     public function edit(Tindaklanjut $tindaklanjut): JsonResponse
     {
+        $verifikasi = VerifikasiSsr::where('id_tindak_lanjut', $tindaklanjut->id_tindak_lanjut)->latest('id')->first();
         return response()->json([
             'id'                    => $tindaklanjut->id_tindak_lanjut,
             'tgl_tindak_lanjut'     => $tindaklanjut->tgl_tindak_lanjut,
-            'id_status'             => $tindaklanjut->id_status,
+            'id_status'             => $tindaklanjut->id_status ?? $verifikasi?->id_status,
             'tindak_lanjut'         => $tindaklanjut->tindak_lanjut,
             'keterangan'            => $tindaklanjut->keterangan,
             'rincian_keuangan'      => $tindaklanjut->rincian_keuangan,
@@ -369,18 +386,19 @@ class TindakLanjutController extends Controller
         if ($tindaklanjut->pembayarans()->exists()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Data tidak dapat dihapus karena masih memiliki data pembayaran.'
+                'message' => 'Data tidak dapat dihapus karena masih memiliki data pembayaran.',
             ], 422);
         }
 
         DB::transaction(function () use ($tindaklanjut) {
-            $tindaklanjut->verifikasiSsr()->delete();
+            $idTindaklanjut = $tindaklanjut->id_tindak_lanjut;
+            VerifikasiSsr::where('id_tindak_lanjut', $idTindaklanjut)->delete();
             $tindaklanjut->delete();
         });
 
         return response()->json([
             'status' => true,
-            'message' => 'Data berhasil dihapus.'
+            'message' => 'Data berhasil dihapus.',
         ]);
     }
 
