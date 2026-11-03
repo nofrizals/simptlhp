@@ -393,6 +393,7 @@ class AdminController extends Controller
                     data-id_pegawai="' . e($user->id_pegawai) . '"
                     data-nama="' . e($user->nama_pegawai) . '"
                     data-level="' . $user->tingkatan_level . '"
+                    data-simak="' . $user->simak . '"
                     data-obrik="' . ($isObrik ? '1' : '0') . '"
                     data-nama_obrik="' . e((string) ($user->instansi?->id_instansi ?? '')) . '"
                     data-tim="' . e((string) $timId) . '"
