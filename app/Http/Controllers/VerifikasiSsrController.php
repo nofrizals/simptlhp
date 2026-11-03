@@ -181,7 +181,6 @@ class VerifikasiSsrController extends Controller
 
         try {
             $verifikasiSsr = VerifikasiSsr::where('id_tindak_lanjut', $id)->first();
-            // $tindakLanjut = Tindaklanjut::where('id_tindak_lanjut', $id)->first();
             if (!$verifikasiSsr) {
                 return response()->json([
                     'status' => false,
@@ -191,15 +190,16 @@ class VerifikasiSsrController extends Controller
 
             $verifikasiSsr->approve_at  = NULL;
             $verifikasiSsr->approve_by  = NULL;
-            $verifikasiSsr->id_status   = 1;
+            $verifikasiSsr->id_status   = 2;
             $verifikasiSsr->reject_at   = now();
             $verifikasiSsr->reject_by   = session('id_pegawai');
             $verifikasiSsr->reject_note = $request->catatan;
             $verifikasiSsr->save();
 
-            // $tindakLanjut->update([
-            //     'id_status' => 2
-            // ]);
+            // Update hanya status pada model TindakLanjut
+            Tindaklanjut::where('id_tindak_lanjut', $id)->update([
+                'id_status' => 2,
+            ]);
 
             return response()->json([
                 'status' => true,

@@ -63,11 +63,11 @@ class TindakLanjutController extends Controller
             })
             ->addColumn('status_tindak_lanjut', function (Tindaklanjut $value): string {
                 if ($value->status?->status_tl) {
-                    // if ($value->id_status == 2) {
-                    //     $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '</b><br> Note: <code>' . e($value->verifikasiSsr?->reject_note ?: '-') . '</code>';
-                    // } else {
-                    $status_tindak_lanjut = $value->status?->status_tl;
-                    // }
+                    if ($value->id_status == 2) {
+                        $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '</b><br> Note: <code>' . e($value->verifikasiSsr?->reject_note ?: '-') . '</code>';
+                    } else {
+                        $status_tindak_lanjut = $value->status?->status_tl;
+                    }
                 } else {
                     $status_tindak_lanjut = '-';
                 }
@@ -77,11 +77,9 @@ class TindakLanjutController extends Controller
                 return '<span class="dark:text-white/90">' . e($value->keterangan) ?: '-' . '</span>';
             })
             ->addColumn('log', function (Tindaklanjut $value): string {
-
                 $status = $value->deleted_by === null
                     ? '<span class="inline-flex items-center rounded-full border border-green-200 bg-green-100 dark:bg-green-500 px-3 py-1 text-xs font-medium text-green-700 dark:text-white/90">Aktif</span>'
                     : '<span class="inline-flex items-center rounded-full border border-red-200 bg-red-100 dark:bg-red-500 px-3 py-1 text-xs font-medium text-red-700 dark:text-white/90">Tidak Aktif</span>';
-
                 if ($value->edited_by) {
                     $log = '<span class="text-gray-600 dark:text-white/90">Diedit oleh <strong>' . e($value->editedBy->nama_pegawai ?? $value->edited_by) . '</strong><br>'
                         . optional(Carbon::parse($value->edited_at ?? '-'))->translatedFormat('d F Y') . '</span>';
@@ -120,48 +118,34 @@ class TindakLanjutController extends Controller
                             data-open="tabPembayaran">
                             Pembayaran
                         </a>';
-
-                // if ($value->id_status != 1) {
-                //     $action .= '
-                //             <a href="javascript:void(0)"
-                //                 data-id="' . $value->id_tindak_lanjut . '"
-                //                 title="Hapus"
-                //                 class="btn-deleteTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
-                //                     bg-red-50 text-red-600 border border-red-200                                    
-                //                     dark:bg-red-800 dark:text-white/90
-                //                     hover:bg-red-600 hover:text-white
-                //                     dark:hover:bg-amber-200
-                //                     transition duration-200 text-sm font-medium">
-                //                 Hapus
-                //             </a>
-
-                //             <a href="javascript:void(0)"
-                //                 data-id="' . $value->id_tindak_lanjut . '"
-                //                 class="btn-editTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md
-                //                     bg-emerald-50 text-emerald-600 border border-emerald-200
-                //                     dark:bg-emerald-800 dark:text-white/90
-                //                     hover:bg-emerald-600 hover:text-white
-                //                     dark:hover:bg-emerald-200
-                //                     transition duration-200 dark:hover:text-emerald-400 dark:text-white/90 text-sm font-medium"
-                //                 title="Edit">
-                //                 Edit
-                //             </a>';
-                // }
-
-                if ($value->id_status != 1) {
+                // Tombol Hapus hanya tampil jika id_status tidak null dan bukan 1
+                if ($value->id_status !== null && $value->id_status != 1) {
                     $action .= '
                         <a href="javascript:void(0)"
                             data-id="' . $value->id_tindak_lanjut . '"
                             title="Hapus"
-                            class="btn-deleteTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md bg-red-50 text-red-600 border border-red-200 dark:bg-red-800 dark:text-white/90 hover:bg-red-600 hover:text-white dark:hover:bg-amber-200 transition duration-200 text-sm font-medium">Hapus
+                            class="btn-deleteTindakLanjut flex items-center justify-center
+                            px-3 py-1.5 rounded-md bg-red-50 text-red-600 border border-red-200
+                            dark:bg-red-800 dark:text-white/90 hover:bg-red-600 hover:text-white
+                            dark:hover:bg-amber-200 transition duration-200 text-sm font-medium">Hapus
                         </a>';
                 }
 
-                if ($value->id_status != 1 || session('level') == 1) {
+                // Tombol Edit hanya tampil jika id_status tidak null
+                // dan status bukan 1, atau level pengguna adalah 1
+                if (
+                    $value->id_status !== null &&
+                    ($value->id_status != 1 || session('level') == 1)
+                ) {
                     $action .= '
                         <a href="javascript:void(0)"
                             data-id="' . $value->id_tindak_lanjut . '"
-                            class="btn-editTindakLanjut flex items-center justify-center px-3 py-1.5 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-800 dark:text-white/90 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-200 transition duration-200 dark:hover:text-emerald-400 dark:text-white/90 text-sm font-medium" title="Edit">Edit
+                            class="btn-editTindakLanjut flex items-center justify-center px-3 py-1.5
+                            rounded-md bg-emerald-50 text-emerald-600 border border-emerald-200
+                            dark:bg-emerald-800 dark:text-white/90 hover:bg-emerald-600
+                            hover:text-white dark:hover:bg-emerald-200 transition duration-200
+                            dark:hover:text-emerald-400 dark:text-white/90 text-sm font-medium"
+                            title="Edit">Edit
                         </a>';
                 }
                 $action .= '

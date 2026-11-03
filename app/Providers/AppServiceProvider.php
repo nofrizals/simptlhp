@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Carbon::setLocale('id');
         View::composer('partials.sidebar', function ($view) {
             $data = VerifikasiSsr::whereNull('approve_by')->whereNull('reject_by')->where('id_status', 1);
             if (session('tim')) {
