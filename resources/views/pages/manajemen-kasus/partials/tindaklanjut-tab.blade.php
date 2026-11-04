@@ -132,7 +132,8 @@
                                     <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
                                         Rincian Temuan Keuangan Blud
                                     </th>
-                                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                                    <th id="th-status-tindak-lanjut"
+                                        class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
                                         Status Tindak Lanjut
                                     </th>
                                     <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">

@@ -21,6 +21,13 @@ class TindakLanjutController extends Controller
 {
     public function ajaxData(Request $request, Rekomendasi $rekomendasi): JsonResponse
     {
+        $idKasus = $rekomendasi->temuan()->value('id_kasus');
+        $hasRejectNote = VerifikasiSsr::query()
+            ->whereNotNull('reject_note')
+            ->where('reject_note', '!=', '')
+            ->whereHas('rekomendasi.temuan', function ($query) use ($idKasus) {
+                $query->where('id_kasus', $idKasus);
+            })->exists();
         $data = Tindaklanjut::query()
             ->where('id_rekomendasi', $rekomendasi->id_rekomendasi)->whereNull('deleted_by')
             ->orderByDesc('id_rekomendasi');
@@ -64,14 +71,14 @@ class TindakLanjutController extends Controller
             ->addColumn('status_tindak_lanjut', function (Tindaklanjut $value): string {
                 if ($value->status?->status_tl) {
                     if ($value->id_status == 2) {
-                        $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '</b><br> Note: <code>' . e($value->verifikasiSsr?->reject_note ?: '-') . '</code>';
+                        $status_tindak_lanjut = '<b>' . $value->status?->status_tl . '<div class="text-red-400"></b> Note: <code>' . e($value->verifikasiSsr?->reject_note ?: '-') . '</code></div>';
                     } else {
                         $status_tindak_lanjut = $value->status?->status_tl;
                     }
                 } else {
                     $status_tindak_lanjut = '-';
                 }
-                return '<span class="dark:text-white/90">' . $status_tindak_lanjut . '</span>';
+                return '<span class="dark:text-white/90 whitespace-normal break-words">' . $status_tindak_lanjut . '</span>';
             })
             ->addColumn('keterangan', function (Tindaklanjut $value): string {
                 return '<span class="dark:text-white/90">' . e($value->keterangan) ?: '-' . '</span>';
@@ -164,6 +171,7 @@ class TindakLanjutController extends Controller
                 'log',
                 'action'
             ])
+            ->with('hasRejectNote', $hasRejectNote)
             ->make(true);
     }
 

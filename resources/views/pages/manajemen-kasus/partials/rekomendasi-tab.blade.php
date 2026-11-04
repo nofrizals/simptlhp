@@ -255,6 +255,15 @@
                     $('#tableLoadingTindakLanjut').toggleClass('hidden', !processing);
                 });
 
+                $('#dtTindakLanjut').on('xhr.dt', function(e, settings, json) {
+                    const th = document.getElementById('th-status-tindak-lanjut');
+
+                    if (th) {
+                        th.style.minWidth = json?.hasRejectNote ? '200px' : '';
+                        th.style.maxWidth = json?.hasRejectNote ? '200px' : '';
+                    }
+                });
+
                 dtTindakLanjutTable = $('#dtTindakLanjut').DataTable({
                     processing: true,
                     serverSide: true,
