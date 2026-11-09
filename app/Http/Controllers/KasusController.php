@@ -134,7 +134,7 @@ class KasusController extends Controller
             'spt_mulai'         => $data->spt_mulai,
             'spt_selesai'       => $data->spt_selesai,
             'nomor_lhp'         => $data->nomor_lhp,
-            'tanggal_lhp'       => Carbon::parse($data->tanggal_lhp ?? '-')->translatedFormat('d F Y'),
+            'tanggal_lhp'       => $data->tanggal_lhp,
             'nama_instansi'     => ucwords(strtolower($data->instansi->nama_instansi)),
             'kode_unor'         => $data->kode_unor,
             'nip_ketua'         => $data->nip_ketua ?? '-',
