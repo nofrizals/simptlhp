@@ -46,11 +46,7 @@ Route::middleware('app.auth')->group(function () {
 
         // --> Menu Kepegawaian
         Route::get('kepegawaian', [KepegawaianController::class, 'index']);
-        // Route::post('admin', [AdminController::class, 'store']);
-        // Route::delete('admin/{admin}', [AdminController::class, 'destroy']);
-        // Route::post('ajax-data-admin', [AdminController::class, 'ajaxDataAdmin']);
-        // Route::post('ajax-data-simak', [AdminController::class, 'ajaxDataSimak']);
-        // Route::post('instansi/getMyTurunan', [InstansiController::class, 'getMyTurunan']);
+        Route::post('ajax-kepegawaian', [KepegawaianController::class, 'ajaxDt']);
     });
 
     Route::middleware('app.super')->group(function () { //middleware superadmin

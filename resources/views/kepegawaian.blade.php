@@ -14,46 +14,10 @@
                             Data Kepegawaian
                         </h3>
                         <p class="text-sm text-gray-500">
-                            Kelola seluruh pengguna
+                            Kelola seluruh kepegawaian
                         </p>
                     </div>
-
-                    <button id="openModalBtn"
-                        class="inline-flex items-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
-                        + Tambah Kepegawaian
-                    </button>
                 </div>
-
-                <!-- Hapus komentar jika butuh filter obrik -->
-                {{-- <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
-                    <form id="formFilterKepegawaian" class="grid grid-cols-1 gap-4 px-6 py-5 md:grid-cols-4 dark:border-gray-800">
-                        <div class="md:col-span-3">
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                Nama Obrik
-                            </label>
-                            <select name="kode_unor" id="kode_unor"
-                                class="select2 dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                                @if ((string) session('level') === '3')
-                                    <option value="{{ session('kode_unor') }}" selected>{{ session('nama_opd') }}</option>
-                                @else
-                                    <option value="semua" selected>Semua Obrik</option>
-                                    @foreach ($instansiList as $instansi)
-                                        <option value="{{ $instansi->kode_instansi }}">
-                                            {{ strtoupper($instansi->nama_instansi) }}
-                                        </option>
-                                    @endforeach
-                                @endif
-                            </select>
-                            <p class="err text-theme-xs text-error-500" id="kode_unor_error"></p>
-                        </div>
-                        <div class="flex items-end">
-                            <button type="submit" id="filterBtn"
-                                class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-gray-400">
-                                Cari
-                            </button>
-                        </div>
-                    </form>
-                </div> --}}
 
                 {{-- TOOLBAR --}}
                 <div
@@ -91,14 +55,15 @@
                     <table id="dataTable" class="min-w-full text-sm dt-table">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">No</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama Pegawai
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">No</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Nama Pegawai
                                 </th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">NIP</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">NIK</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Golongan &
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">NIP</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">NIK</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Golongan &
                                     Pangkat</th>
-                                <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">Nama OPD</th>
+                                <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Nama OPD
+                                </th>
                                 <th class="px-6 py-4 text-center text-xs font-semibold uppercase text-gray-500">Jabatan</th>
                             </tr>
                         </thead>
@@ -115,4 +80,111 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                const URL = {
+                    ajaxDt: "{{ url('ajax-kepegawaian') }}"
+                };
+
+                const SPINNER_HTML = `
+                        <svg aria-hidden="true" class="w-5 h-5 animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                        </svg>
+                        <span>Loading...</span>`;
+
+                // LOADING
+                $('#dataTable')
+                    .on('processing.dt', function(e, settings, processing) {
+                        $('#tableLoading').toggleClass('hidden', !processing);
+                    });
+
+                const dataTable = $('#dataTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: false,
+                    scrollX: true,
+                    dom: 'rtip',
+                    searching: true,
+                    ordering: true,
+                    lengthChange: false,
+                    ajax: {
+                        type: 'POST',
+                        url: URL.ajaxDt
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false,
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'nama_pegawai',
+                            name: 'nama_pegawai',
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'nip_baru',
+                            name: 'nip_baru',
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'ktp_nomor',
+                            name: 'ktp_nomor',
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'nama_golongan',
+                            name: 'nama_golongan',
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'nomenklatur_pada',
+                            name: 'nomenklatur_pada',
+                            className: 'text-center'
+                        },
+                        {
+                            data: 'nomenklatur_jabatan',
+                            name: 'nomenklatur_jabatan',
+                            className: 'text-center'
+                        }
+                    ],
+                    language: {
+                        processing: "",
+                        zeroRecords: "Data tidak ditemukan",
+                        info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                        infoEmpty: "Tidak ada data",
+                        paginate: {
+                            previous: "←",
+                            next: "→"
+                        }
+                    }
+                });
+
+                $('#customSearch').on('input', function() {
+                    dataTable.search(this.value).draw();
+                });
+
+                $('#pageLength').on('change', function() {
+                    dataTable.page.len(this.value).draw();
+                });
+
+                function moveDataTableFooter() {
+                    $('#dataTable_info').appendTo('#tableInfo');
+                    $('#dataTable_paginate').appendTo('#tablePagination');
+                }
+
+                dataTable.on('init.dt', moveDataTableFooter);
+                dataTable.on('draw.dt', moveDataTableFooter);
+            });
+        </script>
+    @endpush
 @endsection
