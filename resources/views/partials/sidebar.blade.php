@@ -1,5 +1,5 @@
 <aside :class="sidebarToggle ? 'translate-x-0 lg:w-[90px]' : '-translate-x-full lg:translate-x-0'"
-    class="sidebar fixed left-0 top-0 z-10 flex h-screen w-[290px] flex-col overflow-y-hidden border-r border-gray-200 bg-white px-5 dark:border-gray-800 dark:bg-black lg:static lg:translate-x-0">
+    class="sidebar fixed left-0 top-0 z-10 flex h-screen w-[290px] shrink-0 flex-col overflow-hidden border-r border-gray-200 bg-white px-5 dark:border-gray-800 dark:bg-black lg:static lg:translate-x-0">
     <!-- SIDEBAR HEADER -->
     <div :class="sidebarToggle ? 'justify-center' : 'justify-between'"
         class="flex items-center gap-2 pt-8 sidebar-header pb-7">
@@ -14,8 +14,7 @@
         </a>
     </div>
     <!-- SIDEBAR HEADER -->
-
-    <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+    <div class="flex min-h-0 flex-1 flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <!-- Sidebar Menu -->
         <nav x-data="{ selected: $persist('Dashboard') }" x-init="@if (request()->is('dashboard') || request()->is('/')) selected = 'Dashboard';
         @elseif(request()->is('kepegawaian'))
