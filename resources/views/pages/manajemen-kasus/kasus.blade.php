@@ -629,6 +629,62 @@
                     });
                 });
 
+                $(document).on('click', '.btn-selesaiKasus', function() {
+
+                    const id = $(this).data('id');
+
+                    Swal.fire({
+                        title: 'Selesaikan Kasus?',
+                        text: 'Apakah Anda yakin ingin menyelesaikan kasus ini?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Selesaikan',
+                        cancelButtonText: 'Batal',
+                    }).then((result) => {
+
+                        if (result.isConfirmed) {
+
+                            $.ajax({
+                                url: `daftar-kasus/${id}/selesaikan`,
+                                type: 'POST',
+                                data: {
+                                    _token: $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function(response) {
+
+                                    if (response.status) {
+
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Berhasil',
+                                            text: response.message
+                                        });
+
+                                        // Reload DataTables
+                                        $('#dataTable').DataTable().ajax.reload(null,
+                                            false);
+
+                                    } else {
+
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Gagal',
+                                            text: response.message
+                                        });
+                                    }
+                                },
+                                error: function() {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Terjadi Kesalahan',
+                                        text: 'Tidak dapat menyelesaikan kasus.'
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+
                 $(document).on('click', '.btn-deleteKasus', function() {
                     Swal.fire({
                         title: 'Apakah anda yakin?',

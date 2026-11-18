@@ -9,10 +9,15 @@ use App\Models\JenisPhp;
 use App\Models\StatusTl;
 use App\Models\PegawaiSimak;
 use Illuminate\Http\Request;
+use App\Models\VerifikasiSsr;
+use App\Services\HitungService;
 use Illuminate\Validation\Rule;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Services\StatusKasusService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class KasusController extends Controller
 {
@@ -32,6 +37,41 @@ class KasusController extends Controller
             ->withCount(['temuans as temuans_count' => function (Builder $query): void {
                 $query->whereNull('deleted_by');
             }])
+            ->selectSub(
+                DB::table('kis_rekomendasis as a')
+                    ->join('kis_temuans as b', 'b.id_temuan', '=', 'a.id_temuan')
+                    ->whereColumn('b.id_kasus', 'kis_kasus.id_kasus')
+                    ->whereNull('a.deleted_by')
+                    ->whereNull('b.deleted_by')
+                    ->selectRaw('COUNT(*)'),
+                'rekomendasi_count'
+            )
+            ->selectSub(
+                DB::table('kis_tindak_lanjuts as a')
+                    ->join('kis_rekomendasis as b', 'b.id_rekomendasi', '=', 'a.id_rekomendasi')
+                    ->join('kis_temuans as c', 'c.id_temuan', '=', 'b.id_temuan')
+                    ->whereColumn('c.id_kasus', 'kis_kasus.id_kasus')
+                    ->whereNull('a.deleted_by')
+                    ->whereNull('b.deleted_by')
+                    ->whereNull('c.deleted_by')
+                    ->whereExists(function ($query) {
+                        $tabelVerifikasi = (new VerifikasiSsr())->getTable();
+
+                        $query->select(DB::raw(1))
+                            ->from($tabelVerifikasi . ' as v')
+                            ->whereColumn('v.id_tindak_lanjut', 'a.id_tindak_lanjut')
+                            ->where('v.id_status', 1)
+                            ->whereRaw(
+                                'v.id = (
+                            SELECT MAX(v2.id)
+                            FROM ' . $tabelVerifikasi . ' as v2
+                            WHERE v2.id_tindak_lanjut = a.id_tindak_lanjut
+                        )'
+                            );
+                    })
+                    ->selectRaw('COUNT(*)'),
+                'tindak_lanjut_approved_count'
+            )
             ->orderBy('id_kasus', 'desc');
         $status = $request->input('status_kasus', 'semua');
         if ($status !== 'semua') {
@@ -77,8 +117,34 @@ class KasusController extends Controller
                 return '<span class="dark:text-white/90">' . ucwords(strtolower($value->instansi->nama_instansi)) ?? '-' . '</span>';
             })
             ->addColumn('action', function ($value) {
+                $tombolSelesai = '';
+
+                if ((string) $value->selesai === '0') {
+                    $tombolSelesai = '
+        <a href="javascript:void(0)"
+            data-id="' . $value->id_kasus . '"
+            title="Selesaikan Kasus"
+            class="btn-selesaiKasus text-gray-500 hover:text-green-600 transition duration-200 dark:hover:text-green-400 dark:text-white/90">
+
+            <svg class="fill-current"
+                width="21"
+                height="21"
+                viewBox="0 0 21 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+
+                <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M10.5 1.75C5.6675 1.75 1.75 5.6675 1.75 10.5C1.75 15.3325 5.6675 19.25 10.5 19.25C15.3325 19.25 19.25 15.3325 19.25 10.5C19.25 5.6675 15.3325 1.75 10.5 1.75ZM14.2803 8.03033C14.5732 7.73744 14.5732 7.26256 14.2803 6.96967C13.9874 6.67678 13.5126 6.67678 13.2197 6.96967L9.25 10.9393L7.78033 9.46967C7.48744 9.17678 7.01256 9.17678 6.71967 9.46967C6.42678 9.76256 6.42678 10.2374 6.71967 10.5303L8.71967 12.5303C9.01256 12.8232 9.48744 12.8232 9.78033 12.5303L14.2803 8.03033Z"
+                    fill=""
+                />
+            </svg>
+        </a>';
+                }
                 return '
                     <div class="flex items-center justify-center gap-3 px-4 py-2">
+                    ' . $tombolSelesai . '
                         <a href="javascript:void(0)" data-id="' . $value->id_kasus . '" title="Hapus" class="btn-deleteKasus text-gray-500 hover:text-red-500 transition duration-200 dark:hover:text-red-400 dark:text-white/90">
                             <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.04142 4.29199C7.04142 3.04935 8.04878 2.04199 9.29142 2.04199H11.7081C12.9507 2.04199 13.9581 3.04935 13.9581 4.29199V4.54199H16.1252H17.166C17.5802 4.54199 17.916 4.87778 17.916 5.29199C17.916 5.70621 17.5802 6.04199 17.166 6.04199H16.8752V8.74687V13.7469V16.7087C16.8752 17.9513 15.8678 18.9587 14.6252 18.9587H6.37516C5.13252 18.9587 4.12516 17.9513 4.12516 16.7087V13.7469V8.74687V6.04199H3.8335C3.41928 6.04199 3.0835 5.70621 3.0835 5.29199C3.0835 4.87778 3.41928 4.54199 3.8335 4.54199H4.87516H7.04142V4.29199ZM15.3752 13.7469V8.74687V6.04199H13.9581H13.2081H7.79142H7.04142H5.62516V8.74687V13.7469V16.7087C5.62516 17.1229 5.96095 17.4587 6.37516 17.4587H14.6252C15.0394 17.4587 15.3752 17.1229 15.3752 16.7087V13.7469ZM8.54142 4.54199H12.4581V4.29199C12.4581 3.87778 12.1223 3.54199 11.7081 3.54199H9.29142C8.87721 3.54199 8.54142 3.87778 8.54142 4.29199V4.54199ZM8.8335 8.50033C9.24771 8.50033 9.5835 8.83611 9.5835 9.25033V14.2503C9.5835 14.6645 9.24771 15.0003 8.8335 15.0003C8.41928 15.0003 8.0835 14.6645 8.0835 14.2503V9.25033C8.0835 8.83611 8.41928 8.50033 8.8335 8.50033ZM12.9168 9.25033C12.9168 8.83611 12.581 8.50033 12.1668 8.50033C11.7526 8.50033 11.4168 8.83611 11.4168 9.25033V14.2503C11.4168 14.6645 11.7526 15.0003 12.1668 15.0003C12.581 15.0003 12.9168 14.6645 12.9168 14.2503V9.25033Z" fill=""/>
@@ -98,6 +164,42 @@ class KasusController extends Controller
             })
             ->rawColumns(['id_jenis_php', 'tahun_pemeriksaan', 'spt', 'nomor_lhp', 'status', 'tanggal_lhp', 'kode_unor', 'action'])
             ->make(true);
+    }
+
+    public function selesaikanKasus($id, StatusKasusService $statusKasus): JsonResponse
+    {
+        $kasus = Kasus::where('id_kasus', $id)->firstOrFail();
+        if ((string) $kasus->selesai === '1') {
+            return response()->json([
+                'status' => false,
+                'message' => 'Kasus sudah selesai.'
+            ]);
+        }
+
+        $rekomendasi = app(HitungService::class)
+            ->myRekomendasi($id);
+
+        $tindakLanjut = app(HitungService::class)
+            ->myTindakLanjut($id, 1);
+
+        if (
+            $rekomendasi <= 0 ||
+            $rekomendasi !== $tindakLanjut
+        ) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Kasus belum memenuhi persyaratan untuk diselesaikan.'
+            ]);
+        }
+
+        $berhasil = $statusKasus->update($id);
+
+        return response()->json([
+            'status' => $berhasil,
+            'message' => $berhasil
+                ? 'Kasus berhasil diselesaikan.'
+                : 'Gagal menyelesaikan kasus.'
+        ]);
     }
 
     public function edit($id)

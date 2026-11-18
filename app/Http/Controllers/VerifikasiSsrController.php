@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Kasus;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 use App\Models\Tindaklanjut;
 use App\Models\VerifikasiSsr;
 use App\Models\FileTindakLanjut;
 use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
+use Yajra\DataTables\Facades\DataTables;
 
 class VerifikasiSsrController extends Controller
 {
@@ -187,14 +188,20 @@ class VerifikasiSsrController extends Controller
                     'message' => 'Data tindak lanjut tidak ditemukan.',
                 ], 404);
             }
-
+            $kasus = Kasus::with('temuans.rekomendasi.tindakLanjuts')
+                ->whereHas('temuans.rekomendasi.tindakLanjuts', function ($query) use ($id) {
+                    $query->where('id_tindak_lanjut', $id);
+                })
+                ->first();
             $verifikasiSsr->approve_at  = NULL;
             $verifikasiSsr->approve_by  = NULL;
             $verifikasiSsr->id_status   = 2;
             $verifikasiSsr->reject_at   = now();
             $verifikasiSsr->reject_by   = session('id_pegawai');
             $verifikasiSsr->reject_note = $request->catatan;
+            $kasus->selesai             = '0';
             $verifikasiSsr->save();
+            $kasus->save();
 
             // Update hanya status pada model TindakLanjut
             Tindaklanjut::where('id_tindak_lanjut', $id)->update([

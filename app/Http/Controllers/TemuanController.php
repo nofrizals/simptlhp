@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Kasus;
 use App\Models\Temuan;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 
 class TemuanController extends Controller
 {
@@ -136,6 +136,8 @@ class TemuanController extends Controller
             $validated['created_by'] = (string) session('id_pegawai');
             $validated['created_at'] = now();
             $temuan = Temuan::create($validated);
+            $kasus->selesai             = '0';
+            $kasus->save();
             $message = 'Data berhasil ditambahkan';
         }
 

@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Temuan;
 use App\Models\Pembayaran;
 use App\Models\Rekomendasi;
-use App\Models\Temuan;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\Tindaklanjut;
 use App\Models\VerifikasiSsr;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Throwable;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class TindakLanjutController extends Controller
 {
@@ -315,8 +314,7 @@ class TindakLanjutController extends Controller
                 } else {
                     $dataVerifikasi = $validated;
                     $dataVerifikasi['id_status'] = $idStatus;
-                    $dataVerifikasi['id_tindak_lanjut'] =
-                        $temuanRow->id_tindak_lanjut;
+                    $dataVerifikasi['id_tindak_lanjut'] = $temuanRow->id_tindak_lanjut;
                     $dataVerifikasi['label'] = (string) Str::uuid();
                     $dataVerifikasi['created_by'] = $pegawai;
                     $dataVerifikasi['created_at'] = $now;

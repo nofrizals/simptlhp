@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Kasus;
 use App\Models\Temuan;
 use App\Models\Rekomendasi;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
 
 class RekomendasiController extends Controller
 {
@@ -102,8 +103,16 @@ class RekomendasiController extends Controller
             $temuan->update($validated);
             $message = 'Data berhasil diupdate';
         } else {
+            $idTemuan = $temuan->id_temuan;
+            $kasus = Kasus::with('temuans')
+                ->whereHas('temuans', function ($query) use ($idTemuan) {
+                    $query->where('id_temuan', $idTemuan);
+                })
+                ->first();
             $validated['created_by'] = (string) session('id_pegawai');
             $validated['created_at'] = now();
+            $kasus->selesai             = '0';
+            $kasus->save();
             $temuan = Rekomendasi::create($validated);
             $message = 'Data berhasil ditambahkan';
         }

@@ -105,6 +105,7 @@ Route::middleware('app.auth')->group(function () {
     Route::middleware('level:1,2')->group(function () {
         Route::get('daftar-kasus', [KasusController::class, 'index']);
         Route::get('daftar-kasus/{id}/edit', [KasusController::class, 'edit']);
+        Route::post('daftar-kasus/{id}/selesaikan', [KasusController::class, 'selesaikanKasus'])->name('kasus.selesaikan');
         Route::post('daftar-kasus', [KasusController::class, 'store']);
         Route::post('cek-nomor-lhp', [KasusController::class, 'cekNomorLhp']);
         Route::delete('daftar-kasus/{kasus}', [KasusController::class, 'destroy']);

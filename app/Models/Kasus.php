@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kasus extends Model
 {
@@ -30,5 +31,15 @@ class Kasus extends Model
     public function temuans(): HasMany
     {
         return $this->hasMany(Temuan::class, 'id_kasus', 'id_kasus');
+    }
+
+    public function getIdKasusByRekomendasi($id_rekomendasi)
+    {
+        return DB::table('kis_kasus as k')
+            ->select('k.id_kasus')
+            ->join('kis_temuans as t', 'k.id_kasus', '=', 't.id_kasus')
+            ->join('kis_rekomendasis as r', 't.id_temuan', '=', 'r.id_temuan')
+            ->where('r.id_rekomendasi', $id_rekomendasi)
+            ->first();
     }
 }
