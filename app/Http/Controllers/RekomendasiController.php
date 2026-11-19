@@ -6,11 +6,12 @@ use Carbon\Carbon;
 use App\Models\Kasus;
 use App\Models\Temuan;
 use App\Models\Rekomendasi;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class RekomendasiController extends Controller
 {
@@ -38,8 +39,21 @@ class RekomendasiController extends Controller
                     Tindak Lanjut
                 </a>';
             })
-            ->addColumn('rekomendasi', function (Rekomendasi $value): string {
-                return '<span class="dark:text-white/90">' . e($value->rekomendasi) ?: '-' . '</span>';
+            ->addColumn('rekomendasi', function ($value) {
+                $text = $value->rekomendasi ?? '-';
+                $shortText = Str::words(strip_tags($text), 5, '...');
+                return '
+                    <div class="short-content">
+                        <span class="short-text">' . e($shortText) . '</span>
+                        <span class="full-text hidden">' . e($text) . '</span>
+                        ' . (Str::wordCount(strip_tags($text)) > 5 ? '
+                            <button type="button"
+                    class="btn-read-more text-blue-600 underline font-medium text-xs mt-1">
+                    Selengkapnya
+                </button>
+                        ' : '') . '
+                    </div>
+                ';
             })
             ->addColumn('tgl_input', function (Rekomendasi $value): string {
                 return '<span class="dark:text-white/90">' . Carbon::parse($value->created_at ?? '-')->translatedFormat('d F Y') . '</span>';

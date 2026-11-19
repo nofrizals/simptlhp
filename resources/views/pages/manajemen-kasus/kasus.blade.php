@@ -1094,6 +1094,21 @@
                         }
                     });
                 }
+
+                $(document).on('click', '.btn-read-more', function() {
+                    let container = $(this).closest('.short-content');
+                    let shortText = container.find('.short-text');
+                    let fullText = container.find('.full-text');
+                    if (fullText.is(':hidden')) {
+                        shortText.hide();
+                        fullText.show();
+                        $(this).text('Lebih Sedikit');
+                    } else {
+                        shortText.show();
+                        fullText.hide();
+                        $(this).text('Selengkapnya');
+                    }
+                });
             });
         </script>
     @endpush

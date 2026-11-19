@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Kasus;
 use App\Models\Pembayaran;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Tindaklanjut;
 use App\Models\VerifikasiSsr;
 use App\Models\FileTindakLanjut;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class VerifikasiSsrController extends Controller
@@ -36,7 +37,20 @@ class VerifikasiSsrController extends Controller
                 return '<span class="dark:text-white/90">' . Carbon::parse($value->tgl_tindak_lanjut ?? '-')->translatedFormat('d F Y') . '</span>';
             })
             ->addColumn('tindak_lanjut', function ($value) {
-                return '<span class="dark:text-white/90">' . $value->tindak_lanjut ?? '-' . '</span>';
+                $text = $value->tindak_lanjut ?? '-';
+                $shortText = Str::words(strip_tags($text), 5, '...');
+                return '
+                    <div class="tindak-lanjut-content">
+                        <span class="short-text">' . e($shortText) . '</span>
+                        <span class="full-text hidden">' . e($text) . '</span>
+                        ' . (Str::wordCount(strip_tags($text)) > 5 ? '
+                            <button type="button"
+                    class="btn-read-more text-blue-600 underline font-medium text-xs mt-1">
+                    Selengkapnya
+                </button>
+                        ' : '') . '
+                    </div>
+                ';
             })
             ->addColumn('rincian_keuangan', function ($value) {
                 return $value->rincian_keuangan !== null ? '<span class="dark:text-white/90"> Rp ' . number_format($value->rincian_keuangan, 0, ',', '.') . '</span>' : '-';

@@ -7,11 +7,12 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Kasus;
 use App\Models\Temuan;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
 
 class TemuanController extends Controller
 {
@@ -33,11 +34,37 @@ class TemuanController extends Controller
                     . $value->rekomendasi_count . ' Rekomendasi</a>';
                 return '<div class="flex flex-col items-center gap-1">' . $rekomendasiBadge . '</div>';
             })
-            ->addColumn('temuan', function (Temuan $value): string {
-                return '<span class="dark:text-white/90">' . e($value->temuan) ?: '-' . '</span>';
+            ->addColumn('temuan', function ($value) {
+                $text = $value->temuan ?? '-';
+                $shortText = Str::words(strip_tags($text), 5, '...');
+                return '
+                    <div class="short-content">
+                        <span class="short-text">' . e($shortText) . '</span>
+                        <span class="full-text hidden">' . e($text) . '</span>
+                        ' . (Str::wordCount(strip_tags($text)) > 5 ? '
+                            <button type="button"
+                    class="btn-read-more text-blue-600 underline font-medium text-xs mt-1">
+                    Selengkapnya
+                </button>
+                        ' : '') . '
+                    </div>
+                ';
             })
-            ->addColumn('penyebab', function (Temuan $value): string {
-                return '<span class="dark:text-white/90">' . e($value->penyebab) ?: '-' . '</span>';
+            ->addColumn('penyebab', function ($value) {
+                $text = $value->penyebab ?? '-';
+                $shortText = Str::words(strip_tags($text), 5, '...');
+                return '
+                    <div class="short-content">
+                        <span class="short-text">' . e($shortText) . '</span>
+                        <span class="full-text hidden">' . e($text) . '</span>
+                        ' . (Str::wordCount(strip_tags($text)) > 5 ? '
+                            <button type="button"
+                    class="btn-read-more text-blue-600 underline font-medium text-xs mt-1">
+                    Selengkapnya
+                </button>
+                        ' : '') . '
+                    </div>
+                ';
             })
             ->addColumn('besaran_kerugian', function (Temuan $value): string {
                 return '<span class="dark:text-white/90">Rp ' . number_format((float) $value->besaran_kerugian, 0, ',', '.') . '</span>';

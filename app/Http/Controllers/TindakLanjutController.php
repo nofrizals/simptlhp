@@ -36,34 +36,43 @@ class TindakLanjutController extends Controller
             ->addColumn('tgl_tindak_lanjut', function (Tindaklanjut $value): string {
                 return '<span class="dark:text-white/90">' . Carbon::parse($value->tgl_tindak_lanjut ?? '-')->translatedFormat('d F Y') . '</span>';
             })
-            ->addColumn('tindak_lanjut', function (Tindaklanjut $value): string {
-                return '<span class="dark:text-white/90">' . e($value->tindak_lanjut) ?: '-' . '</span>';
+            ->addColumn('tindak_lanjut', function ($value) {
+                $text = $value->tindak_lanjut ?? '-';
+                $shortText = Str::words(strip_tags($text), 5, '...');
+                return '
+                    <div class="short-content">
+                        <span class="short-text">' . e($shortText) . '</span>
+                        <span class="full-text hidden">' . e($text) . '</span>
+                        ' . (Str::wordCount(strip_tags($text)) > 5 ? '
+                            <button type="button"
+                    class="btn-read-more text-blue-600 underline font-medium text-xs mt-1">
+                    Selengkapnya
+                </button>
+                        ' : '') . '
+                    </div>
+                ';
             })
             ->addColumn('rincian_temuan_keuangan_pajak', function (Tindaklanjut $value): string {
                 $rincian = 'Rp ' . number_format((float) $value->rincian_keuangan, 2, ',', '.');
                 $setor = 'Rp ' . number_format((float) $value->setor, 2, ',', '.');
-
                 return '<span class="dark:text-white/90">' . $rincian . '</span>' .
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('rincian_temuan_keuangan_daerah', function (Tindaklanjut $value): string {
                 $rincian = 'Rp ' . number_format((float) $value->rincian_keuangan2, 2, ',', '.');
                 $setor = 'Rp ' . number_format((float) $value->setor2, 2, ',', '.');
-
                 return '<span class="dark:text-white/90">' . $rincian . '</span>' .
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('rincian_temuan_keuangan_desa', function (Tindaklanjut $value): string {
                 $rincian = 'Rp ' . number_format((float) $value->rincian_keuangan3, 2, ',', '.');
                 $setor = 'Rp ' . number_format((float) $value->setor3, 2, ',', '.');
-
                 return '<span class="dark:text-white/90">' . $rincian . '</span>' .
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
             ->addColumn('rincian_temuan_keuangan_blud', function (Tindaklanjut $value): string {
                 $rincian = 'Rp ' . number_format((float) $value->rincian_keuangan4, 2, ',', '.');
                 $setor = 'Rp ' . number_format((float) $value->setor4, 2, ',', '.');
-
                 return '<span class="dark:text-white/90">' . $rincian . '</span>' .
                     "<br><div class='text-red-400'>SETOR {$setor}</div>";
             })
@@ -93,7 +102,6 @@ class TindakLanjutController extends Controller
                     $log = '<span class="text-gray-600 dark:text-white/90">Ditambah oleh <strong>' . e($value->createdBy->nama_pegawai ?? $value->created_by) . '</strong><br>'
                         . optional(Carbon::parse($value->created_at ?? '-'))->translatedFormat('d F Y') . '</span>';
                 }
-
                 return $status . '<br>' . $log;
             })
             ->addColumn('action', function (Tindaklanjut $value): string {
