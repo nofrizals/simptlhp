@@ -118,29 +118,28 @@ class KasusController extends Controller
             })
             ->addColumn('action', function ($value) {
                 $tombolSelesai = '';
-
-                if ((string) $value->selesai === '0') {
+                if ((string) $value->selesai === '0' && (string) session('level') === '1') {
                     $tombolSelesai = '
-        <a href="javascript:void(0)"
-            data-id="' . $value->id_kasus . '"
-            title="Selesaikan Kasus"
-            class="btn-selesaiKasus text-gray-500 hover:text-green-600 transition duration-200 dark:hover:text-green-400 dark:text-white/90">
+                        <a href="javascript:void(0)"
+                            data-id="' . $value->id_kasus . '"
+                            title="Selesaikan Kasus"
+                            class="btn-selesaiKasus text-gray-500 hover:text-green-600 transition duration-200 dark:hover:text-green-400 dark:text-white/90">
 
-            <svg class="fill-current"
-                width="21"
-                height="21"
-                viewBox="0 0 21 21"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+                            <svg class="fill-current"
+                                width="21"
+                                height="21"
+                                viewBox="0 0 21 21"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
 
-                <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M10.5 1.75C5.6675 1.75 1.75 5.6675 1.75 10.5C1.75 15.3325 5.6675 19.25 10.5 19.25C15.3325 19.25 19.25 15.3325 19.25 10.5C19.25 5.6675 15.3325 1.75 10.5 1.75ZM14.2803 8.03033C14.5732 7.73744 14.5732 7.26256 14.2803 6.96967C13.9874 6.67678 13.5126 6.67678 13.2197 6.96967L9.25 10.9393L7.78033 9.46967C7.48744 9.17678 7.01256 9.17678 6.71967 9.46967C6.42678 9.76256 6.42678 10.2374 6.71967 10.5303L8.71967 12.5303C9.01256 12.8232 9.48744 12.8232 9.78033 12.5303L14.2803 8.03033Z"
-                    fill=""
-                />
-            </svg>
-        </a>';
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M10.5 1.75C5.6675 1.75 1.75 5.6675 1.75 10.5C1.75 15.3325 5.6675 19.25 10.5 19.25C15.3325 19.25 19.25 15.3325 19.25 10.5C19.25 5.6675 15.3325 1.75 10.5 1.75ZM14.2803 8.03033C14.5732 7.73744 14.5732 7.26256 14.2803 6.96967C13.9874 6.67678 13.5126 6.67678 13.2197 6.96967L9.25 10.9393L7.78033 9.46967C7.48744 9.17678 7.01256 9.17678 6.71967 9.46967C6.42678 9.76256 6.42678 10.2374 6.71967 10.5303L8.71967 12.5303C9.01256 12.8232 9.48744 12.8232 9.78033 12.5303L14.2803 8.03033Z"
+                                    fill=""
+                                />
+                            </svg>
+                        </a>';
                 }
                 return '
                     <div class="flex items-center justify-center gap-3 px-4 py-2">
@@ -270,7 +269,6 @@ class KasusController extends Controller
             'spt_mulai'             => ['required'],
             'spt_selesai'           => ['required'],
             'tanggal_lhp'           => ['required'],
-            // 'nomor_lhp'             => ['required'],
             'nomor_lhp' => [
                 'required',
                 Rule::unique('kis_kasus', 'nomor_lhp')
