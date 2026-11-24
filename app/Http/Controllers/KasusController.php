@@ -9,11 +9,11 @@ use App\Models\JenisPhp;
 use App\Models\StatusTl;
 use App\Models\PegawaiSimak;
 use Illuminate\Http\Request;
-use App\Models\VerifikasiSsr;
+// use App\Models\VerifikasiSsr;
 use App\Services\HitungService;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 use App\Services\StatusKasusService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
@@ -33,48 +33,6 @@ class KasusController extends Controller
 
     public function ajaxDataDaftarKasus(Request $request)
     {
-        $tabelVerifikasi = (new VerifikasiSsr())->getTable();
-
-        $rekomendasiCounts = DB::table('kis_temuans as b')
-            ->join('kis_rekomendasis as a', 'a.id_temuan', '=', 'b.id_temuan')
-            ->whereNull('a.deleted_by')
-            ->whereNull('b.deleted_by')
-            ->select('b.id_kasus')
-            ->selectRaw('COUNT(*) as rekomendasi_count')
-            ->groupBy('b.id_kasus');
-
-        $latestVerifikasi = DB::table($tabelVerifikasi . ' as v')
-            ->joinSub(
-                DB::table($tabelVerifikasi)
-                    ->select('id_tindak_lanjut')
-                    ->selectRaw('MAX(id) as max_id')
-                    ->groupBy('id_tindak_lanjut'),
-                'latest',
-                function ($join) {
-                    $join->on('v.id_tindak_lanjut', '=', 'latest.id_tindak_lanjut')
-                        ->on('v.id', '=', 'latest.max_id');
-                }
-            )
-            ->where('v.id_status', 1)
-            ->select('v.id_tindak_lanjut');
-
-        $tindakLanjutCounts = DB::table('kis_tindak_lanjuts as a')
-            ->join('kis_rekomendasis as b', 'b.id_rekomendasi', '=', 'a.id_rekomendasi')
-            ->join('kis_temuans as c', 'c.id_temuan', '=', 'b.id_temuan')
-            ->joinSub(
-                $latestVerifikasi,
-                'lv',
-                function ($join) {
-                    $join->on('lv.id_tindak_lanjut', '=', 'a.id_tindak_lanjut');
-                }
-            )
-            ->whereNull('a.deleted_by')
-            ->whereNull('b.deleted_by')
-            ->whereNull('c.deleted_by')
-            ->select('c.id_kasus')
-            ->selectRaw('COUNT(*) as tindak_lanjut_approved_count')
-            ->groupBy('c.id_kasus');
-
         $data = Kasus::query()
             ->select('kis_kasus.*')
             ->with(['jenis_php', 'instansi'])
