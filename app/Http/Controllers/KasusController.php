@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
-use App\Models\Kasus;
-use App\Models\PegawaiSimak;
 use App\Models\StatusTl;
+use App\Models\PegawaiSimak;
+use Illuminate\Http\Request;
 use App\Models\VerifikasiSsr;
 use App\Services\HitungService;
-use App\Services\StatusKasusService;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Services\StatusKasusService;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class KasusController extends Controller
@@ -33,77 +33,7 @@ class KasusController extends Controller
 
     public function ajaxDataDaftarKasus(Request $request)
     {
-        // $tabelVerifikasi = (new VerifikasiSsr())->getTable();
-        // $data = Kasus::query()
-        //     ->with(['jenis_php', 'instansi'])
-
-        //     // 1. Menghitung jumlah temuan yang belum dihapus
-        //     ->withCount([
-        //         'temuans as temuans_count' => function (Builder $query): void {
-        //             $query->whereNull('deleted_by');
-        //         }
-        //     ])
-
-        //     // 2. Menghitung jumlah rekomendasi per kasus
-        //     ->selectSub(function ($query) {
-        //         $query->from('kis_rekomendasis as a')
-        //             ->join('kis_temuans as b', 'b.id_temuan', '=', 'a.id_temuan')
-        //             ->whereColumn('b.id_kasus', 'kis_kasus.id_kasus')
-        //             ->whereNull('a.deleted_by')
-        //             ->whereNull('b.deleted_by')
-        //             ->selectRaw('COUNT(*)');
-        //     }, 'rekomendasi_count')
-
-        //     // 3. Menghitung tindak lanjut yang verifikasi terakhirnya berstatus 1
-        //     ->selectSub(function ($query) use ($tabelVerifikasi) {
-        //         $query->from('kis_tindak_lanjuts as a')
-        //             ->join('kis_rekomendasis as b', 'b.id_rekomendasi', '=', 'a.id_rekomendasi')
-        //             ->join('kis_temuans as c', 'c.id_temuan', '=', 'b.id_temuan')
-        //             ->whereColumn('c.id_kasus', 'kis_kasus.id_kasus')
-        //             ->whereNull('a.deleted_by')
-        //             ->whereNull('b.deleted_by')
-        //             ->whereNull('c.deleted_by')
-
-        //             ->whereExists(function ($query) use ($tabelVerifikasi) {
-        //                 $query->selectRaw('1')
-        //                     ->from($tabelVerifikasi . ' as v')
-        //                     ->whereColumn('v.id_tindak_lanjut', 'a.id_tindak_lanjut')
-        //                     ->where('v.id_status', 1)
-
-        //                     // Pastikan tidak ada verifikasi dengan ID lebih besar
-        //                     ->whereNotExists(function ($subQuery) use ($tabelVerifikasi) {
-        //                         $subQuery->selectRaw('1')
-        //                             ->from($tabelVerifikasi . ' as v2')
-        //                             ->whereColumn(
-        //                                 'v2.id_tindak_lanjut',
-        //                                 'v.id_tindak_lanjut'
-        //                             )
-        //                             ->whereColumn('v2.id', '>', 'v.id');
-        //                     });
-        //             })
-
-        //             ->selectRaw('COUNT(*)');
-        //     }, 'tindak_lanjut_approved_count')
-
-        //     ->orderByDesc('id_kasus');
-        // $status = $request->input('status_kasus', 'semua');
-        // if ($status !== 'semua') {
-        //     $data->where('selesai', $status);
-        // }
-
-        // if (session('tim')) {
-        //     $data->whereHas('instansi', function (Builder $query): void {
-        //         $query->where('id_tim', session('tim'));
-        //     });
-        // }
-
         $tabelVerifikasi = (new VerifikasiSsr())->getTable();
-
-        /*
-|--------------------------------------------------------------------------
-| 1. Agregasi jumlah rekomendasi per kasus
-|--------------------------------------------------------------------------
-*/
 
         $rekomendasiCounts = DB::table('kis_temuans as b')
             ->join('kis_rekomendasis as a', 'a.id_temuan', '=', 'b.id_temuan')
@@ -112,13 +42,6 @@ class KasusController extends Controller
             ->select('b.id_kasus')
             ->selectRaw('COUNT(*) as rekomendasi_count')
             ->groupBy('b.id_kasus');
-
-
-        /*
-|--------------------------------------------------------------------------
-| 2. Mencari verifikasi terakhir berdasarkan MAX(id)
-|--------------------------------------------------------------------------
-*/
 
         $latestVerifikasi = DB::table($tabelVerifikasi . ' as v')
             ->joinSub(
@@ -134,13 +57,6 @@ class KasusController extends Controller
             )
             ->where('v.id_status', 1)
             ->select('v.id_tindak_lanjut');
-
-
-        /*
-|--------------------------------------------------------------------------
-| 3. Agregasi tindak lanjut yang sudah disetujui
-|--------------------------------------------------------------------------
-*/
 
         $tindakLanjutCounts = DB::table('kis_tindak_lanjuts as a')
             ->join('kis_rekomendasis as b', 'b.id_rekomendasi', '=', 'a.id_rekomendasi')
@@ -159,13 +75,6 @@ class KasusController extends Controller
             ->selectRaw('COUNT(*) as tindak_lanjut_approved_count')
             ->groupBy('c.id_kasus');
 
-
-        /*
-|--------------------------------------------------------------------------
-| 4. Query utama kasus
-|--------------------------------------------------------------------------
-*/
-
         $data = Kasus::query()
             ->select('kis_kasus.*')
             ->with(['jenis_php', 'instansi'])
@@ -175,47 +84,13 @@ class KasusController extends Controller
                     $query->whereNull('deleted_by');
                 }
             ])
-
-            ->leftJoinSub(
-                $rekomendasiCounts,
-                'rc',
-                function ($join) {
-                    $join->on('rc.id_kasus', '=', 'kis_kasus.id_kasus');
-                }
-            )
-
-            ->leftJoinSub(
-                $tindakLanjutCounts,
-                'tc',
-                function ($join) {
-                    $join->on('tc.id_kasus', '=', 'kis_kasus.id_kasus');
-                }
-            )
-
-            ->addSelect(DB::raw('COALESCE(rc.rekomendasi_count, 0) as rekomendasi_count'))
-            ->addSelect(DB::raw('COALESCE(tc.tindak_lanjut_approved_count, 0) as tindak_lanjut_approved_count'))
-
-            ->orderByDesc('kis_kasus.id_kasus');
-
-
-        /*
-|--------------------------------------------------------------------------
-| 5. Filter status kasus
-|--------------------------------------------------------------------------
-*/
+            ->orderByDesc('id_kasus');
 
         $status = $request->input('status_kasus', 'semua');
 
         if ($status !== 'semua') {
             $data->where('kis_kasus.selesai', $status);
         }
-
-
-        /*
-|--------------------------------------------------------------------------
-| 6. Filter berdasarkan tim
-|--------------------------------------------------------------------------
-*/
 
         $tim = session('tim');
 
