@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Kasus;
 use App\Models\Instansi;
 use App\Models\JenisPhp;
-use App\Models\StatusTl;
+use App\Models\Kasus;
 use App\Models\PegawaiSimak;
-use Illuminate\Http\Request;
+use App\Models\StatusTl;
 use App\Models\VerifikasiSsr;
 use App\Services\HitungService;
-use Illuminate\Validation\Rule;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use App\Services\StatusKasusService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class KasusController extends Controller
@@ -33,56 +33,199 @@ class KasusController extends Controller
 
     public function ajaxDataDaftarKasus(Request $request)
     {
-        $data = Kasus::with(['jenis_php', 'instansi'])
-            ->withCount(['temuans as temuans_count' => function (Builder $query): void {
-                $query->whereNull('deleted_by');
-            }])
-            ->selectSub(
-                DB::table('kis_rekomendasis as a')
-                    ->join('kis_temuans as b', 'b.id_temuan', '=', 'a.id_temuan')
-                    ->whereColumn('b.id_kasus', 'kis_kasus.id_kasus')
-                    ->whereNull('a.deleted_by')
-                    ->whereNull('b.deleted_by')
-                    ->selectRaw('COUNT(*)'),
-                'rekomendasi_count'
-            )
-            ->selectSub(
-                DB::table('kis_tindak_lanjuts as a')
-                    ->join('kis_rekomendasis as b', 'b.id_rekomendasi', '=', 'a.id_rekomendasi')
-                    ->join('kis_temuans as c', 'c.id_temuan', '=', 'b.id_temuan')
-                    ->whereColumn('c.id_kasus', 'kis_kasus.id_kasus')
-                    ->whereNull('a.deleted_by')
-                    ->whereNull('b.deleted_by')
-                    ->whereNull('c.deleted_by')
-                    ->whereExists(function ($query) {
-                        $tabelVerifikasi = (new VerifikasiSsr())->getTable();
+        // $tabelVerifikasi = (new VerifikasiSsr())->getTable();
+        // $data = Kasus::query()
+        //     ->with(['jenis_php', 'instansi'])
 
-                        $query->select(DB::raw(1))
-                            ->from($tabelVerifikasi . ' as v')
-                            ->whereColumn('v.id_tindak_lanjut', 'a.id_tindak_lanjut')
-                            ->where('v.id_status', 1)
-                            ->whereRaw(
-                                'v.id = (
-                            SELECT MAX(v2.id)
-                            FROM ' . $tabelVerifikasi . ' as v2
-                            WHERE v2.id_tindak_lanjut = a.id_tindak_lanjut
-                        )'
-                            );
-                    })
-                    ->selectRaw('COUNT(*)'),
-                'tindak_lanjut_approved_count'
+        //     // 1. Menghitung jumlah temuan yang belum dihapus
+        //     ->withCount([
+        //         'temuans as temuans_count' => function (Builder $query): void {
+        //             $query->whereNull('deleted_by');
+        //         }
+        //     ])
+
+        //     // 2. Menghitung jumlah rekomendasi per kasus
+        //     ->selectSub(function ($query) {
+        //         $query->from('kis_rekomendasis as a')
+        //             ->join('kis_temuans as b', 'b.id_temuan', '=', 'a.id_temuan')
+        //             ->whereColumn('b.id_kasus', 'kis_kasus.id_kasus')
+        //             ->whereNull('a.deleted_by')
+        //             ->whereNull('b.deleted_by')
+        //             ->selectRaw('COUNT(*)');
+        //     }, 'rekomendasi_count')
+
+        //     // 3. Menghitung tindak lanjut yang verifikasi terakhirnya berstatus 1
+        //     ->selectSub(function ($query) use ($tabelVerifikasi) {
+        //         $query->from('kis_tindak_lanjuts as a')
+        //             ->join('kis_rekomendasis as b', 'b.id_rekomendasi', '=', 'a.id_rekomendasi')
+        //             ->join('kis_temuans as c', 'c.id_temuan', '=', 'b.id_temuan')
+        //             ->whereColumn('c.id_kasus', 'kis_kasus.id_kasus')
+        //             ->whereNull('a.deleted_by')
+        //             ->whereNull('b.deleted_by')
+        //             ->whereNull('c.deleted_by')
+
+        //             ->whereExists(function ($query) use ($tabelVerifikasi) {
+        //                 $query->selectRaw('1')
+        //                     ->from($tabelVerifikasi . ' as v')
+        //                     ->whereColumn('v.id_tindak_lanjut', 'a.id_tindak_lanjut')
+        //                     ->where('v.id_status', 1)
+
+        //                     // Pastikan tidak ada verifikasi dengan ID lebih besar
+        //                     ->whereNotExists(function ($subQuery) use ($tabelVerifikasi) {
+        //                         $subQuery->selectRaw('1')
+        //                             ->from($tabelVerifikasi . ' as v2')
+        //                             ->whereColumn(
+        //                                 'v2.id_tindak_lanjut',
+        //                                 'v.id_tindak_lanjut'
+        //                             )
+        //                             ->whereColumn('v2.id', '>', 'v.id');
+        //                     });
+        //             })
+
+        //             ->selectRaw('COUNT(*)');
+        //     }, 'tindak_lanjut_approved_count')
+
+        //     ->orderByDesc('id_kasus');
+        // $status = $request->input('status_kasus', 'semua');
+        // if ($status !== 'semua') {
+        //     $data->where('selesai', $status);
+        // }
+
+        // if (session('tim')) {
+        //     $data->whereHas('instansi', function (Builder $query): void {
+        //         $query->where('id_tim', session('tim'));
+        //     });
+        // }
+
+        $tabelVerifikasi = (new VerifikasiSsr())->getTable();
+
+        /*
+|--------------------------------------------------------------------------
+| 1. Agregasi jumlah rekomendasi per kasus
+|--------------------------------------------------------------------------
+*/
+
+        $rekomendasiCounts = DB::table('kis_temuans as b')
+            ->join('kis_rekomendasis as a', 'a.id_temuan', '=', 'b.id_temuan')
+            ->whereNull('a.deleted_by')
+            ->whereNull('b.deleted_by')
+            ->select('b.id_kasus')
+            ->selectRaw('COUNT(*) as rekomendasi_count')
+            ->groupBy('b.id_kasus');
+
+
+        /*
+|--------------------------------------------------------------------------
+| 2. Mencari verifikasi terakhir berdasarkan MAX(id)
+|--------------------------------------------------------------------------
+*/
+
+        $latestVerifikasi = DB::table($tabelVerifikasi . ' as v')
+            ->joinSub(
+                DB::table($tabelVerifikasi)
+                    ->select('id_tindak_lanjut')
+                    ->selectRaw('MAX(id) as max_id')
+                    ->groupBy('id_tindak_lanjut'),
+                'latest',
+                function ($join) {
+                    $join->on('v.id_tindak_lanjut', '=', 'latest.id_tindak_lanjut')
+                        ->on('v.id', '=', 'latest.max_id');
+                }
             )
-            ->orderBy('id_kasus', 'desc');
+            ->where('v.id_status', 1)
+            ->select('v.id_tindak_lanjut');
+
+
+        /*
+|--------------------------------------------------------------------------
+| 3. Agregasi tindak lanjut yang sudah disetujui
+|--------------------------------------------------------------------------
+*/
+
+        $tindakLanjutCounts = DB::table('kis_tindak_lanjuts as a')
+            ->join('kis_rekomendasis as b', 'b.id_rekomendasi', '=', 'a.id_rekomendasi')
+            ->join('kis_temuans as c', 'c.id_temuan', '=', 'b.id_temuan')
+            ->joinSub(
+                $latestVerifikasi,
+                'lv',
+                function ($join) {
+                    $join->on('lv.id_tindak_lanjut', '=', 'a.id_tindak_lanjut');
+                }
+            )
+            ->whereNull('a.deleted_by')
+            ->whereNull('b.deleted_by')
+            ->whereNull('c.deleted_by')
+            ->select('c.id_kasus')
+            ->selectRaw('COUNT(*) as tindak_lanjut_approved_count')
+            ->groupBy('c.id_kasus');
+
+
+        /*
+|--------------------------------------------------------------------------
+| 4. Query utama kasus
+|--------------------------------------------------------------------------
+*/
+
+        $data = Kasus::query()
+            ->select('kis_kasus.*')
+            ->with(['jenis_php', 'instansi'])
+
+            ->withCount([
+                'temuans as temuans_count' => function (Builder $query): void {
+                    $query->whereNull('deleted_by');
+                }
+            ])
+
+            ->leftJoinSub(
+                $rekomendasiCounts,
+                'rc',
+                function ($join) {
+                    $join->on('rc.id_kasus', '=', 'kis_kasus.id_kasus');
+                }
+            )
+
+            ->leftJoinSub(
+                $tindakLanjutCounts,
+                'tc',
+                function ($join) {
+                    $join->on('tc.id_kasus', '=', 'kis_kasus.id_kasus');
+                }
+            )
+
+            ->addSelect(DB::raw('COALESCE(rc.rekomendasi_count, 0) as rekomendasi_count'))
+            ->addSelect(DB::raw('COALESCE(tc.tindak_lanjut_approved_count, 0) as tindak_lanjut_approved_count'))
+
+            ->orderByDesc('kis_kasus.id_kasus');
+
+
+        /*
+|--------------------------------------------------------------------------
+| 5. Filter status kasus
+|--------------------------------------------------------------------------
+*/
+
         $status = $request->input('status_kasus', 'semua');
+
         if ($status !== 'semua') {
-            $data->where('selesai', $status);
+            $data->where('kis_kasus.selesai', $status);
         }
-        //tambahkan obrik yang ditangani berdasarkan tim(user) yang login
-        if (session('tim')) {
-            $data->whereHas('instansi', function (Builder $query): void {
-                $query->where('id_tim', session('tim'));
+
+
+        /*
+|--------------------------------------------------------------------------
+| 6. Filter berdasarkan tim
+|--------------------------------------------------------------------------
+*/
+
+        $tim = session('tim');
+
+        if ($tim) {
+            $data->whereHas('instansi', function (Builder $query) use ($tim): void {
+                $query->where('id_tim', $tim);
             });
         }
+
+        $level = (string) session('level');
         return DataTables::eloquent($data)
             ->addIndexColumn()
             ->addColumn('id_jenis_php', function (Kasus $value): string {
@@ -92,10 +235,10 @@ class KasusController extends Controller
                 return '<div class="flex flex-col items-center gap-1">' . $temuanBadge . '</div>';
             })
             ->addColumn('tahun_pemeriksaan', function ($value) {
-                return '<span class="dark:text-white/90">' . $value->tahun_pemeriksaan ?? '-' . '</span>';
+                return '<span class="dark:text-white/90">' . e($value->tahun_pemeriksaan ?? '-') . '</span>';
             })
             ->addColumn('spt', function ($data) {
-                return $data->spt ? '<span class="dark:text-white/90">' . nl2br(e($data->spt)) . '</span>' : '-' . '</span>';
+                return $data->spt ? '<span class="dark:text-white/90">' . nl2br(e($data->spt)) . '</span>' : '-';
             })
             ->addColumn('nomor_lhp', function ($value) {
                 return '<span class="dark:text-white/90">' . $value->nomor_lhp ?? '-' . '</span>';
@@ -109,16 +252,15 @@ class KasusController extends Controller
                     . $badge
                     . '</div>';
             })
-
             ->addColumn('tanggal_lhp', function ($value) {
                 return $value->tanggal_lhp ? '<span class="dark:text-white/90">' . Carbon::parse($value->tanggal_lhp)->translatedFormat('d F Y') . '</span>' : '-';
             })
             ->addColumn('kode_unor', function ($value) {
-                return '<span class="dark:text-white/90">' . ucwords(strtolower($value->instansi->nama_instansi)) ?? '-' . '</span>';
+                return '<span class="dark:text-white/90">' . e(ucwords(strtolower($value->instansi->nama_instansi ?? '-'))) . '</span>';
             })
-            ->addColumn('action', function ($value) {
+            ->addColumn('action', function ($value) use ($level) {
                 $tombolSelesai = '';
-                if ((string) $value->selesai === '0' && (string) session('level') === '1') {
+                if ((string) $value->selesai === '0' && $level === '1') {
                     $tombolSelesai = '
                         <a href="javascript:void(0)"
                             data-id="' . $value->id_kasus . '"
